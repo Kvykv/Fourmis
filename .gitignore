@@ -1,0 +1,11 @@
+#################
+# Ignore :
+#################
+
+$ cat .gitignore
+
+Fourmis.cbp
+Fourmis.depend
+Fourmis.layout
+obj/*
+bin/*
