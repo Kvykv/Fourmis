@@ -41,8 +41,17 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
   		map<pair<int,int>, Node> ouverte;
 		vector<Node> fermee;
 		vector<pair<int,int> > path;
-		if(!(tileMap->getBlock(coordTarget.first, coordTarget.second)->isCrossable() ||
-                     tileMap->getBlock(coordTarget.first, coordTarget.second)->isDiggable()))
+		bool isReachable(false);
+		vector<pair<int,int> > neighbours(tileMap->getNeighbours(coordTarget.first, coordTarget.second));
+		for (int i=0; i<neighbours.size(); i++)
+        {
+            if((tileMap->getBlock(neighbours[i]))->isCrossable() ||
+                        tileMap->getBlock(neighbours[i])->isDiggable())
+            {
+                isReachable = true;
+            }
+        }
+        if (!isReachable || MathHelp::distance(coordEntite,coordTarget)<= 2)
         {
             path.push_back(coordEntite);
             return path;

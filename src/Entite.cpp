@@ -213,13 +213,11 @@ bool Entite::oneAction()
         break;
     case 2 :
         {
-            cout <<"Food :  " << getBlock(m_currentAction.getCoord())->getValeurCase() << "  ";
             int quantity(min(500, getBlock(m_currentAction.getCoord())->getQuantite()));
             getBlock(m_currentAction.getCoord())->dimQuantite(quantity);
             m_hunger+=quantity;
             m_goingForFood = false;
             setAction(m_memoryAction);
-            cout << "ok" << endl;
             return true;
             break;
         }
@@ -271,7 +269,6 @@ void Entite::getFood()
             m_goingForFood = true;
         }
     }
-
 }
 pair<int,int> Entite::lookFor(int typeBlock)
 {
@@ -283,7 +280,7 @@ pair<int,int> Entite::lookFor(int typeBlock)
     {
         return coord;
     }
-    while(ite < 200)
+    while(ite < 1000)
     {
         ite++;
         if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->getValeurCase() == typeBlock)
@@ -375,7 +372,6 @@ void Entite::setNextAction()
     {
         setAction(coord, block, 1);
     }
-
 
 }
 bool Entite::nextStep()
