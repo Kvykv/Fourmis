@@ -2,25 +2,25 @@
 #include <iostream>
 using namespace std;
 
-Block::Block():m_valeurCase(0)
+Block::Block():m_blockType(0)
     ,m_tag("Air")
 {
     m_isCrossable = false;
     m_isDiggable = false;
 }
 Block::Block(int n, bool crossable, bool diggable, int cost)
-    :m_valeurCase(n)
+    :m_blockType(n)
     ,m_isCrossable(crossable)
     ,m_isDiggable(diggable)
     ,m_cost(cost)
 {}
-int Block::getValeurCase() const
+int Block::getBlockType() const
 {
-    return m_valeurCase;
+    return m_blockType;
 }
-void Block::setValeurCase(int n)
+void Block::setBlockType(int n)
 {
-    m_valeurCase = n;
+    m_blockType = n;
     if (n==0)
     {
         setCrossable(false);

@@ -57,7 +57,7 @@ void TileMap::createGrass(int x, int y)
     int width(1);
     for (int i= 0; i<height; i++)
     {
-        setBlock(min(largeur-2,x+width), max(1,y-i), 2);
+        setBlock(min(largeur-2,x+width), max(1,y-i), 2, 10000);
         width = rand()%2;
     }
 }
@@ -86,7 +86,7 @@ void creerTableau(vector<vector<int> >& tableau)
 
 void TileMap::paintBlock(int x, int y)
 {
-    int valeurCase(m_terrain[x][y]->getValeurCase());
+    int blockType(m_terrain[x][y]->getBlockType());
     sf::Vertex* quad = &m_array[(x+y*largeur)*4];
     // Position carré
     quad[0].position = sf::Vector2f(x*tailleTileLargeur,y*tailleTileHauteur);
@@ -94,16 +94,16 @@ void TileMap::paintBlock(int x, int y)
     quad[2].position = sf::Vector2f((x+1)*tailleTileLargeur, (y+1)*tailleTileHauteur);
     quad[3].position = sf::Vector2f(x*tailleTileLargeur, (y+1)*tailleTileHauteur);
     sf::Color color;
-    if (valeurCase == 1)
+    if (blockType == 1)
     {
         int cost(m_terrain[x][y]->getCost());
         color = sf::Color(91 - cost/50 + 20, 60 - cost/50 + 20, 20 - cost/50 + 20);
     }
-    else if (valeurCase == 2)
+    else if (blockType == 2)
     {
         color = sf::Color(58, 157, 35);
     }
-    else if (valeurCase == 3)
+    else if (blockType == 3)
     {
         color = sf::Color(0,0,0);
     }
@@ -150,7 +150,7 @@ void TileMap::showTileMap() const
     {
         for (int x=0; x<largeur; x++)
         {
-            cout << m_terrain[x][y]->getValeurCase();
+            cout << m_terrain[x][y]->getBlockType();
         }
     cout << endl;
     }
@@ -168,9 +168,9 @@ void TileMap::showTileMap() const
 
 // -------------------------- Gameplay -------------------------------------
 
-void TileMap::setBlock(int x, int y, int valeurCase)
+void TileMap::setBlock(int x, int y, int blockType, int blockValue)
 {
-    switch(valeurCase)
+    switch(blockType)
     {
     case 0:
         m_terrain[x][y].reset(new BlockAir());
@@ -179,16 +179,17 @@ void TileMap::setBlock(int x, int y, int valeurCase)
         m_terrain[x][y].reset(new BlockDirt());
         break;
     case 2:
-        m_terrain[x][y].reset(new BlockFood(10000));
+        m_terrain[x][y].reset(new BlockFood(blockValue));
+        break;
+    case 3:
+        m_terrain[x][y].reset(new BlockStorage(0, blockValue));
     }
     setSurfaceVoisinage(x, y);
     paintVoisinage(x, y);
 }
-void TileMap::setBlock(pair<int,int> coord, Block block)
+void TileMap::setBlock(pair<int,int> coord, int blockType, int blockValue)
 {
-    m_terrain[coord.first][coord.second].reset(&block);
-    setSurfaceVoisinage(coord.first, coord.second);
-    paintVoisinage(coord.first, coord.second);
+    setBlock(coord.first, coord.second, blockType, blockValue);
 }
 void TileMap::setBlockCrossable(int x, int y, bool boolean)
 {
@@ -207,8 +208,7 @@ void TileMap::dimQuantiteBlock(pair<int,int> coord, int quantite)
     getBlock(coord)->dimQuantite(quantite);
     if (getBlock(coord)->getQuantite() <= 0)
     {
-        Block block = BlockAir();
-        setBlock(coord, block);
+        setBlock(coord, 0);
     }
 }
 void TileMap::setSurfaceBlock(int x, int y)
@@ -220,7 +220,7 @@ void TileMap::setSurfaceBlock(int x, int y)
 				|| (m_terrain[x][y - 1]->isDiggable())||(m_terrain[x + 1][y+1]->isDiggable())
 				|| (m_terrain[x-1][y + 1]->isDiggable()) || (m_terrain[x - 1][y+1]->isDiggable())
 				|| (m_terrain[x-1][y - 1]->isDiggable()));
-		if (m_terrain[x][y]->getValeurCase() == 0 && support)
+		if (m_terrain[x][y]->getBlockType() == 0 && support)
         {
             setBlockCrossable(x, y, true);
 		}

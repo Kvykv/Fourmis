@@ -8,8 +8,8 @@ class Block
     public:
         Block();
         Block(int n, bool crossable, bool diggable, int cost);
-        int getValeurCase() const;
-        void setValeurCase(int n);
+        int getBlockType() const;
+        void setBlockType(int n);
         int getCost() const;
         void setCost(int cost);
         bool isDiggable();
@@ -26,7 +26,7 @@ class Block
         virtual int getValueStorage();
 
     protected:
-        int m_valeurCase;
+        int m_blockType;
         int m_cost;
         bool m_isCrossable = false;
         bool m_isDiggable = false;

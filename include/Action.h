@@ -12,15 +12,17 @@ class Action
 {
     public:
         Action();
-        Action(pair<int,int> coordAction, Block block, int typeAction);
+        Action(pair<int,int> coordAction, int blockType, int blockValue, int typeAction);
         bool isOver();
         void setOver(bool state);
         int getType();
         pair<int,int> getCoord();
-        Block getBlock();
+        int getBlockType();
+        int getBlockValue();
 
     protected:
-        Block m_block;
+        int m_blockType;
+        int m_blockValue;
         pair<int,int> m_coord;
         int m_typeAction;
         bool m_isOver;
