@@ -1,6 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 #include "Block.h"
+#include "Ant.h"
 #include "TileMap.h"
 #include "AntHill.h"
 #include "Entite.h"

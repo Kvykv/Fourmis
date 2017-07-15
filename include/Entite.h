@@ -14,8 +14,8 @@ class Entite : public sf::Drawable, public sf::Transformable
 {
     public:
         // Constructeur
-        Entite(TileMap *tileMap, AntHill *antHill);
-        Entite(int x, int y, TileMap *tileMap, AntHill *antHill);
+        Entite(TileMap *tileMap);
+        Entite(int x, int y, TileMap *tileMap);
 
         // Set et get
         void setCoordX(int x);
@@ -50,13 +50,11 @@ class Entite : public sf::Drawable, public sf::Transformable
         bool oneMovement();
         bool oneAction();
         bool falling();
-        void gather(Block* block);
-        void store(Block* block);
 
         // Entite IA base
         bool nextStep();
         void goTo(pair<int,int> coord);
-        void getFood();
+        bool getFood();
         void setNextAction();
         pair<int,int> lookFor(int typeBlock);
         pair<int,int> lookUp(pair<int,int> coord, int typeBlock);
@@ -71,7 +69,6 @@ class Entite : public sf::Drawable, public sf::Transformable
         int m_hunger;
         int m_inventoryType;
         int m_inventoryQuantity;
-        AntHill *m_antHill;
         TileMap *m_ptrMap;
         vector<pair<int,int> > m_path;
         sf::CircleShape m_shape;

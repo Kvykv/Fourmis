@@ -3,11 +3,10 @@ using namespace std;
 
 /* -------------------------- Constructeurs / get / set ---------------------------------------- */
 
-Entite::Entite(TileMap *tileMap, AntHill *antHill)
+Entite::Entite(TileMap *tileMap)
     :m_ptrMap(tileMap)
     ,m_hunger(1000)
     ,m_goingForFood(false)
-    ,m_antHill(antHill)
 {
 
     int x = (rand()%(largeur-2)) + 1;
@@ -26,13 +25,12 @@ Entite::Entite(TileMap *tileMap, AntHill *antHill)
     setNextAction();
 
 }
-Entite::Entite(int x, int y, TileMap *tileMap, AntHill *antHill)
+Entite::Entite(int x, int y, TileMap *tileMap)
     :m_coordX(x)
     ,m_coordY(y)
     ,m_ptrMap(tileMap)
     ,m_hunger(1000)
     ,m_goingForFood(false)
-    ,m_antHill(antHill)
 {
     m_shape.setRadius(1.5*tailleTileLargeur);
     paintEntite();
@@ -173,9 +171,21 @@ void Entite::creuserBlock(int x, int y)
 }
 void Entite::nexStepArray(vector<Entite> &entiteArray)
 {
+    vector<int> areDead;
     for (int i=0; i < entiteArray.size() ; i++)
     {
-       entiteArray[i].nextStep();
+        bool isDead(entiteArray[i].nextStep());
+        if (isDead)
+        {
+        areDead.push_back(i);
+        }
+    }
+    if(areDead.size()>0)
+    {
+        for (int i=areDead.size()-1; i>=0; i--)
+        {
+            entiteArray.erase(entiteArray.begin() + areDead[i]);
+        }
     }
 }
 bool Entite::falling()
@@ -222,51 +232,35 @@ bool Entite::oneAction()
             break;
         }
     case 3 :
-        store(getBlock(m_currentAction.getCoord()));
         break;
     }
     setNextAction();
     return true;
 }
-void Entite::gather(Block* block)
-{
-    int quantity(min(1000, block->getQuantite()));
-    setInventoryQuantity(quantity);
-    setInventoryType(block->getBlockType());
-    block->dimQuantite(quantity);
-}
-void Entite::store(Block* block)
-{
-    if (getBlock(m_currentAction.getCoord())->getBlockType() != 3)
-    {
-        setBlock(m_currentAction.getCoord(), 3, m_inventoryType);
-    }
-    else if(getBlock(m_currentAction.getCoord())->getQuantite()<20000)
-    {
-        lookFor(3);
-    }
-    if(getInventoryType() == block->getValueStorage())
-    {
-        int quantity(min(20000-block->getQuantite(), getInventoryQuantity()));
-        block->addQuantite(quantity);
-        setInventoryQuantity(getInventoryQuantity()-quantity);
-    }
-}
+
 /* -------------------------- Entity base IA ---------------------------------------- */
 
-void Entite::getFood()
+bool Entite::getFood()
 {
+    if (m_hunger == 0)
+    {
+        return true;
+    }
     if (!m_goingForFood)
     {
-        if (m_hunger < 800)
+        if (m_hunger < 200 && m_hunger%20 == 0)
         {
             m_memoryAction = m_currentAction;
             pair<int,int> coord(lookFor(2));
             coord = lookUp(coord, 2);
-            setAction(coord, 0, 0, 2);
-            m_goingForFood = true;
+            if (m_ptrMap->getBlock(coord)->getBlockType()==2)
+            {
+                setAction(coord, 0, 0, 2);
+                m_goingForFood = true;
+            }
         }
     }
+    return false;
 }
 pair<int,int> Entite::lookFor(int typeBlock)
 {
@@ -373,12 +367,16 @@ void Entite::setNextAction()
 }
 bool Entite::nextStep()
 {
+    bool isDead(false);
     m_hunger -= 1;
-    getFood();
+    isDead = getFood();
+    cout << isDead << "  " << m_hunger << endl;
     falling();
     while (!m_hasArrived)
     {
-        return oneMovement();
+        oneMovement();
+        return isDead;
     }
-    return oneAction();
+    oneAction();
+    return isDead;
 }

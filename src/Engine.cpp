@@ -13,7 +13,7 @@ Engine::Engine()
 
 bool Engine::run()
 {
-    m_entityArray.push_back(Entite(&tileMap, &m_antHill));
+    m_entityArray.push_back(Ant(&tileMap, &m_antHill));
     draw();
     //tileMap.showTileMap();
     sf::Clock clock;
@@ -25,13 +25,13 @@ bool Engine::run()
         processEvents();
         draw();
         sf::sleep(timePerFrame - clock.getElapsedTime());
-        /*i++;
+        i++;
         if (i>=50)
         {
-            m_entityArray.push_back(Entite(&tileMap, &m_antHill));
+            //m_entityArray.push_back(Ant(&tileMap, &m_antHill));
             i-=50;
 
-        }*/
+        }
     }
 }
 void Engine::processEvents()
@@ -45,7 +45,7 @@ void Engine::processEvents()
         }
         else if (event.type == sf::Event::KeyPressed)
         {
-            m_entityArray.push_back(Entite(&tileMap, &m_antHill));
+            m_entityArray.push_back(Ant(&tileMap, &m_antHill));
         }
     }
     Entite::nexStepArray(m_entityArray);

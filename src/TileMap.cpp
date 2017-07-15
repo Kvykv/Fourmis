@@ -45,7 +45,7 @@ void TileMap::initFood()
         {
             if  (m_terrain[x][y]->isCrossable())
             {
-                createGrass(x, y);
+               // createGrass(x, y);
                 break;
             }
         }
