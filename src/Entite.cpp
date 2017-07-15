@@ -214,7 +214,7 @@ bool Entite::oneAction()
     case 2 :
         {
             int quantity(min(500, getBlock(m_currentAction.getCoord())->getQuantite()));
-            getBlock(m_currentAction.getCoord())->dimQuantite(quantity);
+            m_ptrMap->dimQuantiteBlock(m_currentAction.getCoord(), quantity);
             m_hunger+=quantity;
             m_goingForFood = false;
             setAction(m_memoryAction);
