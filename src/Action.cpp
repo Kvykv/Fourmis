@@ -4,9 +4,10 @@ Action::Action()
     :m_typeAction(0)
 {
 }
-Action::Action(pair<int,int> coordAction, Block block, int typeAction)
+Action::Action(pair<int,int> coordAction, int blockType, int blockValue, int typeAction)
     :m_coord(coordAction)
-    ,m_block(block)
+    ,m_blockType(blockType)
+    ,m_blockValue(blockValue)
     ,m_typeAction(typeAction)
     ,m_isOver(false)
 {
@@ -27,7 +28,11 @@ pair<int,int> Action::getCoord()
 {
     return m_coord;
 }
-Block Action::getBlock()
+int Action::getBlockType()
 {
-    return m_block;
+    return m_blockType;
+}
+int Action::getBlockValue()
+{
+    return m_blockValue;
 }

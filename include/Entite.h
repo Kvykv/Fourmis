@@ -24,13 +24,13 @@ class Entite : public sf::Drawable, public sf::Transformable
         int getCoordY();
         pair<int,int> getCoord();
         Block* getBlock(pair<int,int> coord);
-        void setBlock(pair<int,int> coord, Block block);
+        void setBlock(pair<int,int> coord, int blockType, int blockValue);
         void setPath(vector<pair<int,int> > path);
         void setGoingForFood(bool boolean);
         Action getMemoryAction();
         void setAction(Action action);
         Action getAction();
-        void setAction(pair<int,int> coord, Block block, int typeAction);
+        void setAction(pair<int,int> coord, int blockType, int blockValue, int typeAction);
         bool hasArrived();
         void setHasArrived(bool boolean);
         void setInventoryType(int type);

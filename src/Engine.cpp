@@ -2,8 +2,8 @@
 
 Engine::Engine()
     :timePerFrame(sf::seconds(1.f/30.f))
-    ,window(sf::VideoMode::getDesktopMode(), "TileMap"/*, sf::Style::Fullscreen*/)
-{
+    ,window(sf::VideoMode(1920,1080), "TileMap"/*, sf::Style::Fullscreen*/)
+{                   //sf::VideoMode::getDesktopMode
     vector<vector<int> > tableau;
     tableau.resize(largeur);
     creerTableau(tableau);
@@ -21,17 +21,17 @@ bool Engine::run()
     sf::Time time;
     while(window.isOpen())
     {
-        i++;
         clock.restart();
         processEvents();
         draw();
         sf::sleep(timePerFrame - clock.getElapsedTime());
+        /*i++;
         if (i>=50)
         {
             m_entityArray.push_back(Entite(&tileMap, &m_antHill));
             i-=50;
 
-        }
+        }*/
     }
 }
 void Engine::processEvents()
@@ -45,7 +45,7 @@ void Engine::processEvents()
         }
         else if (event.type == sf::Event::KeyPressed)
         {
-            //m_entityArray.push_back(Entite(&tileMap, &m_antHill));
+            m_entityArray.push_back(Entite(&tileMap, &m_antHill));
         }
     }
     Entite::nexStepArray(m_entityArray);

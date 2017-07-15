@@ -71,11 +71,11 @@ Block* Entite::getBlock(pair<int,int> coord)
 {
     return m_ptrMap->getBlock(coord);
 }
-void Entite::setBlock(pair<int,int> coord, Block block)
+void Entite::setBlock(pair<int,int> coord, int blockType, int blockValue)
 {
     if(MathHelp::distance(coord, getCoord())<=2)
     {
-        m_ptrMap->setBlock(coord, block);
+        m_ptrMap->setBlock(coord, blockType, blockValue);
     }
 }
 void Entite::setGoingForFood(bool boolean)
@@ -86,9 +86,9 @@ Action Entite::getMemoryAction()
 {
     return m_memoryAction;
 }
-void Entite::setAction(pair<int,int> coord, Block block, int typeAction)
+void Entite::setAction(pair<int,int> coord, int blockType, int blockValue, int typeAction)
 {
-    m_currentAction = Action(coord, block, typeAction);
+    m_currentAction = Action(coord, blockType, blockValue, typeAction);
     goTo(coord);
 }
 void Entite::setAction(Action action)
@@ -209,17 +209,15 @@ bool Entite::oneAction()
     case 0 :
         break;
     case 1 :
-        setBlock(m_currentAction.getCoord(), m_currentAction.getBlock());
+        m_ptrMap->setBlock(m_currentAction.getCoord(), 0);
         break;
     case 2 :
         {
-            cout <<"Food :  " << getBlock(m_currentAction.getCoord())->getValeurCase() << "  ";
             int quantity(min(500, getBlock(m_currentAction.getCoord())->getQuantite()));
-            getBlock(m_currentAction.getCoord())->dimQuantite(quantity);
+            m_ptrMap->dimQuantiteBlock(m_currentAction.getCoord(), quantity);
             m_hunger+=quantity;
             m_goingForFood = false;
             setAction(m_memoryAction);
-            cout << "ok" << endl;
             return true;
             break;
         }
@@ -234,15 +232,14 @@ void Entite::gather(Block* block)
 {
     int quantity(min(1000, block->getQuantite()));
     setInventoryQuantity(quantity);
-    setInventoryType(block->getValeurCase());
+    setInventoryType(block->getBlockType());
     block->dimQuantite(quantity);
 }
 void Entite::store(Block* block)
 {
-    if (getBlock(m_currentAction.getCoord())->getValeurCase() != 3)
+    if (getBlock(m_currentAction.getCoord())->getBlockType() != 3)
     {
-        Block block = BlockStorage(0,m_inventoryType);
-        setBlock(m_currentAction.getCoord(), block);
+        setBlock(m_currentAction.getCoord(), 3, m_inventoryType);
     }
     else if(getBlock(m_currentAction.getCoord())->getQuantite()<20000)
     {
@@ -266,12 +263,10 @@ void Entite::getFood()
             m_memoryAction = m_currentAction;
             pair<int,int> coord(lookFor(2));
             coord = lookUp(coord, 2);
-            Block block = BlockAir();
-            setAction(coord, block, 2);
+            setAction(coord, 0, 0, 2);
             m_goingForFood = true;
         }
     }
-
 }
 pair<int,int> Entite::lookFor(int typeBlock)
 {
@@ -279,20 +274,20 @@ pair<int,int> Entite::lookFor(int typeBlock)
     int x(coord.first);
     int y(coord.second);
     int ite(0);
-    if (m_ptrMap->getBlock(coord)->getValeurCase() == typeBlock)
+    if (m_ptrMap->getBlock(coord)->getBlockType() == typeBlock)
     {
         return coord;
     }
-    while(ite < 200)
+    while(ite < 1000)
     {
         ite++;
-        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->getValeurCase() == typeBlock)
+        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->getBlockType() == typeBlock)
         {
             coord.first = x;
             coord.second = min(hauteur-1, y + ite);
             return coord;
         }
-        else if (m_ptrMap->getBlock(x, max(0, y - ite))->getValeurCase() == typeBlock)
+        else if (m_ptrMap->getBlock(x, max(0, y - ite))->getBlockType() == typeBlock)
         {
             coord.first = x;
             coord.second = max(0, y - ite);
@@ -300,25 +295,25 @@ pair<int,int> Entite::lookFor(int typeBlock)
         }
         for (int i = 0; i < ite + 2; i++)       // Scan en losange
         {
-            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->getValeurCase() == typeBlock)
+            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->getBlockType() == typeBlock)
             {
                 coord.first = min(largeur-1, x+i);
                 coord.second = min(hauteur-1, y + ite - i);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->getValeurCase() == typeBlock)
+            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->getBlockType() == typeBlock)
             {
                 coord.first = max(0, x-i);
                 coord.second = min(hauteur-1, y + ite - i);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->getValeurCase() == typeBlock)
+            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->getBlockType() == typeBlock)
             {
                 coord.first = min(largeur-1, x+i);
                 coord.second = max(0, y - ite + i);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->getValeurCase() == typeBlock)
+            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->getBlockType() == typeBlock)
             {
                 coord.first = max(0, x-i);
                 coord.second = max(0, y - ite + i);
@@ -335,17 +330,17 @@ pair<int,int> Entite::lookUp(pair<int,int> coord, int typeBlock)
     int y = coord.second;
     while (boolean && y > 0)
     {
-        if (m_ptrMap->getBlock(x,y-1)->getValeurCase() == typeBlock)
+        if (m_ptrMap->getBlock(x,y-1)->getBlockType() == typeBlock)
         {
             coord.first = x;
             coord.second = y-1;
         }
-        else if (m_ptrMap->getBlock(x-1,y-1)->getValeurCase() == typeBlock)
+        else if (m_ptrMap->getBlock(x-1,y-1)->getBlockType() == typeBlock)
         {
             coord.second = y-1;
             coord.first = x-1;
         }
-        else if (m_ptrMap->getBlock(x+1,y-1)->getValeurCase() == typeBlock)
+        else if (m_ptrMap->getBlock(x+1,y-1)->getBlockType() == typeBlock)
         {
             coord.second = y-1;
             coord.first = x+1;
@@ -366,16 +361,14 @@ void Entite::setNextAction()
     pair<int,int> coord;
     coord.first = 300;
     coord.second = 200;
-    Block block = BlockAir();
     if(coord.first == m_coordX && coord.second == m_coordY)
     {
-        setAction(coord, block, 0);
+        setAction(coord, 0, 0, 0);
     }
     else
     {
-        setAction(coord, block, 1);
+        setAction(coord, 0, 0, 1);
     }
-
 
 }
 bool Entite::nextStep()

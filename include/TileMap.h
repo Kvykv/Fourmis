@@ -27,8 +27,8 @@ public:
     void initFood();
     void createGrass(int x, int y);
     void setBlockCrossable(int x, int y, bool boolean);
-    void setBlock(int x, int y, int valeurCase);
-    void setBlock(pair<int,int> coord, Block block);
+    void setBlock(int x, int y, int blockType, int blockValue = 0);
+    void setBlock(pair<int,int> coord, int blockType, int blockValeur = 0);
     void setSurfaceBlock(int x, int y);
     void setSurfaceVoisinage(int x, int y);
     void setSurfaceTotale();
