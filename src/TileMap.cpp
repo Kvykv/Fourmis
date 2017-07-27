@@ -38,14 +38,14 @@ void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
 void TileMap::initFood()
 {
     int x(0);
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < largeur/20; i++)
     {
         x = (rand()%(largeur-2)) + 1;
         for (int y = 0; y < hauteur; y ++)
         {
             if  (m_terrain[x][y]->isCrossable())
             {
-               // createGrass(x, y);
+                createGrass(x, y);
                 break;
             }
         }

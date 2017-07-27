@@ -52,7 +52,7 @@ class Entite : public sf::Drawable, public sf::Transformable
         bool falling();
 
         // Entite IA base
-        bool nextStep();
+        virtual bool nextStep();
         void goTo(pair<int,int> coord);
         bool getFood();
         void setNextAction();

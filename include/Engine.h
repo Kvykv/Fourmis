@@ -1,7 +1,8 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 #include "Block.h"
-#include "Ant.h"
+#include "EntityTypesHeader/AntQueen.h"
+#include "EntityTypesHeader/AntWorker.h"
 #include "TileMap.h"
 #include "AntHill.h"
 #include "Entite.h"

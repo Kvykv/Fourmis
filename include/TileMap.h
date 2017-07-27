@@ -11,8 +11,8 @@
 #include <memory>
 
 using namespace std;
-static const int largeur(500);
-static const int hauteur(300);
+static const int largeur(600);
+static const int hauteur(380);
 static const double tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur);
 static const double tailleTileLargeur((double)sf::VideoMode::getDesktopMode().width/largeur);
 

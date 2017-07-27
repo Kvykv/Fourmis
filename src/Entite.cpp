@@ -248,7 +248,7 @@ bool Entite::getFood()
     }
     if (!m_goingForFood)
     {
-        if (m_hunger < 200 && m_hunger%20 == 0)
+        if (m_hunger < 250 && m_hunger%20 == 0)
         {
             m_memoryAction = m_currentAction;
             pair<int,int> coord(lookFor(2));
@@ -353,8 +353,8 @@ void Entite::goTo(pair<int,int> coord)
 void Entite::setNextAction()
 {
     pair<int,int> coord;
-    coord.first = 300;
-    coord.second = 200;
+    coord.first = 300 + rand()%20;
+    coord.second = 300+ rand()%5;
     if(coord.first == m_coordX && coord.second == m_coordY)
     {
         setAction(coord, 0, 0, 0);
@@ -370,7 +370,6 @@ bool Entite::nextStep()
     bool isDead(false);
     m_hunger -= 1;
     isDead = getFood();
-    cout << isDead << "  " << m_hunger << endl;
     falling();
     while (!m_hasArrived)
     {

@@ -28,11 +28,11 @@ bool Engine::run()
         i++;
         if (i>=50)
         {
-            //m_entityArray.push_back(Ant(&tileMap, &m_antHill));
+            m_entityArray.push_back(Ant(&tileMap, &m_antHill));
             i-=50;
-
         }
     }
+    return true;
 }
 void Engine::processEvents()
 {
