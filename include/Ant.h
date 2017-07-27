@@ -1,19 +1,19 @@
 #ifndef ANT_H
 #define ANT_H
 
-#include "AntHill.h"
 #include "Entite.h"
+
+class AntHill;
 
 class Ant : public Entite
 {
     public:
-        Ant(TileMap *tileMap, AntHill *antHill);
-        Ant(int x, int y, TileMap *tileMap, AntHill *antHill);
+        Ant(TileMap *tileMap, AntHill *antHill, int type);
+        Ant(int x, int y, TileMap *tileMap, AntHill *antHill, int type);
 
     protected:
-
-    private:
         AntHill *m_antHill;
+    private:
 };
 
 #endif // ANT_H

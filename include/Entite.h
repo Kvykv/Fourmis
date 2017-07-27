@@ -5,7 +5,6 @@
 #include "MathHelp.h"
 #include "Action.h"
 #include "IAPathFinding.h"
-#include "AntHill.h"
 #include <vector>
 #include <iostream>
 
@@ -14,8 +13,8 @@ class Entite : public sf::Drawable, public sf::Transformable
 {
     public:
         // Constructeur
-        Entite(TileMap *tileMap);
-        Entite(int x, int y, TileMap *tileMap);
+        Entite(TileMap *tileMap, int type);
+        Entite(int x, int y, TileMap *tileMap, int type);
 
         // Set et get
         void setCoordX(int x);
@@ -40,10 +39,10 @@ class Entite : public sf::Drawable, public sf::Transformable
 
         // Graphic
         void paintEntite();
-        static void drawEntiteArray(vector<Entite> &entiteArray, sf::RenderWindow &window);
+        static void drawEntiteArray(vector<unique_ptr<Entite> > *entiteArray, sf::RenderWindow &window);
 
         // Actions
-        static void nexStepArray(vector<Entite> &entiteArray);
+        static void nexStepArray(vector<unique_ptr<Entite> > *entiteArray);
         void deplacerEntite(int x, int y);
         void deplacerEntite(pair<int,int> coord);
         void creuserBlock(int x, int y);
@@ -55,12 +54,13 @@ class Entite : public sf::Drawable, public sf::Transformable
         virtual bool nextStep();
         void goTo(pair<int,int> coord);
         bool getFood();
-        void setNextAction();
+        virtual void setNextAction();
         pair<int,int> lookFor(int typeBlock);
         pair<int,int> lookUp(pair<int,int> coord, int typeBlock);
 
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        int m_entityType=0;
         int m_coordY;
         int m_coordX;
         bool m_hasArrived;

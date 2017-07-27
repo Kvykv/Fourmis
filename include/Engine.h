@@ -23,7 +23,6 @@ class Engine
         void processEvents();
     protected:
         TileMap tileMap;
-        vector<Entite> m_entityArray;
         AntHill m_antHill;
         sf::Time timePerFrame;
         sf::RenderWindow window;

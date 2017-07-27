@@ -13,7 +13,7 @@ Engine::Engine()
 
 bool Engine::run()
 {
-    m_entityArray.push_back(Ant(&tileMap, &m_antHill));
+    m_antHill.addAnt();
     draw();
     //tileMap.showTileMap();
     sf::Clock clock;
@@ -28,7 +28,6 @@ bool Engine::run()
         i++;
         if (i>=50)
         {
-            m_entityArray.push_back(Ant(&tileMap, &m_antHill));
             i-=50;
         }
     }
@@ -45,15 +44,15 @@ void Engine::processEvents()
         }
         else if (event.type == sf::Event::KeyPressed)
         {
-            m_entityArray.push_back(Ant(&tileMap, &m_antHill));
+            m_antHill.addEgg();
         }
     }
-    Entite::nexStepArray(m_entityArray);
+    Entite::nexStepArray(m_antHill.getEntityArray());
 }
 void Engine::draw()
 {
     window.clear();
     window.draw(tileMap);
-    Entite::drawEntiteArray(m_entityArray, window);
+    Entite::drawEntiteArray(m_antHill.getEntityArray(), window);
     window.display();
 }

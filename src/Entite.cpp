@@ -3,10 +3,11 @@ using namespace std;
 
 /* -------------------------- Constructeurs / get / set ---------------------------------------- */
 
-Entite::Entite(TileMap *tileMap)
+Entite::Entite(TileMap *tileMap, int type)
     :m_ptrMap(tileMap)
     ,m_hunger(1000)
     ,m_goingForFood(false)
+    ,m_entityType(type)
 {
 
     int x = (rand()%(largeur-2)) + 1;
@@ -22,20 +23,19 @@ Entite::Entite(TileMap *tileMap)
             break;
         }
     }
-    setNextAction();
 
 }
-Entite::Entite(int x, int y, TileMap *tileMap)
+Entite::Entite(int x, int y, TileMap *tileMap, int type)
     :m_coordX(x)
     ,m_coordY(y)
     ,m_ptrMap(tileMap)
     ,m_hunger(1000)
     ,m_goingForFood(false)
+    ,m_entityType(type)
 {
     m_shape.setRadius(1.5*tailleTileLargeur);
     paintEntite();
     m_shape.setFillColor(sf::Color::Black);
-    setNextAction();
 }
 int Entite::getCoordX()
 {
@@ -138,11 +138,11 @@ void Entite::draw(sf::RenderTarget& target, sf::RenderStates states) const
     states.transform *= getTransform();
     target.draw(m_shape, states);
 }
-void Entite::drawEntiteArray(vector<Entite> &entiteArray, sf::RenderWindow &window)
+void Entite::drawEntiteArray(vector<unique_ptr<Entite> > *entiteArray, sf::RenderWindow &window)
 {
-    for (int i=0; i < entiteArray.size() ; i++)
+    for (int i=0; i < entiteArray->size() ; i++)
     {
-        window.draw(entiteArray[i]);
+        window.draw(*(*entiteArray)[i]);
     }
 }
 /* -------------------------- Actions ---------------------------------------- */
@@ -169,12 +169,12 @@ void Entite::creuserBlock(int x, int y)
         m_ptrMap->setBlock(x,y,0);
     }
 }
-void Entite::nexStepArray(vector<Entite> &entiteArray)
+void Entite::nexStepArray(vector<unique_ptr<Entite> > *entiteArray)
 {
     vector<int> areDead;
-    for (int i=0; i < entiteArray.size() ; i++)
+    for (int i=0; i < entiteArray->size() ; i++)
     {
-        bool isDead(entiteArray[i].nextStep());
+        bool isDead((*entiteArray)[i]->nextStep());
         if (isDead)
         {
         areDead.push_back(i);
@@ -184,7 +184,7 @@ void Entite::nexStepArray(vector<Entite> &entiteArray)
     {
         for (int i=areDead.size()-1; i>=0; i--)
         {
-            entiteArray.erase(entiteArray.begin() + areDead[i]);
+            entiteArray->erase(entiteArray->begin() + areDead[i]);
         }
     }
 }

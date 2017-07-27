@@ -2,17 +2,19 @@
 #define ANTEGG_H
 
 #include "Ant.h"
+#include "AntHill.h"
 
 class AntEgg : public Ant
 {
     public:
-        AntEgg(TileMap *tileMap, AntHill *antHill, std::string eggType);
-        AntEgg(int x, int y, TileMap *tileMap, AntHill *antHill, std::string eggType);
+        AntEgg(TileMap *tileMap, AntHill *antHill, int eggType);
+        AntEgg(int x, int y, TileMap *tileMap, AntHill *antHill, int eggType);
 
     private:
         virtual bool nextStep();
+        virtual void setNextAction();
 
-        std::string m_eggType;
+        int m_eggType;
         int m_hatchingCoolDown;
 };
 

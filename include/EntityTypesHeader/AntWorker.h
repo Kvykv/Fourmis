@@ -3,6 +3,8 @@
 
 #include "Ant.h"
 
+class AntHill;
+
 class AntWorker : public Ant
 {
     public:

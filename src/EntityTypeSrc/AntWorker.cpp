@@ -1,15 +1,15 @@
 #include "EntityTypesHeader/AntWorker.h"
 
 AntWorker::AntWorker(TileMap *tileMap, AntHill *antHill)
-    :Ant(tileMap, antHill)
+    :Ant(tileMap, antHill, 0)
 {
-
+    setNextAction();
 }
 
 AntWorker::AntWorker(int x, int y, TileMap *tileMap, AntHill *antHill)
-    :Ant(x, y, tileMap, antHill)
+    :Ant(x, y, tileMap, antHill, 0)
 {
-
+    setNextAction();
 }
 
 void AntWorker::gather(Block* block)
