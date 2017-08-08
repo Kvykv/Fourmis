@@ -3,3 +3,7 @@
 State::State()
 {
 }
+
+StateIdle::StateIdle()
+{
+}

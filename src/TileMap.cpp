@@ -9,6 +9,11 @@ using namespace std;
 TileMap::TileMap(){}
 TileMap::TileMap(vector<vector<int> >& tableau)
 {
+    m_terrain.resize(largeur);
+    for (int i = 0; i < largeur; i++)
+    {
+        m_terrain[i].resize(hauteur);
+    }
     initialiserTileMap(tableau);
 }
 void TileMap::initialiserTileMap(vector<vector<int> >& tableau)

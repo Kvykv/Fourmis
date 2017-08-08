@@ -11,8 +11,8 @@
 #include <memory>
 
 using namespace std;
-static const int largeur(600);
-static const int hauteur(380);
+static const int largeur(800);
+static const int hauteur(450);
 static const double tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur);
 static const double tailleTileLargeur((double)sf::VideoMode::getDesktopMode().width/largeur);
 
@@ -42,7 +42,7 @@ private:
     void paintVoisinage(int x, int y);
     sf::VertexArray m_array;
 
-    array<array<unique_ptr<Block>,hauteur>,largeur> m_terrain;
+    vector<vector<unique_ptr<Block> > > m_terrain;
 };
 
 void creerTableau(vector<vector<int> >& tableau);

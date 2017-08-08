@@ -13,7 +13,7 @@ Engine::Engine()
 
 bool Engine::run()
 {
-    m_antHill.addAnt();
+    m_antHill.addAnt(0);
     draw();
     //tileMap.showTileMap();
     sf::Clock clock;
@@ -28,6 +28,7 @@ bool Engine::run()
         i++;
         if (i>=50)
         {
+            //m_antHill.addEgg();
             i-=50;
         }
     }
@@ -44,7 +45,7 @@ void Engine::processEvents()
         }
         else if (event.type == sf::Event::KeyPressed)
         {
-            m_antHill.addEgg();
+            //m_antHill.addEgg();
         }
     }
     Entite::nexStepArray(m_antHill.getEntityArray());
