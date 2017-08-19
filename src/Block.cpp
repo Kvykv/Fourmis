@@ -68,20 +68,25 @@ void Block::setDiggable(bool boolean)
 
 /* --------------------- Heritage --------------------- */
 
-void Block::setQuantite(int quantite)
+void Block::setQuantity(int quantite)
 {
 }
-int Block::getQuantite()
+int Block::getQuantity()
 {
     return 1;
 }
-void Block::dimQuantite(int quantite)
+void Block::dimQuantity(int quantite)
 {
 }
-void Block::addQuantite(int quantite)
+void Block::addQuantity(int quantite)
 {
 }
-int Block::getValueStorage()
+int Block::getTypeStorage()
+{
+    return 0;
+}
+
+int Block::getCapacity()
 {
     return 0;
 }

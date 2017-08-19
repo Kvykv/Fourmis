@@ -11,7 +11,6 @@ Entite::Entite(TileMap *tileMap, int type)
     ,m_inventoryQuantity(0)
     ,m_inventoryType(0)
 {
-
     int x = (rand()%(largeur-2)) + 1;
     for (int y = 0; y < hauteur; y ++)
     {
@@ -25,7 +24,6 @@ Entite::Entite(TileMap *tileMap, int type)
             break;
         }
     }
-
 }
 Entite::Entite(int x, int y, TileMap *tileMap, int type)
     :m_coordX(x)
@@ -166,6 +164,11 @@ pair<int,int> Entite::getDestination()
     return m_destination;
 }
 
+TileMap* Entite::getPtrMap()
+{
+    return m_ptrMap;
+}
+
 /* -------------------------- Graphics ---------------------------------------- */
 
 void Entite::paintEntite()
@@ -201,6 +204,59 @@ void Entite::deplacerEntite(pair<int,int> coord)
 {
     deplacerEntite(coord.first, coord.second);
 }
+
+pair<int,int> Entite::getRandomDestination()
+{
+    pair<int,int> coord = getCoord();
+    int x(coord.first);
+    int y(coord.second);
+    int ite(rand()%30+25);
+    while(ite < 60)
+    {
+        ite++;
+        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->isCrossable())
+        {
+            coord.first = x;
+            coord.second = min(hauteur-1, y + ite);
+            return coord;
+        }
+        else if (m_ptrMap->getBlock(x, max(0, y - ite))->isCrossable())
+        {
+            coord.first = x;
+            coord.second = max(0, y - ite);
+            return coord;
+        }
+        for (int i = 0; i < ite + 2; i++)       // Scan en losange
+        {
+            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->isCrossable())
+            {
+                coord.first = min(largeur-1, x+i);
+                coord.second = min(hauteur-1, y + ite - i);
+                return coord;
+            }
+            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->isCrossable())
+            {
+                coord.first = max(0, x-i);
+                coord.second = min(hauteur-1, y + ite - i);
+                return coord;
+            }
+            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->isCrossable())
+            {
+                coord.first = min(largeur-1, x+i);
+                coord.second = max(0, y - ite + i);
+                return coord;
+            }
+            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->isCrossable())
+            {
+                coord.first = max(0, x-i);
+                coord.second = max(0, y - ite + i);
+                return coord;
+            }
+        }
+    }
+    return coord;
+}
+
 void Entite::creuserBlock(int x, int y)
 {
     if(MathHelp::distance(x, y, m_coordX, m_coordY)< 3)
@@ -213,10 +269,12 @@ void Entite::eat()
 {
     if (getBlock(m_destination)->getBlockType() == 2)
     {
-        int quantity(min(1000, getBlock(m_destination)->getQuantite()));
+        cout << m_hunger << "  " << getBlock(m_destination)->getBlockType() << "  ";
+        int quantity(min(1000, getBlock(m_destination)->getQuantity()));
         m_ptrMap->dimQuantiteBlock(m_destination, quantity);
         m_hunger+=quantity;
         m_goingForFood = false;
+        cout << m_hunger << endl;
     }
     else
     {
@@ -277,7 +335,7 @@ bool Entite::oneAction()
         break;
     case 2 :
         {
-            int quantity(min(500, getBlock(m_currentAction.getCoord())->getQuantite()));
+            int quantity(min(500, getBlock(m_currentAction.getCoord())->getQuantity()));
             m_ptrMap->dimQuantiteBlock(m_currentAction.getCoord(), quantity);
             setAction(m_memoryAction);
             m_hunger+=quantity;
@@ -312,10 +370,6 @@ pair<int,int> Entite::lookFor(int typeBlock)
     int x(coord.first);
     int y(coord.second);
     int ite(0);
-    if (m_ptrMap->getBlock(coord)->getBlockType() == typeBlock)
-    {
-        return coord;
-    }
     vector<pair<int,int> > airBlocks;
     while(ite < 40)
     {
@@ -364,7 +418,7 @@ pair<int,int> Entite::lookFor(int typeBlock)
                 coord = lookUp(coord, 2);
                 return coord;
             }
-            if (ite > 39)              //Sinon : scan air et crossable et choix au hasard
+            if (ite > 37)              //Sinon : scan air et crossable et choix au hasard
             {
                 if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->isCrossable())
                 {

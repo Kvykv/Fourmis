@@ -25,6 +25,7 @@ StateWorkerIdle::StateWorkerIdle(AntWorker* antWorker)
 {
     setNextAction(antWorker);
     m_string = "idle";
+    antWorker->getAntHill()->m_numberWorkerIdle +=1;
 }
 
 bool StateWorkerIdle::execute(AntWorker* antWorker)
@@ -54,13 +55,14 @@ bool StateWorkerIdle::updateState(AntWorker* antWorker)
     if (antWorker->getHunger() < 500)
     {
         antWorker->setState(StateWorkerFood(antWorker));
+        antWorker->getAntHill()->m_numberWorkerIdle -=1;
     }
     return false;
 }
 
 void StateWorkerIdle::setNextAction(AntWorker* antWorker)
 {
-    antWorker->goTo(pair<int,int>(300 + rand()%20,hauteur - 100 + rand()%5));
+    antWorker->goTo(antWorker->getRandomDestination());
 }
 
 
@@ -72,6 +74,7 @@ StateWorkerFood::StateWorkerFood(AntWorker* antWorker)
 {
     antWorker->getFood();
     m_string = "food";
+    antWorker->getAntHill()->m_numberWorkerFood +=1;
 }
 
 bool StateWorkerFood::execute(AntWorker* antWorker)
@@ -97,6 +100,7 @@ bool StateWorkerFood::updateState(AntWorker* antWorker)
     if (!antWorker->isGoingForFood())
     {
         antWorker->setState(StateWorkerGather(antWorker));
+        antWorker->getAntHill()->m_numberWorkerFood -=1;
     }
     return false;
 }
@@ -109,6 +113,7 @@ StateWorkerGather::StateWorkerGather(AntWorker* antWorker)
 {
     setNextAction(antWorker);
     m_string = "gather";
+    antWorker->getAntHill()->m_numberWorkerGather +=1;
 }
 
 bool StateWorkerGather::execute(AntWorker* antWorker)
@@ -142,6 +147,7 @@ bool StateWorkerGather::updateState(AntWorker* antWorker)
     if (antWorker->getHunger() < 500)
     {
         antWorker->setState(StateWorkerFood(antWorker));
+        antWorker->getAntHill()->m_numberWorkerGather -=1;
     }
     return false;
 }
@@ -150,11 +156,54 @@ void StateWorkerGather::setNextAction(AntWorker* antWorker)
 {
     if(antWorker->getInventoryQuantity() != 0)
     {
-        antWorker->goTo(pair<int,int>(200 + 5*(rand()%4),hauteur - 100));
+        antWorker->goTo(antWorker->getNotFullStorage());
     }
     else
     {
-        cout << antWorker->getCoordY() << "  " << antWorker->m_previousCoord.first << endl;
         antWorker->goTo(antWorker->lookFor(2));
     }
+}
+
+
+/// State Worker Build
+
+StateWorkerBuild::StateWorkerBuild(AntWorker* antWorker)
+{
+    setNextAction(antWorker);
+    m_string = "build";
+    antWorker->getAntHill()->m_numberWorkerBuild +=1;
+}
+
+bool StateWorkerBuild::execute(AntWorker* antWorker)
+{
+    bool isDead(false);
+    isDead = updateState(antWorker);
+    while (!antWorker->hasArrived())
+    {
+        antWorker->oneMovement();
+        return isDead;
+    }
+//action
+    setNextAction(antWorker);
+    return isDead;
+}
+
+bool StateWorkerBuild::updateState(AntWorker* antWorker)
+{
+    antWorker->dimHunger(1);
+    if (antWorker->checkFood())
+    {
+        return true;
+    }
+    if (antWorker->getHunger() < 500)
+    {
+        antWorker->setState(StateWorkerFood(antWorker));
+        antWorker->getAntHill()->m_numberWorkerBuild -=1;
+    }
+    return false;
+}
+
+void StateWorkerBuild::setNextAction(AntWorker* antWorker)
+{
+
 }

@@ -19,11 +19,12 @@ class Block
 
         // Heritage
         virtual string getString() const;
-        virtual void setQuantite(int quantite);
-        virtual void dimQuantite(int quantite);
-        virtual void addQuantite(int quantite);
-        virtual int getQuantite();
-        virtual int getValueStorage();
+        virtual void setQuantity(int quantite);
+        virtual void dimQuantity(int quantite);
+        virtual void addQuantity(int quantite);
+        virtual int getQuantity();
+        virtual int getTypeStorage();
+        virtual int getCapacity();
 
     protected:
         int m_blockType;

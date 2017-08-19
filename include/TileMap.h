@@ -16,6 +16,7 @@ static const int hauteur(450);
 static const double tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur);
 static const double tailleTileLargeur((double)sf::VideoMode::getDesktopMode().width/largeur);
 
+
 class TileMap : public sf::Drawable, public sf::Transformable
 {
 public:
@@ -36,6 +37,7 @@ public:
     Block* getBlock(pair<int,int> coord);
     void dimQuantiteBlock(pair<int,int> coord, int quantite);
     vector<pair<int, int> > getNeighbours(int x, int y);
+
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void paintBlock(int x, int y);

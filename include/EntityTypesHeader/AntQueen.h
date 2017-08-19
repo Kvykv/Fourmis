@@ -2,10 +2,8 @@
 #define ANTQUEEN_H
 
 #include "Ant.h"
-#include "AntHill.h"
 #include "StateQueen.h"
 
-class AntHill;
 class StateQueen;
 class AntQueen : public Ant
 {

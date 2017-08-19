@@ -2,11 +2,10 @@
 #define ANTWORKER_H
 
 #include "Ant.h"
+#include <memory>
 #include "StateWorker.h"
 
-class AntHill;
 class StateWorker;
-
 class AntWorker : public Ant
 {
     public:
@@ -14,6 +13,7 @@ class AntWorker : public Ant
         AntWorker(int x, int y, TileMap *tileMap, AntHill *antHill);
         void gather(int typeResource);
         bool store();
+        pair<int,int> getNotFullStorage();
         virtual bool nextStep();
         StateWorker* getState();
         void setState(StateWorker newState);

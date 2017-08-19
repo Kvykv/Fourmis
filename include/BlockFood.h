@@ -7,13 +7,13 @@ class BlockFood : public Block
 {
     public:
         BlockFood(int quantite);
-        virtual void setQuantite(int quantite);
-        virtual int getQuantite();
-        virtual void dimQuantite(int quantite);
-        virtual void addQuantite(int quantite);
+        virtual void setQuantity(int quantite);
+        virtual int getQuantity();
+        virtual void dimQuantity(int quantite);
+        virtual void addQuantity(int quantite);
 
     protected:
-        int m_quantite;
+        int m_quantity;
 };
 
 #endif // BLOCKFOOD_H

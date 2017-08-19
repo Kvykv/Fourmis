@@ -173,6 +173,7 @@ void TileMap::showTileMap() const
 
 // -------------------------- Gameplay -------------------------------------
 
+
 void TileMap::setBlock(int x, int y, int blockType, int blockValue)
 {
     switch(blockType)
@@ -210,8 +211,8 @@ Block* TileMap::getBlock(pair<int,int> coord)
 }
 void TileMap::dimQuantiteBlock(pair<int,int> coord, int quantite)
 {
-    getBlock(coord)->dimQuantite(quantite);
-    if (getBlock(coord)->getQuantite() <= 0)
+    getBlock(coord)->dimQuantity(quantite);
+    if (getBlock(coord)->getQuantity() <= 0)
     {
         setBlock(coord, 0);
     }

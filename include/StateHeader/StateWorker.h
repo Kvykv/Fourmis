@@ -42,4 +42,13 @@ class StateWorkerGather : public StateWorker
         virtual void setNextAction(AntWorker* antWorker);
 };
 
+class StateWorkerBuild : public StateWorker
+{
+    public:
+        StateWorkerBuild(AntWorker* antWorker);
+        virtual bool execute(AntWorker* antWorker);
+        virtual bool updateState(AntWorker* antWorker);
+        virtual void setNextAction(AntWorker* antWorker);
+};
+
 #endif // STATEWORKER_H

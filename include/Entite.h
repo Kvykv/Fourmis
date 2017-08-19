@@ -1,8 +1,8 @@
 #ifndef ENTITE_H
 #define ENTITE_H
 
-#include "TileMap.h"
 #include "MathHelp.h"
+#include "TileMap.h"
 #include "Action.h"
 #include "IAPathFinding.h"
 #include "State.h"
@@ -14,7 +14,7 @@ class Entite : public sf::Drawable, public sf::Transformable
 {
     public:
         // Constructeur
-        Entite(TileMap *tileMap, int type);
+        Entite(TileMap* tileMap, int type);
         Entite(int x, int y, TileMap *tileMap, int type);
 
         // Set et get
@@ -24,7 +24,7 @@ class Entite : public sf::Drawable, public sf::Transformable
         int getCoordY();
         pair<int,int> getCoord();
         Block* getBlock(pair<int,int> coord);
-        void setBlock(pair<int,int> coord, int blockType, int blockValue);
+        virtual void setBlock(pair<int,int> coord, int blockType, int blockValue);
         void setPath(vector<pair<int,int> > path);
         void setGoingForFood(bool boolean);
         bool isGoingForFood();
@@ -39,6 +39,7 @@ class Entite : public sf::Drawable, public sf::Transformable
         int getInventoryQuantity();
         int getInventoryType();
         int getHunger();
+        TileMap* getPtrMap();
         void setHunger(int food);
         void dimHunger(int food);
         bool checkFood();
@@ -59,6 +60,7 @@ class Entite : public sf::Drawable, public sf::Transformable
         bool oneMovement();
         bool oneAction();
         bool falling();
+        pair<int,int> getRandomDestination();
 
         // Entite IA base
         virtual bool nextStep();
