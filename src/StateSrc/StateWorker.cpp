@@ -39,9 +39,12 @@ bool StateWorkerIdle::execute(AntWorker* antWorker)
     }
     if (!antWorker->isGoingForFood())
     {
-        antWorker->setBlock(antWorker->getDestination(), 0, 0);
-        setNextAction(antWorker);
     }
+    else
+    {
+        antWorker->eat();
+    }
+    setNextAction(antWorker);
     return isDead;
 }
 
@@ -54,8 +57,7 @@ bool StateWorkerIdle::updateState(AntWorker* antWorker)
     }
     if (antWorker->getHunger() < 500)
     {
-        antWorker->setState(StateWorkerFood(antWorker));
-        antWorker->getAntHill()->m_numberWorkerIdle -=1;
+        antWorker->getFood();
     }
     return false;
 }
@@ -64,47 +66,6 @@ void StateWorkerIdle::setNextAction(AntWorker* antWorker)
 {
     antWorker->goTo(antWorker->getRandomDestination());
 }
-
-
-
-
-/// State Worker Food
-
-StateWorkerFood::StateWorkerFood(AntWorker* antWorker)
-{
-    antWorker->getFood();
-    m_string = "food";
-    antWorker->getAntHill()->m_numberWorkerFood +=1;
-}
-
-bool StateWorkerFood::execute(AntWorker* antWorker)
-{
-    bool isDead(false);
-    isDead = updateState(antWorker);
-    while (!antWorker->hasArrived())
-    {
-        antWorker->oneMovement();
-        return isDead;
-    }
-    antWorker->eat();
-    return isDead;
-}
-
-bool StateWorkerFood::updateState(AntWorker* antWorker)
-{
-    antWorker->dimHunger(1);
-    if (antWorker->checkFood())
-    {
-        return true;
-    }
-    if (!antWorker->isGoingForFood())
-    {
-        antWorker->setState(StateWorkerGather(antWorker));
-        antWorker->getAntHill()->m_numberWorkerFood -=1;
-    }
-    return false;
-}
-
 
 
 /// State Worker Gather
@@ -125,13 +86,20 @@ bool StateWorkerGather::execute(AntWorker* antWorker)
         antWorker->oneMovement();
         return isDead;
     }
-    if (antWorker->getInventoryQuantity() != 0)
+    if (antWorker->isGoingForFood())
     {
-        antWorker->store();
+        antWorker->eat();
     }
     else
     {
-        antWorker->gather(2);
+        if (antWorker->getInventoryQuantity() != 0)
+        {
+            antWorker->store();
+        }
+        else
+        {
+            antWorker->gather(2);
+        }
     }
     setNextAction(antWorker);
     return isDead;
@@ -146,8 +114,7 @@ bool StateWorkerGather::updateState(AntWorker* antWorker)
     }
     if (antWorker->getHunger() < 500)
     {
-        antWorker->setState(StateWorkerFood(antWorker));
-        antWorker->getAntHill()->m_numberWorkerGather -=1;
+        antWorker->getFood();
     }
     return false;
 }
@@ -183,7 +150,14 @@ bool StateWorkerBuild::execute(AntWorker* antWorker)
         antWorker->oneMovement();
         return isDead;
     }
-//action
+    if (antWorker->isGoingForFood())
+    {
+        antWorker->eat();
+    }
+    else
+    {
+
+    }
     setNextAction(antWorker);
     return isDead;
 }
@@ -197,8 +171,7 @@ bool StateWorkerBuild::updateState(AntWorker* antWorker)
     }
     if (antWorker->getHunger() < 500)
     {
-        antWorker->setState(StateWorkerFood(antWorker));
-        antWorker->getAntHill()->m_numberWorkerBuild -=1;
+        antWorker->getFood();
     }
     return false;
 }

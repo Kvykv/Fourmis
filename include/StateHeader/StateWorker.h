@@ -25,13 +25,6 @@ class StateWorkerIdle : public StateWorker
         virtual void setNextAction(AntWorker* antWorker);
 };
 
-class StateWorkerFood : public StateWorker
-{
-    public:
-        StateWorkerFood(AntWorker* antWorker);
-        virtual bool execute(AntWorker* antWorker);
-        virtual bool updateState(AntWorker* antWorker);
-};
 
 class StateWorkerGather : public StateWorker
 {
@@ -49,6 +42,10 @@ class StateWorkerBuild : public StateWorker
         virtual bool execute(AntWorker* antWorker);
         virtual bool updateState(AntWorker* antWorker);
         virtual void setNextAction(AntWorker* antWorker);
+
+    protected:
+        int m_buildType;
+        pair<int,int> m_buildCoord;
 };
 
 #endif // STATEWORKER_H

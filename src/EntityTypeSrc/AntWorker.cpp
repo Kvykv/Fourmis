@@ -51,11 +51,7 @@ StateWorker* AntWorker::getState()
 }
 void AntWorker::setState(StateWorker newState)
 {
-    if (newState.m_string == "food")
-    {
-        m_state.reset(new StateWorkerFood(this));
-    }
-    else if (newState.m_string == "idle")
+     if (newState.m_string == "idle")
     {
         m_state.reset(new StateWorkerIdle(this));
     }
@@ -63,7 +59,7 @@ void AntWorker::setState(StateWorker newState)
     {
         m_state.reset(new StateWorkerGather(this));
     }
-    else if (newState.m_string == "buid")
+    else if (newState.m_string == "build")
     {
         m_state.reset(new StateWorkerBuild(this));
     }

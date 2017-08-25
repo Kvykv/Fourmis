@@ -64,15 +64,21 @@ void Engine::draw()
 void Engine::drawInformations()
 {
     std::stringstream sstm;
-    sstm << "Number of :        Idle : " << antHill.m_numberWorkerIdle << "       Food : " << antHill.m_numberWorkerFood << "        Gather : " << antHill.m_numberWorkerGather << "        Build : " << antHill.m_numberWorkerBuild << "        Eggs : " << antHill.m_numberEggs;
+    sstm << "Population : " << antHill.getPopulation()
+                        << "    |    Idle : " << antHill.m_numberWorkerIdle
+                        << "        Gather : " << antHill.m_numberWorkerGather
+                        << "        Build : " << antHill.m_numberWorkerBuild
+                        << "        Eggs : " << antHill.m_numberEggs
+                        << "      ||        Food Capacity : " << antHill.getFoodCapacity()
+                        << "        Food Stored : " << antHill.getCurrentFoodStorage();
     string infos = sstm.str();
-    sf::Text text;
     sf::Font font;
-    text.setString(infos);
+    sf::Text text;
     text.setPosition(10,10);
     font.loadFromFile("resources/arial.ttf");
     text.setFont(font);
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(20);
+    text.setString(infos);
     window.draw(text);
 }

@@ -7,10 +7,11 @@ AntHill::AntHill(){}
 AntHill::AntHill(TileMap &tileMap)
     :m_tileMap(&tileMap)
     ,m_numberWorkerIdle(0)
-    ,m_numberWorkerFood(0)
     ,m_numberWorkerGather(0)
     ,m_numberWorkerBuild(0)
     ,m_numberEggs(0)
+    ,m_storageFoodCapacity(0)
+    ,m_storageFoodCurrent(0)
 {
 }
 

@@ -31,7 +31,6 @@ class AntHill
 
         /// Compteurs
         int m_numberWorkerIdle;
-        int m_numberWorkerFood;
         int m_numberWorkerGather;
         int m_numberWorkerBuild;
         int m_numberEggs;
