@@ -21,9 +21,10 @@ class Engine
         bool run();
         void draw();
         void processEvents();
+        void drawInformations();
     protected:
         TileMap tileMap;
-        AntHill m_antHill;
+        AntHill antHill;
         sf::Time timePerFrame;
         sf::RenderWindow window;
 

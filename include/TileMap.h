@@ -11,10 +11,11 @@
 #include <memory>
 
 using namespace std;
-static const int largeur(600);
-static const int hauteur(380);
+static const int largeur(800);
+static const int hauteur(450);
 static const double tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur);
 static const double tailleTileLargeur((double)sf::VideoMode::getDesktopMode().width/largeur);
+
 
 class TileMap : public sf::Drawable, public sf::Transformable
 {
@@ -36,13 +37,14 @@ public:
     Block* getBlock(pair<int,int> coord);
     void dimQuantiteBlock(pair<int,int> coord, int quantite);
     vector<pair<int, int> > getNeighbours(int x, int y);
+
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void paintBlock(int x, int y);
     void paintVoisinage(int x, int y);
     sf::VertexArray m_array;
 
-    array<array<unique_ptr<Block>,hauteur>,largeur> m_terrain;
+    vector<vector<unique_ptr<Block> > > m_terrain;
 };
 
 void creerTableau(vector<vector<int> >& tableau);

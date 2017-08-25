@@ -2,11 +2,12 @@
 #define STATE_H
 
 
+class Entite;
+
 class State
 {
     public:
         State();
-    private:
 };
 
 class StateIdle : public State
@@ -14,5 +15,6 @@ class StateIdle : public State
     public:
         StateIdle();
 };
+
 
 #endif // STATE_H

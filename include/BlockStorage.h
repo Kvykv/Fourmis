@@ -10,11 +10,13 @@ class BlockStorage : public Block
         virtual int getQuantite();
         virtual void dimQuantite(int quantite);
         virtual void addQuantite(int quantite);
-        virtual int getValueStorage();
+        virtual int getTypeStorage();
+        virtual int getCapacity();
 
     protected:
-        int m_valueStorage;
+        int m_typeStorage;
         int m_quantite;
+        const int m_capacity;
 
     private:
 };

@@ -1,11 +1,7 @@
 #ifndef ANTHILL_H
 #define ANTHILL_H
 #include "Block.h"
-#include "TileMap.h"
 #include "Entite.h"
-#include "AntWorker.h"
-#include "AntQueen.h"
-#include "AntEgg.h"
 #include <map>
 #include <memory>
 #include <string>
@@ -19,16 +15,32 @@ class AntHill
         AntHill();
         AntHill(TileMap &tileMap);
         vector<unique_ptr<Entite> >* getEntityArray();
-        void addTile(pair<int,int> coord);
-        void addAnt(int typeAnt = 0);
-        void addAnt(pair<int,int> coord, int typeAnt = 0);
-        void addEgg(int typeEgg = 0);
-        void addEgg(pair<int,int> coord, int typeEgg = 0);
+        multimap<string, pair<int,int> >* getTileArray();
+        void addTile(string aString, pair<int,int> coord);
+
+        ///Set and get
+        int getPopulation();
+        void updateFoodCapacity();
+        int getFoodCapacity();
+        int getCurrentFoodStorage();
+
+        void addAnt(pair<int,int> coord, int antType);
+        void addAnt(int antType);
+        void addEgg(int eggType);
+        void addEgg(pair<int,int> coord, int eggType);
+
+        /// Compteurs
+        int m_numberWorkerIdle;
+        int m_numberWorkerGather;
+        int m_numberWorkerBuild;
+        int m_numberEggs;
 
     protected:
-        TileMap* m_tileMap;
         vector<unique_ptr<Entite> > m_entityArray;
         multimap<string, pair<int,int> > m_tileArray;
+        TileMap* m_tileMap;
+        int m_storageFoodCapacity;
+        int m_storageFoodCurrent;
 };
 
 #endif // ANTHILL_H

@@ -2,7 +2,6 @@
 #define ANTEGG_H
 
 #include "Ant.h"
-#include "AntHill.h"
 
 class AntEgg : public Ant
 {
