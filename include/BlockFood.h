@@ -1,12 +1,13 @@
 #ifndef BLOCKFOOD_H
 #define BLOCKFOOD_H
 #include "Block.h"
+#include "BaseBlockFood.h"
 #include <iostream>
 
 class BlockFood : public Block
 {
     public:
-        BlockFood(int quantite);
+        BlockFood(shared_ptr<BaseBlock> baseBlock, int quantite);
         virtual void setQuantity(int quantite);
         virtual int getQuantity();
         virtual void dimQuantity(int quantite);

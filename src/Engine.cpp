@@ -17,7 +17,6 @@ bool Engine::run()
 {
     antHill.addAnt(1);
     draw();
-    //tileMap.showTileMap();
     sf::Clock clock;
     int i(0);
     sf::Time time;
@@ -25,6 +24,7 @@ bool Engine::run()
     {
         clock.restart();
         processEvents();
+        //tileMap.showTileMap();
         draw();
         sf::sleep(timePerFrame - clock.getElapsedTime());
         i++;

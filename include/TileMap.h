@@ -7,12 +7,13 @@
 #include "BlockDirt.h"
 #include "BlockFood.h"
 #include "BlockStorage.h"
+#include "BaseBlock.h"
 #include <vector>
 #include <memory>
 
 using namespace std;
-static const int largeur(800);
-static const int hauteur(450);
+static const int largeur(960);
+static const int hauteur(540);
 static const double tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur);
 static const double tailleTileLargeur((double)sf::VideoMode::getDesktopMode().width/largeur);
 
@@ -43,6 +44,7 @@ private:
     void paintBlock(int x, int y);
     void paintVoisinage(int x, int y);
     sf::VertexArray m_array;
+    array<shared_ptr<BaseBlock>, 4> m_blockFactory;
 
     vector<vector<unique_ptr<Block> > > m_terrain;
 };

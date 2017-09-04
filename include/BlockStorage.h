@@ -1,11 +1,12 @@
 #ifndef BLOCKSTORAGE_H
 #define BLOCKSTORAGE_H
 #include "Block.h"
+#include "BaseBlockStorage.h"
 
 class BlockStorage : public Block
 {
     public:
-        BlockStorage(int quantite, int valueStorage);
+        BlockStorage(shared_ptr<BaseBlock> baseBlock, int quantite, int valueStorage);
         virtual void setQuantite(int quantite);
         virtual int getQuantite();
         virtual void dimQuantite(int quantite);

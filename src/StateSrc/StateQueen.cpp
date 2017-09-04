@@ -17,7 +17,7 @@ bool  StateQueen::updateState(AntQueen* AntQueen)
 
 StateQueenLaying::StateQueenLaying(AntQueen* antQueen)
 {
-    antQueen->goTo(pair<int,int>(200,300));
+    antQueen->goTo(pair<int,int>(300,300));
     m_string = "laying";
 }
 
@@ -63,7 +63,6 @@ StateQueenFood::StateQueenFood(AntQueen* antQueen)
 bool StateQueenFood::execute(AntQueen* antQueen)
 {
     bool isDead(false);
-    antQueen->addCDLaying(1);
     isDead = updateState(antQueen);
     while (!antQueen->hasArrived())
     {

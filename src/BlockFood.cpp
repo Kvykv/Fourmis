@@ -2,11 +2,10 @@
 
 using namespace std;
 
-BlockFood::BlockFood(int quantite)
-    :Block(2, true, true, 1)
+BlockFood::BlockFood(shared_ptr<BaseBlock> baseBlock, int quantite)
+    :Block(baseBlock, true, true, 1)
     ,m_quantity(quantite)
 {
-    m_tag = "Food";
 }
 
 void BlockFood::setQuantity(int quantite)

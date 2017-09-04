@@ -1,7 +1,6 @@
 #include "BlockAir.h"
 
-BlockAir::BlockAir()
-    :Block(0, false, false, 1)
+BlockAir::BlockAir(shared_ptr<BaseBlock> baseBlock)
+    :Block(baseBlock, false, false, 1)
 {
-    m_tag = "Air";
 }

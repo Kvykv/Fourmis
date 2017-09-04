@@ -25,7 +25,7 @@ void Ant::setBlock(pair<int,int> coord, int blockType, int blockValue)
         m_ptrMap->setBlock(coord, blockType, blockValue);
         if (blockType == 3)
         {
-            m_antHill->addTile(m_ptrMap->getBlock(coord)->getString(), coord);
+            m_antHill->addTile(m_ptrMap->getBlock(coord)->getTag(), coord);
         }
     }
 }

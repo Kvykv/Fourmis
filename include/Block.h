@@ -1,15 +1,16 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 #include <string>
+#include "BaseBlock.h"
+#include <memory>
 
 using namespace std;
 class Block
 {
     public:
-        Block();
-        Block(int n, bool crossable, bool diggable, int cost);
+        Block(shared_ptr<BaseBlock> baseBlock);
+        Block(shared_ptr<BaseBlock> baseBlock , bool crossable, bool diggable, int cost);
         int getBlockType() const;
-        void setBlockType(int n);
         int getCost() const;
         void setCost(int cost);
         bool isDiggable();
@@ -18,7 +19,7 @@ class Block
         void setDiggable(bool boolean);
 
         // Heritage
-        virtual string getString() const;
+        virtual string getTag() const;
         virtual void setQuantity(int quantite);
         virtual void dimQuantity(int quantite);
         virtual void addQuantity(int quantite);
@@ -27,11 +28,10 @@ class Block
         virtual int getCapacity();
 
     protected:
-        int m_blockType;
+        shared_ptr<BaseBlock> m_baseBlock;
         int m_cost;
         bool m_isCrossable = false;
         bool m_isDiggable = false;
-        string m_tag;
 
     private:
 };
