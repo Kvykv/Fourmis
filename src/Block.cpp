@@ -2,41 +2,22 @@
 #include <iostream>
 using namespace std;
 
-Block::Block():m_blockType(0)
-    ,m_tag("Air")
+Block::Block(shared_ptr<BaseBlock> baseBlock):m_baseBlock(baseBlock)
 {
     m_isCrossable = false;
     m_isDiggable = false;
 }
-Block::Block(int n, bool crossable, bool diggable, int cost)
-    :m_blockType(n)
+Block::Block(shared_ptr<BaseBlock> baseBlock, bool crossable, bool diggable, int cost)
+    :m_baseBlock(baseBlock)
     ,m_isCrossable(crossable)
     ,m_isDiggable(diggable)
     ,m_cost(cost)
 {}
 int Block::getBlockType() const
 {
-    return m_blockType;
+    return m_baseBlock->getBlockType();
 }
-void Block::setBlockType(int n)
-{
-    m_blockType = n;
-    if (n==0)
-    {
-        setCrossable(false);
-        setDiggable(false);
-    }
-    else if (n==2)
-    {
-        setCrossable(false);
-        setDiggable(true);
-    }
-    else
-    {
-        setCrossable(false);
-        setDiggable(false);
-    }
-}
+
 int Block::getCost() const
 {
     return m_cost;
@@ -45,9 +26,9 @@ void Block::setCost(int cost)
 {
     m_cost = cost;
 }
-string Block::getString() const
+string Block::getTag() const
 {
-    return m_tag;
+    return m_baseBlock->getTag();
 }
 bool Block::isCrossable()
 {
@@ -68,20 +49,25 @@ void Block::setDiggable(bool boolean)
 
 /* --------------------- Heritage --------------------- */
 
-void Block::setQuantite(int quantite)
+void Block::setQuantity(int quantite)
 {
 }
-int Block::getQuantite()
+int Block::getQuantity()
 {
     return 1;
 }
-void Block::dimQuantite(int quantite)
+void Block::dimQuantity(int quantite)
 {
 }
-void Block::addQuantite(int quantite)
+void Block::addQuantity(int quantite)
 {
 }
-int Block::getValueStorage()
+int Block::getTypeStorage()
+{
+    return 0;
+}
+
+int Block::getCapacity()
 {
     return 0;
 }

@@ -2,12 +2,12 @@
 
 using namespace std;
 
-BlockStorage::BlockStorage(int quantite, int valueStorage)
-    :Block(3, true, true, 1)
-    ,m_valueStorage(valueStorage)
+BlockStorage::BlockStorage(shared_ptr<BaseBlock> baseBlock, int quantite, int typeStorage)
+    :Block(baseBlock, true, true, 1)
+    ,m_typeStorage(typeStorage)
     ,m_quantite(quantite)
+    ,m_capacity(20000)
 {
-    m_tag = "Storage";
 }
 
 void BlockStorage::setQuantite(int quantite)
@@ -26,7 +26,12 @@ void BlockStorage::addQuantite(int quantite)
 {
     m_quantite = m_quantite + quantite;
 }
-int BlockStorage::getValueStorage()
+int BlockStorage::getTypeStorage()
 {
-    return m_valueStorage;
+    return m_typeStorage;
+}
+
+int BlockStorage::getCapacity()
+{
+    return m_capacity;
 }

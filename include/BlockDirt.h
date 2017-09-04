@@ -2,11 +2,12 @@
 #define BLOCKDIRT_H
 
 #include "Block.h"
+#include "BaseBlockDirt.h"
 
 class BlockDirt : public Block
 {
     public:
-        BlockDirt();
+        BlockDirt(shared_ptr<BaseBlock> baseBlock);
 
     protected:
 

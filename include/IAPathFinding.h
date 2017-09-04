@@ -9,6 +9,8 @@ using namespace std;
 struct point{
     int x,y;
 };
+
+
 class Node {
 public:
     int m_id;

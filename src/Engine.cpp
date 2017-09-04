@@ -1,4 +1,6 @@
 #include "Engine.h"
+#include <string>
+#include <sstream>
 
 Engine::Engine()
     :timePerFrame(sf::seconds(1.f/30.f))
@@ -8,14 +10,13 @@ Engine::Engine()
     tableau.resize(largeur);
     creerTableau(tableau);
     tileMap = TileMap(tableau);
-    m_antHill = AntHill(tileMap);
+    antHill =  AntHill(tileMap);
 }
 
 bool Engine::run()
 {
-    m_entityArray.push_back(Entite(&tileMap, &m_antHill));
+    antHill.addAnt(1);
     draw();
-    //tileMap.showTileMap();
     sf::Clock clock;
     int i(0);
     sf::Time time;
@@ -23,16 +24,17 @@ bool Engine::run()
     {
         clock.restart();
         processEvents();
+        //tileMap.showTileMap();
         draw();
         sf::sleep(timePerFrame - clock.getElapsedTime());
-        /*i++;
+        i++;
         if (i>=50)
         {
-            m_entityArray.push_back(Entite(&tileMap, &m_antHill));
+            //antHill.addEgg();
             i-=50;
-
-        }*/
+        }
     }
+    return true;
 }
 void Engine::processEvents()
 {
@@ -45,15 +47,38 @@ void Engine::processEvents()
         }
         else if (event.type == sf::Event::KeyPressed)
         {
-            m_entityArray.push_back(Entite(&tileMap, &m_antHill));
+            //antHill.addEgg();
         }
     }
-    Entite::nexStepArray(m_entityArray);
+    Entite::nexStepArray(antHill.getEntityArray());
 }
 void Engine::draw()
 {
     window.clear();
     window.draw(tileMap);
-    Entite::drawEntiteArray(m_entityArray, window);
+    Entite::drawEntiteArray(antHill.getEntityArray(), window);
+    drawInformations();
     window.display();
+}
+
+void Engine::drawInformations()
+{
+    std::stringstream sstm;
+    sstm << "Population : " << antHill.getPopulation()
+                        << "    |    Idle : " << antHill.m_numberWorkerIdle
+                        << "        Gather : " << antHill.m_numberWorkerGather
+                        << "        Build : " << antHill.m_numberWorkerBuild
+                        << "        Eggs : " << antHill.m_numberEggs
+                        << "      ||        Food Capacity : " << antHill.getFoodCapacity()
+                        << "        Food Stored : " << antHill.getCurrentFoodStorage();
+    string infos = sstm.str();
+    sf::Font font;
+    sf::Text text;
+    text.setPosition(10,10);
+    font.loadFromFile("resources/arial.ttf");
+    text.setFont(font);
+    text.setFillColor(sf::Color::Black);
+    text.setCharacterSize(20);
+    text.setString(infos);
+    window.draw(text);
 }

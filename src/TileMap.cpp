@@ -9,6 +9,17 @@ using namespace std;
 TileMap::TileMap(){}
 TileMap::TileMap(vector<vector<int> >& tableau)
 {
+    m_blockFactory[0].reset(new BaseBlockAir());
+    m_blockFactory[1].reset(new BaseBlockDirt());
+    m_blockFactory[2].reset(new BaseBlockFood());
+    m_blockFactory[3].reset (new BaseBlockStorage());
+
+
+    m_terrain.resize(largeur);
+    for (int i = 0; i < largeur; i++)
+    {
+        m_terrain[i].resize(hauteur);
+    }
     initialiserTileMap(tableau);
 }
 void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
@@ -20,13 +31,13 @@ void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
             switch(tableau[x][y])
             {
             case 0:
-                 m_terrain[x][y].reset(new BlockAir());
+                 m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
                  break;
             case 1:
-                 m_terrain[x][y].reset(new BlockDirt());
+                 m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1]));
                  break;
             default:
-                 m_terrain[x][y].reset(new BlockAir());
+                 m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
                  break;
             }
         }
@@ -38,7 +49,7 @@ void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
 void TileMap::initFood()
 {
     int x(0);
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < largeur/20; i++)
     {
         x = (rand()%(largeur-2)) + 1;
         for (int y = 0; y < hauteur; y ++)
@@ -159,7 +170,7 @@ void TileMap::showTileMap() const
     {
         for (int x=0; x<largeur; x++)
         {
-            cout << m_terrain[x][y]->isCrossable();
+            cout << m_terrain[x][y]->getTag();
         }
     cout << endl;
     }
@@ -168,21 +179,22 @@ void TileMap::showTileMap() const
 
 // -------------------------- Gameplay -------------------------------------
 
+
 void TileMap::setBlock(int x, int y, int blockType, int blockValue)
 {
     switch(blockType)
     {
     case 0:
-        m_terrain[x][y].reset(new BlockAir());
+        m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
         break;
     case 1:
-        m_terrain[x][y].reset(new BlockDirt());
+        m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1]));
         break;
     case 2:
-        m_terrain[x][y].reset(new BlockFood(blockValue));
+        m_terrain[x][y].reset(new BlockFood(m_blockFactory[2], blockValue));
         break;
     case 3:
-        m_terrain[x][y].reset(new BlockStorage(0, blockValue));
+        m_terrain[x][y].reset(new BlockStorage(m_blockFactory[3], 0, blockValue));
     }
     setSurfaceVoisinage(x, y);
     paintVoisinage(x, y);
@@ -205,8 +217,8 @@ Block* TileMap::getBlock(pair<int,int> coord)
 }
 void TileMap::dimQuantiteBlock(pair<int,int> coord, int quantite)
 {
-    getBlock(coord)->dimQuantite(quantite);
-    if (getBlock(coord)->getQuantite() <= 0)
+    getBlock(coord)->dimQuantity(quantite);
+    if (getBlock(coord)->getQuantity() <= 0)
     {
         setBlock(coord, 0);
     }

@@ -1,11 +1,13 @@
 #ifndef BLOCKAIR_H
 #define BLOCKAIR_H
+
 #include "Block.h"
+#include "BaseBlockAir.h"
 
 class BlockAir : public Block
 {
     public:
-        BlockAir();
+        BlockAir(shared_ptr<BaseBlock> baseBlock);
 
     protected:
 

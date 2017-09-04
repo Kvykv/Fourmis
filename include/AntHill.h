@@ -1,33 +1,46 @@
 #ifndef ANTHILL_H
 #define ANTHILL_H
 #include "Block.h"
-#include "TileMap.h"
+#include "Entite.h"
 #include <map>
 #include <memory>
 #include <string>
 
 using namespace std;
 
-struct Tile
-{
-    pair<int,int> m_coord;
-    Block m_block;
-    Tile(pair<int,int> coord, Block &block);
-};
-typedef pair<string, Tile> pairTile;
-
-class Entite;
 
 class AntHill
 {
     public:
         AntHill();
         AntHill(TileMap &tileMap);
-        void addTile(pair<int,int> coord, Block &block);
+        vector<unique_ptr<Entite> >* getEntityArray();
+        multimap<string, pair<int,int> >* getTileArray();
+        void addTile(string aString, pair<int,int> coord);
+
+        ///Set and get
+        int getPopulation();
+        void updateFoodCapacity();
+        int getFoodCapacity();
+        int getCurrentFoodStorage();
+
+        void addAnt(pair<int,int> coord, int antType);
+        void addAnt(int antType);
+        void addEgg(int eggType);
+        void addEgg(pair<int,int> coord, int eggType);
+
+        /// Compteurs
+        int m_numberWorkerIdle;
+        int m_numberWorkerGather;
+        int m_numberWorkerBuild;
+        int m_numberEggs;
 
     protected:
+        vector<unique_ptr<Entite> > m_entityArray;
+        multimap<string, pair<int,int> > m_tileArray;
         TileMap* m_tileMap;
-        multimap<string, Tile> m_tileArray;
+        int m_storageFoodCapacity;
+        int m_storageFoodCurrent;
 };
 
 #endif // ANTHILL_H

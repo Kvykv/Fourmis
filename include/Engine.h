@@ -1,6 +1,8 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 #include "Block.h"
+#include "EntityTypesHeader/AntQueen.h"
+#include "EntityTypesHeader/AntWorker.h"
 #include "TileMap.h"
 #include "AntHill.h"
 #include "Entite.h"
@@ -19,10 +21,10 @@ class Engine
         bool run();
         void draw();
         void processEvents();
+        void drawInformations();
     protected:
         TileMap tileMap;
-        vector<Entite> m_entityArray;
-        AntHill m_antHill;
+        AntHill antHill;
         sf::Time timePerFrame;
         sf::RenderWindow window;
 
