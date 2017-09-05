@@ -71,12 +71,13 @@ Block* Entite::getBlock(pair<int,int> coord)
 {
     return m_ptrMap->getBlock(coord);
 }
-void Entite::setBlock(pair<int,int> coord, int blockType, int blockValue)
+bool Entite::setBlock(pair<int,int> coord, int blockType, int blockValue)
 {
     if(MathHelp::distance(coord, getCoord())<=2)
     {
         m_ptrMap->setBlock(coord, blockType, blockValue);
     }
+    return true;
 }
 void Entite::setGoingForFood(bool boolean)
 {
@@ -269,12 +270,10 @@ void Entite::eat()
 {
     if (getBlock(m_destination)->getBlockType() == 2)
     {
-        cout << m_hunger << "  " << getBlock(m_destination)->getBlockType() << "  ";
         int quantity(min(1000, getBlock(m_destination)->getQuantity()));
         m_ptrMap->dimQuantiteBlock(m_destination, quantity);
         m_hunger+=quantity;
         m_goingForFood = false;
-        cout << m_hunger << endl;
     }
     else
     {

@@ -1,5 +1,7 @@
 #include "StateQueen.h"
 
+using namespace std;
+
 StateQueen::StateQueen()
 {
 }

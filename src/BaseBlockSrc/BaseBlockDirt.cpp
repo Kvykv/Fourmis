@@ -1,6 +1,6 @@
 #include "BaseBlockDirt.h"
 
 BaseBlockDirt::BaseBlockDirt()
-    :BaseBlock(1, "Dirt")
+    :BaseBlock(1, "Dirt", true)
 {
 }

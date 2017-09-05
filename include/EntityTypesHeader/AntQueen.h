@@ -22,7 +22,7 @@ class AntQueen : public Ant
 
     private:
         int m_CDLaying;
-        unique_ptr<StateQueen> m_state;
+        std::unique_ptr<StateQueen> m_state;
 };
 
 #endif // ANTQUEEN_H

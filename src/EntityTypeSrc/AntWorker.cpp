@@ -1,5 +1,7 @@
 #include "EntityTypesHeader/AntWorker.h"
 
+using namespace std;
+
 AntWorker::AntWorker(TileMap *tileMap, AntHill *antHill)
     :Ant(tileMap, antHill, 0)
     ,m_state(new StateWorkerIdle(this))
@@ -9,9 +11,20 @@ AntWorker::AntWorker(TileMap *tileMap, AntHill *antHill)
 
 AntWorker::AntWorker(int x, int y, TileMap *tileMap, AntHill *antHill)
     :Ant(x, y, tileMap, antHill, 0)
-    ,m_state(new StateWorkerIdle(this))
 {
     setNextAction();
+    if (antHill->m_numberWorkerBuild == 0)
+    {
+        m_state.reset(new StateWorkerBuild(this));
+    }
+    else if (rand()%10 < 6)
+    {
+        m_state.reset(new StateWorkerGather(this));
+    }
+    else
+    {
+        m_state.reset(new StateWorkerIdle(this));
+    }
 }
 
 void AntWorker::gather(int typeResource)
@@ -67,7 +80,7 @@ void AntWorker::setState(StateWorker newState)
 
 pair<int,int> AntWorker::getNotFullStorage()
 {
-    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> storage = m_antHill->getTileArray()->equal_range("storage");
+    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> storage = m_antHill->getTileArray()->equal_range("Storage");
     if (storage.first!=m_antHill->getTileArray()->end())
     {
         for (multimap<string, pair<int,int> >::iterator i = storage.first; i != storage.second; i++)
@@ -85,4 +98,16 @@ bool AntWorker::nextStep()
 {
     falling();
     return m_state->execute(this);
+}
+
+Tile AntWorker::popBuildQueue()
+{
+    if(!m_antHill->isEmptyBuildQueue())
+    {
+        return m_antHill->popBuildQueue();
+    }
+    else
+    {
+        return Tile(0, getCoord());
+    }
 }

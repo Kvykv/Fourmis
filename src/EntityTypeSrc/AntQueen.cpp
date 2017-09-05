@@ -1,5 +1,6 @@
 #include "EntityTypesHeader/AntQueen.h"
 
+using namespace std;
 
 AntQueen::AntQueen(TileMap *tileMap, AntHill *antHill)
     :Ant(tileMap, antHill, 1)

@@ -2,6 +2,8 @@
 #include <string>
 #include <sstream>
 
+using namespace std;
+
 Engine::Engine()
     :timePerFrame(sf::seconds(1.f/30.f))
     ,window(sf::VideoMode(1920,1080), "TileMap"/*, sf::Style::Fullscreen*/)
@@ -11,6 +13,7 @@ Engine::Engine()
     creerTableau(tableau);
     tileMap = TileMap(tableau);
     antHill =  AntHill(tileMap);
+    m_antHillAI = AntHillAI(&antHill);
 }
 
 bool Engine::run()
@@ -28,10 +31,13 @@ bool Engine::run()
         draw();
         sf::sleep(timePerFrame - clock.getElapsedTime());
         i++;
-        if (i>=50)
+        if (i%10)
         {
-            //antHill.addEgg();
-            i-=50;
+            antHill.updateFoodCapacity();
+        }
+        if (i == 1000)
+        {
+            i = 0;
         }
     }
     return true;
@@ -47,7 +53,7 @@ void Engine::processEvents()
         }
         else if (event.type == sf::Event::KeyPressed)
         {
-            //antHill.addEgg();
+            antHill.addAnt(0);
         }
     }
     Entite::nexStepArray(antHill.getEntityArray());

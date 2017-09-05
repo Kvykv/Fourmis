@@ -1,23 +1,28 @@
 #include "StateWorker.h"
 
+using namespace std;
+
 StateWorker::StateWorker()
 {
 }
 
-bool StateWorker::execute(AntWorker* antWorker)
+bool StateWorker::execute(AntWorker* antWorker){}
+
+bool StateWorker::updateState(AntWorker* antWorker)
 {
+    antWorker->dimHunger(1);
+    if (antWorker->checkFood())
+    {
+        return true;
+    }
+    if (antWorker->getHunger() < 500 && !antWorker->isGoingForFood())
+    {
+        antWorker->getFood();
+    }
+    return false;
 }
 
-bool  StateWorker::updateState(AntWorker* antWorker)
-{
-}
-
-
-void StateWorker::setNextAction(AntWorker* antWorker)
-{
-
-}
-
+void StateWorker::setNextAction(AntWorker* antWorker){}
 
 /// State Worker Idle
 
@@ -32,7 +37,7 @@ bool StateWorkerIdle::execute(AntWorker* antWorker)
 {
     bool isDead(false);
     isDead = updateState(antWorker);
-    while (!antWorker->hasArrived())
+    if(!antWorker->hasArrived())
     {
         antWorker->oneMovement();
         return isDead;
@@ -48,19 +53,6 @@ bool StateWorkerIdle::execute(AntWorker* antWorker)
     return isDead;
 }
 
-bool StateWorkerIdle::updateState(AntWorker* antWorker)
-{
-    antWorker->dimHunger(1);
-    if (antWorker->checkFood())
-    {
-        return true;
-    }
-    if (antWorker->getHunger() < 500)
-    {
-        antWorker->getFood();
-    }
-    return false;
-}
 
 void StateWorkerIdle::setNextAction(AntWorker* antWorker)
 {
@@ -105,19 +97,6 @@ bool StateWorkerGather::execute(AntWorker* antWorker)
     return isDead;
 }
 
-bool StateWorkerGather::updateState(AntWorker* antWorker)
-{
-    antWorker->dimHunger(1);
-    if (antWorker->checkFood())
-    {
-        return true;
-    }
-    if (antWorker->getHunger() < 500)
-    {
-        antWorker->getFood();
-    }
-    return false;
-}
 
 void StateWorkerGather::setNextAction(AntWorker* antWorker)
 {
@@ -135,6 +114,7 @@ void StateWorkerGather::setNextAction(AntWorker* antWorker)
 /// State Worker Build
 
 StateWorkerBuild::StateWorkerBuild(AntWorker* antWorker)
+    :m_buildOrder(0, antWorker->getCoord())
 {
     setNextAction(antWorker);
     m_string = "build";
@@ -156,27 +136,31 @@ bool StateWorkerBuild::execute(AntWorker* antWorker)
     }
     else
     {
-
+        bool success(build(antWorker));
+        if (success)
+        {
+        setNextAction(antWorker);
+        }
+        else
+        {
+            antWorker->goTo(m_buildOrder.coord);
+        }
     }
-    setNextAction(antWorker);
     return isDead;
 }
 
-bool StateWorkerBuild::updateState(AntWorker* antWorker)
+bool StateWorkerBuild::build(AntWorker* antWorker)
 {
-    antWorker->dimHunger(1);
-    if (antWorker->checkFood())
-    {
-        return true;
-    }
-    if (antWorker->getHunger() < 500)
-    {
-        antWorker->getFood();
-    }
-    return false;
+    return antWorker->setBlock(m_buildOrder.coord, m_buildOrder.blockType, m_buildOrder.blockValue);
 }
 
 void StateWorkerBuild::setNextAction(AntWorker* antWorker)
 {
+    setBuildOrder(antWorker->popBuildQueue());
+    antWorker->goTo(m_buildOrder.coord);
+}
 
+void StateWorkerBuild::setBuildOrder(Tile tile)
+{
+    m_buildOrder = tile;
 }

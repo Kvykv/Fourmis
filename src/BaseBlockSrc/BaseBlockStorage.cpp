@@ -1,6 +1,6 @@
 #include "BaseBlockStorage.h"
 
 BaseBlockStorage::BaseBlockStorage()
-    :BaseBlock(3, "Storage")
+    :BaseBlock(3, "Storage", true)
 {
 }

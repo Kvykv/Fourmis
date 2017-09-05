@@ -1,6 +1,8 @@
 #include "BlockAir.h"
 
+using namespace std;
+
 BlockAir::BlockAir(shared_ptr<BaseBlock> baseBlock)
-    :Block(baseBlock, false, false, 1)
+    :Block(baseBlock, false, 1)
 {
 }

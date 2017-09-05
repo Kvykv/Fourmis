@@ -9,7 +9,7 @@ class Ant : public Entite
     public:
         Ant(TileMap *tileMap, AntHill *antHill, int type);
         Ant(int x, int y, TileMap *tileMap, AntHill *antHill, int type);
-        virtual void setBlock(pair<int,int> coord, int blockType, int blockValue);
+        virtual bool setBlock(std::pair<int,int> coord, int blockType, int blockValue = 0);
         AntHill* getAntHill();
 
     protected:

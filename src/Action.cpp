@@ -1,5 +1,7 @@
 #include "Action.h"
 
+using namespace std;
+
 Action::Action()
     :m_typeAction(0)
 {

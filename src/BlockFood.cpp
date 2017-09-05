@@ -3,7 +3,7 @@
 using namespace std;
 
 BlockFood::BlockFood(shared_ptr<BaseBlock> baseBlock, int quantite)
-    :Block(baseBlock, true, true, 1)
+    :Block(baseBlock, true, 1)
     ,m_quantity(quantite)
 {
 }

@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "TileMap.h"
+#include <math.h>
 #include <iostream>
 using namespace std;
 
@@ -64,9 +65,10 @@ void TileMap::initFood()
 }
 void TileMap::createGrass(int x, int y)
 {
-    int height(rand()%7);
+    int height(rand()%7+1);
     int width(1);
-    for (int i= 0; i<height; i++)
+    setBlock(min(largeur-2,x), max(1,y), 2, 10000);
+    for (int i= 1; i<height; i++)
     {
         setBlock(min(largeur-2,x+width), max(1,y-i), 2, 10000);
         width = rand()%2;
@@ -77,7 +79,7 @@ void creerTableau(vector<vector<int> >& tableau)
     double var(2 * hauteur/ 5); // Proportion ciel
     for (int x = 0; x < largeur; x++)
     {
-        var = var + rand()%7 - 3;
+        var = var + (pow(rand()%7 - 3, 3))/9;
         tableau[x].resize(hauteur);
         for (int y = 0; y < hauteur; y++)
         {

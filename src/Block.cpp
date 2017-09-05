@@ -5,12 +5,10 @@ using namespace std;
 Block::Block(shared_ptr<BaseBlock> baseBlock):m_baseBlock(baseBlock)
 {
     m_isCrossable = false;
-    m_isDiggable = false;
 }
-Block::Block(shared_ptr<BaseBlock> baseBlock, bool crossable, bool diggable, int cost)
+Block::Block(shared_ptr<BaseBlock> baseBlock, bool crossable, int cost)
     :m_baseBlock(baseBlock)
     ,m_isCrossable(crossable)
-    ,m_isDiggable(diggable)
     ,m_cost(cost)
 {}
 int Block::getBlockType() const
@@ -36,15 +34,11 @@ bool Block::isCrossable()
 }
 bool Block::isDiggable()
 {
-    return m_isDiggable;
+    return m_baseBlock->isDiggable();
 }
 void Block::setCrossable(bool boolean)
 {
     m_isCrossable = boolean;
-}
-void Block::setDiggable(bool boolean)
-{
-    m_isDiggable = boolean;
 }
 
 /* --------------------- Heritage --------------------- */
@@ -54,7 +48,7 @@ void Block::setQuantity(int quantite)
 }
 int Block::getQuantity()
 {
-    return 1;
+    return -1;
 }
 void Block::dimQuantity(int quantite)
 {

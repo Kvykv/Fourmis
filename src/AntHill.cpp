@@ -3,6 +3,15 @@
 #include "AntQueen.h"
 #include "AntEgg.h"
 
+using namespace std;
+
+Tile::Tile(int aBlockType, pair<int,int> aCoord, int aBlockValue)
+    :blockType(aBlockType)
+    ,coord(aCoord)
+    ,blockValue(aBlockValue)
+{
+}
+
 AntHill::AntHill(){}
 AntHill::AntHill(TileMap &tileMap)
     :m_tileMap(&tileMap)
@@ -41,7 +50,7 @@ void AntHill::updateFoodCapacity()
 {
     m_storageFoodCapacity = 0;
     m_storageFoodCurrent = 0;
-    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> storage = m_tileArray.equal_range("storage");
+    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> storage = m_tileArray.equal_range("Storage");
     if (storage.first!=m_tileArray.end())
     {
         for (multimap<string, pair<int,int> >::iterator i = storage.first; i != storage.second; i++)
@@ -59,6 +68,11 @@ int AntHill::getFoodCapacity()
 int AntHill::getCurrentFoodStorage()
 {
     return m_storageFoodCurrent;
+}
+
+std::queue<Tile>* AntHill::getQueueBuild()
+{
+    return &m_buildQueue;
 }
 
 
@@ -111,3 +125,19 @@ void AntHill::addEgg(pair<int,int> coord, int eggType)
     m_entityArray.push_back(move(ptr_Entite));
 }
 
+void AntHill::addBuildQueue(Tile tile)
+{
+    m_buildQueue.push(tile);
+}
+
+Tile AntHill::popBuildQueue()
+{
+    Tile tile = m_buildQueue.front();
+    m_buildQueue.pop();
+    return tile;
+}
+
+bool AntHill::isEmptyBuildQueue()
+{
+    return m_buildQueue.empty();
+}

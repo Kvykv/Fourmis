@@ -1,17 +1,19 @@
 #ifndef IA_H
 #define IA_H
 
-#include "Entite.h"
 #include "TileMap.h"
+#include "AntHill.h"
 
-class IA
+class AntHillAI
 {
     public:
-
+        AntHillAI();
+        AntHillAI(AntHill* antHill);
 
     protected:
 
     private:
+        AntHill* m_antHill;
 };
 
 #endif // IA_H

@@ -8,6 +8,7 @@
 #include "Entite.h"
 #include "time.h"
 #include "IAPathFinding.h"
+#include "IA.h"
 #include <windows.h>
 #include <vector>
 #include <cmath>
@@ -25,6 +26,7 @@ class Engine
     protected:
         TileMap tileMap;
         AntHill antHill;
+        AntHillAI m_antHillAI;
         sf::Time timePerFrame;
         sf::RenderWindow window;
 
