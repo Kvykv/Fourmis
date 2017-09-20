@@ -3,6 +3,7 @@
 
 #include "Entite.h"
 #include "AntHill.h"
+#include "ResourceHolder.h"
 
 class Ant : public Entite
 {
@@ -10,6 +11,8 @@ class Ant : public Entite
         Ant(TileMap *tileMap, AntHill *antHill, int type);
         Ant(int x, int y, TileMap *tileMap, AntHill *antHill, int type);
         virtual bool setBlock(std::pair<int,int> coord, int blockType, int blockValue = 0);
+        virtual std::pair<int,int> lookForFood(int typeBlock);
+        std::pair<int,int> getNotEmptyStorage();
         AntHill* getAntHill();
 
     protected:

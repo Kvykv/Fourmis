@@ -22,8 +22,9 @@ class Block
         virtual void dimQuantity(int quantite);
         virtual void addQuantity(int quantite);
         virtual int getQuantity();
-        virtual int getTypeStorage();
+        virtual int getStorageType();
         virtual int getCapacity();
+        virtual bool isEmpty();
 
     protected:
         std::shared_ptr<BaseBlock> m_baseBlock;

@@ -9,6 +9,8 @@ class AntHillAI
     public:
         AntHillAI();
         AntHillAI(AntHill* antHill);
+        void update();
+        void expandStorage();
 
     protected:
 

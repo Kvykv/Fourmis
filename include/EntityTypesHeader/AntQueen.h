@@ -10,6 +10,7 @@ class AntQueen : public Ant
     public:
         AntQueen(TileMap *tileMap, AntHill *antHill);
         AntQueen(int x, int y, TileMap *tileMap, AntHill *antHill);
+        ~AntQueen();
         void setCDLaying(int par);
         void addCDLaying(int incr);
         int getCDLaying();

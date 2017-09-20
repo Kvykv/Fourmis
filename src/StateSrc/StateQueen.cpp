@@ -42,6 +42,7 @@ bool StateQueenLaying::execute(AntQueen* antQueen)
 
 bool StateQueenLaying::updateState(AntQueen* antQueen)
 {
+    antQueen->falling();
     antQueen->dimHunger(1);
     if (antQueen->checkFood())
     {

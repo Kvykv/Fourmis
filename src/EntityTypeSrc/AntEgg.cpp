@@ -6,9 +6,13 @@ AntEgg::AntEgg(TileMap *tileMap, AntHill *antHill, int eggType)
     ,m_eggType(eggType)
     ,m_hatchingCoolDown(500)
 {
-    m_shape.setRadius(0.8*tailleTileLargeur);
+    m_sprite.setTexture(m_antHill->getResourceHolder()->get(TextureEgg));
+    //float scale(1.0/m_sprite.getTexture()->getSize().x);
+
+    auto fscale = [&] (float s) -> float {return 1.0/m_sprite.getTexture()->getSize().x;};
+
+    m_sprite.setScale(fscale(1.f)*tailleTileLargeur,fscale(1.f)*tailleTileHauteur);
     paintEntite();
-    m_shape.setFillColor(sf::Color::White);
     setNextAction();
     m_antHill->m_numberEggs+=1;
 }
@@ -18,9 +22,10 @@ AntEgg::AntEgg(int x, int y, TileMap *tileMap, AntHill *antHill, int eggType)
     ,m_eggType(eggType)
     ,m_hatchingCoolDown(1000)
 {
-    m_shape.setRadius(0.8*tailleTileLargeur);
+    m_sprite.setTexture(m_antHill->getResourceHolder()->get(TextureEgg));
+    float scale(1.0/m_sprite.getTexture()->getSize().x);
+    m_sprite.setScale(scale*tailleTileLargeur,scale*tailleTileHauteur);
     paintEntite();
-    m_shape.setFillColor(sf::Color::White);
     setNextAction();
     m_antHill->m_numberEggs+=1;
 }

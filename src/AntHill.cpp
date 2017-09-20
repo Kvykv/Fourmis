@@ -15,13 +15,16 @@ Tile::Tile(int aBlockType, pair<int,int> aCoord, int aBlockValue)
 AntHill::AntHill(){}
 AntHill::AntHill(TileMap &tileMap)
     :m_tileMap(&tileMap)
+    ,m_numberQueen(0)
     ,m_numberWorkerIdle(0)
     ,m_numberWorkerGather(0)
     ,m_numberWorkerBuild(0)
     ,m_numberEggs(0)
     ,m_storageFoodCapacity(0)
     ,m_storageFoodCurrent(0)
+    ,m_dead(0)
 {
+    loadTextures();
 }
 
 void AntHill::addTile(string aString, pair<int,int> coord)
@@ -75,16 +78,29 @@ std::queue<Tile>* AntHill::getQueueBuild()
     return &m_buildQueue;
 }
 
+TileMap* AntHill::getTileMap()
+{
+    return m_tileMap;
+}
 
+vector<pair<int,int>> AntHill::getSpecificTile(string tag)
+{
+    vector<pair<int,int>> listCoord;
+    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> listTag = m_tileArray.equal_range(tag);
+    if (listTag.first!=m_tileArray.end())
+    {
+        for (multimap<string, pair<int,int> >::iterator i = listTag.first; i != listTag.second; i++)
+        {
+            listCoord.push_back(i->second);
+        }
+    }
+    return listCoord;
+}
 
 void AntHill::addAnt(int antType)
 {
     switch (antType)
     {
-    case 0 :
-        {unique_ptr<Entite> ptr_Entite(new AntWorker(m_tileMap, this));
-        m_entityArray.push_back(move(ptr_Entite));
-        break;}
     case 1 :
         {unique_ptr<Entite> ptr_Entite(new AntQueen(m_tileMap, this));
         m_entityArray.push_back(move(ptr_Entite));
@@ -99,10 +115,6 @@ void AntHill::addAnt(pair<int,int> coord, int antType)
 {
     switch (antType)
     {
-    case 0 :
-        {unique_ptr<Entite> ptr_Entite(new AntWorker(coord.first, coord.second, m_tileMap, this));
-        m_entityArray.push_back(move(ptr_Entite));
-        break;}
     case 1 :
         {unique_ptr<Entite> ptr_Entite(new AntQueen(coord.first, coord.second, m_tileMap, this));
         m_entityArray.push_back(move(ptr_Entite));
@@ -141,3 +153,21 @@ bool AntHill::isEmptyBuildQueue()
 {
     return m_buildQueue.empty();
 }
+
+
+
+/// Textures
+void AntHill::loadTextures()
+{
+    m_resourceHolder.load(TextureAnt, "resources/ant.png");
+    m_resourceHolder.load(TextureEgg, "resources/egg.png");
+}
+
+TextureHolder* AntHill::getResourceHolder()
+{
+    return &m_resourceHolder;
+}
+
+
+
+

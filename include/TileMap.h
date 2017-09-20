@@ -6,15 +6,15 @@
 #include "BlockAir.h"
 #include "BlockDirt.h"
 #include "BlockFood.h"
+#include "BlockStone.h"
 #include "BlockStorage.h"
-#include "BaseBlock.h"
+#include "BlockGallery.h"
+#include "WorldGen.h"
 #include <vector>
 #include <memory>
 
-static const int largeur(960);
-static const int hauteur(540);
-static const double tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur);
-static const double tailleTileLargeur((double)sf::VideoMode::getDesktopMode().width/largeur);
+const double tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur);
+const double tailleTileLargeur((double)sf::VideoMode::getDesktopMode().width/largeur);
 
 class TileMap : public sf::Drawable, public sf::Transformable
 {
@@ -35,18 +35,18 @@ public:
     Block* getBlock(int x, int y);
     Block* getBlock(std::pair<int,int> coord);
     void dimQuantiteBlock(std::pair<int,int> coord, int quantite);
-    std::vector<std::pair<int, int> > getNeighbours(int x, int y);
+    std::vector<std::pair<int, int>> getNeighbours(int x, int y);
+    std::vector<std::pair<int, int>> getNeighbours(std::pair<int,int> coord);
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void paintBlock(int x, int y);
     void paintVoisinage(int x, int y);
     sf::VertexArray m_array;
-    std::array<std::shared_ptr<BaseBlock>, 4> m_blockFactory;
+    std::array<std::shared_ptr<BaseBlock>, 6> m_blockFactory;
 
     std::vector<std::vector<std::unique_ptr<Block>>> m_terrain;
 };
 
-void creerTableau(std::vector<std::vector<int> >& tableau);
 
 #endif // TILEMAP_H

@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <queue>
+#include "ResourceHolder.h"
 
 struct Tile
 {
@@ -21,6 +22,9 @@ class AntHillAI;
 class AntHill
 {
     public:
+        using TileArray = std::multimap<std::string, std::pair<int,int>>;
+
+    public:
         AntHill();
         AntHill(TileMap &tileMap);
         std::vector<std::unique_ptr<Entite> >* getEntityArray();
@@ -32,6 +36,8 @@ class AntHill
         void updateFoodCapacity();
         int getFoodCapacity();
         int getCurrentFoodStorage();
+        TileMap* getTileMap();
+        std::vector<std::pair<int,int>> getSpecificTile(std::string tag);
         std::queue<Tile>* getQueueBuild();
 
         void addAnt(std::pair<int,int> coord, int antType);
@@ -43,18 +49,25 @@ class AntHill
         bool isEmptyBuildQueue();
 
         /// Compteurs
+        int m_numberQueen;
         int m_numberWorkerIdle;
         int m_numberWorkerGather;
         int m_numberWorkerBuild;
         int m_numberEggs;
+        int m_dead;
+
+        /// Textures
+        void loadTextures();
+        TextureHolder* getResourceHolder();
 
     protected:
-        std::vector<std::unique_ptr<Entite>> m_entityArray;
-        std::multimap<std::string, std::pair<int,int>> m_tileArray;
+        std::vector<Entite::Ptr> m_entityArray;
+        TileArray m_tileArray;
         TileMap* m_tileMap;
         int m_storageFoodCapacity;
         int m_storageFoodCurrent;
         std::queue<Tile> m_buildQueue;
+        TextureHolder m_resourceHolder;
 };
 
 #endif // ANTHILL_H

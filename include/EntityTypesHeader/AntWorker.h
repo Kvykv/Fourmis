@@ -11,6 +11,7 @@ class AntWorker : public Ant
     public:
         AntWorker(TileMap *tileMap, AntHill *antHill);
         AntWorker(int x, int y, TileMap *tileMap, AntHill *antHill);
+        ~AntWorker();
         void gather(int typeResource);
         bool store();
         std::pair<int,int> getNotFullStorage();

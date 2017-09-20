@@ -24,3 +24,8 @@ void BlockFood::addQuantity(int quantite)
 {
     m_quantity = m_quantity + quantite;
 }
+
+int BlockFood::getStorageType()
+{
+    return m_baseBlock->getBlockType();
+}

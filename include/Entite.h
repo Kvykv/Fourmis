@@ -3,7 +3,6 @@
 
 #include "MathHelp.h"
 #include "TileMap.h"
-#include "Action.h"
 #include "IAPathFinding.h"
 #include "State.h"
 #include <vector>
@@ -12,6 +11,9 @@
 
 class Entite : public sf::Drawable, public sf::Transformable
 {
+    public:
+        using Ptr = std::unique_ptr<Entite>;
+
     public:
         // Constructeur
         Entite(TileMap* tileMap, int type);
@@ -28,10 +30,6 @@ class Entite : public sf::Drawable, public sf::Transformable
         void setPath(std::vector<std::pair<int,int> > path);
         void setGoingForFood(bool boolean);
         bool isGoingForFood();
-        Action getMemoryAction();
-        void setAction(Action action);
-        Action getAction();
-        void setAction(std::pair<int,int> coord, int blockType, int blockValue, int typeAction);
         bool hasArrived();
         void setHasArrived(bool boolean);
         void setInventoryType(int type);
@@ -49,7 +47,7 @@ class Entite : public sf::Drawable, public sf::Transformable
 
         // Graphic
         void paintEntite();
-        static void drawEntiteArray(std::vector<std::unique_ptr<Entite> > *entiteArray, sf::RenderWindow &window);
+        static void drawEntiteArray(const std::vector<Entite::Ptr>& entiteArray, sf::RenderWindow &window);
 
         // Actions
         static void nexStepArray(std::vector<std::unique_ptr<Entite> > *entiteArray);
@@ -58,7 +56,6 @@ class Entite : public sf::Drawable, public sf::Transformable
         void creuserBlock(int x, int y);
         void eat();
         bool oneMovement();
-        bool oneAction();
         bool falling();
         std::pair<int,int> getRandomDestination();
 
@@ -66,11 +63,11 @@ class Entite : public sf::Drawable, public sf::Transformable
         virtual bool nextStep();
         void goTo(std::pair<int,int> coord);
         bool getFood();
-        virtual void setNextAction();
+        virtual std::pair<int,int> lookForFood(int typeBlock);
         std::pair<int,int> lookFor(int typeBlock);
         std::pair<int,int> lookUp(std::pair<int,int> coord, int typeBlock);
-        std::pair <int,int> m_previousCoord;
 
+        std::pair <int,int> m_previousCoord;
         std::vector<std::pair<int,int> > m_path;
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -85,9 +82,7 @@ class Entite : public sf::Drawable, public sf::Transformable
         int m_inventoryQuantity;
         std::pair <int,int> m_destination;
         TileMap *m_ptrMap;
-        sf::CircleShape m_shape;
-        Action m_currentAction;
-        Action m_memoryAction;
+        sf::Sprite m_sprite;
 };
 
 #endif // ENTITE_H

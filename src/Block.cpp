@@ -56,7 +56,7 @@ void Block::dimQuantity(int quantite)
 void Block::addQuantity(int quantite)
 {
 }
-int Block::getTypeStorage()
+int Block::getStorageType()
 {
     return 0;
 }
@@ -64,4 +64,9 @@ int Block::getTypeStorage()
 int Block::getCapacity()
 {
     return 0;
+}
+
+bool Block::isEmpty()
+{
+    return false;
 }

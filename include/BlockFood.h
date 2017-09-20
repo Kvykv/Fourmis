@@ -12,6 +12,7 @@ class BlockFood : public Block
         virtual int getQuantity();
         virtual void dimQuantity(int quantite);
         virtual void addQuantity(int quantite);
+        virtual int getStorageType();
 
     protected:
         int m_quantity;

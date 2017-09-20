@@ -11,11 +11,12 @@ class BlockStorage : public Block
         virtual int getQuantity();
         virtual void dimQuantity(int quantity);
         virtual void addQuantity(int quantity);
-        virtual int getTypeStorage();
+        virtual int getStorageType();
         virtual int getCapacity();
+        virtual bool isEmpty();
 
     protected:
-        int m_typeStorage;
+        int m_storageType;
         int m_quantity;
         const int m_capacity;
 

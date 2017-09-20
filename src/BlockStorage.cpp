@@ -4,7 +4,7 @@ using namespace std;
 
 BlockStorage::BlockStorage(shared_ptr<BaseBlock> baseBlock, int quantity, int typeStorage)
     :Block(baseBlock, true, 1)
-    ,m_typeStorage(typeStorage)
+    ,m_storageType(typeStorage)
     ,m_quantity(quantity)
     ,m_capacity(20000)
 {
@@ -26,12 +26,17 @@ void BlockStorage::addQuantity(int quantity)
 {
     m_quantity = m_quantity + quantity;
 }
-int BlockStorage::getTypeStorage()
+int BlockStorage::getStorageType()
 {
-    return m_typeStorage;
+    return m_storageType;
 }
 
 int BlockStorage::getCapacity()
 {
     return m_capacity;
+}
+
+bool BlockStorage::isEmpty()
+{
+    return (m_quantity == 0);
 }
