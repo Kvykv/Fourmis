@@ -7,7 +7,9 @@
 class BlockDirt : public Block
 {
     public:
-        BlockDirt(shared_ptr<BaseBlock> baseBlock);
+        BlockDirt(std::shared_ptr<BaseBlock> baseBlock, int hardness = 1000);
+
+        virtual std::string getInfo();
 
     protected:
 

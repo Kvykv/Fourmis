@@ -7,7 +7,7 @@
 class BlockAir : public Block
 {
     public:
-        BlockAir(shared_ptr<BaseBlock> baseBlock);
+        BlockAir(std::shared_ptr<BaseBlock> baseBlock);
 
     protected:
 

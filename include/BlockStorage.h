@@ -6,17 +6,19 @@
 class BlockStorage : public Block
 {
     public:
-        BlockStorage(shared_ptr<BaseBlock> baseBlock, int quantite, int valueStorage);
-        virtual void setQuantite(int quantite);
-        virtual int getQuantite();
-        virtual void dimQuantite(int quantite);
-        virtual void addQuantite(int quantite);
-        virtual int getTypeStorage();
+        BlockStorage(std::shared_ptr<BaseBlock> baseBlock, int quantity, int typeStorage);
+        virtual void setQuantity(int quantity);
+        virtual int getQuantity();
+        virtual bool dimQuantity(int quantity);
+        virtual void addQuantity(int quantity);
+        virtual int getStorageType();
         virtual int getCapacity();
+        virtual bool isEmpty();
+        virtual std::string getInfo();
 
     protected:
-        int m_typeStorage;
-        int m_quantite;
+        int m_storageType;
+        int m_quantity;
         const int m_capacity;
 
     private:

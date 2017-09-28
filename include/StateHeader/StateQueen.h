@@ -12,7 +12,7 @@ class StateQueen : public State
         StateQueen();
         virtual bool execute(AntQueen* antQueen);
         virtual bool updateState(AntQueen* AntQueen);
-        string m_string;
+        std::string m_string;
 
     private:
 };

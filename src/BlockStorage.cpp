@@ -2,36 +2,50 @@
 
 using namespace std;
 
-BlockStorage::BlockStorage(shared_ptr<BaseBlock> baseBlock, int quantite, int typeStorage)
-    :Block(baseBlock, true, true, 1)
-    ,m_typeStorage(typeStorage)
-    ,m_quantite(quantite)
+BlockStorage::BlockStorage(shared_ptr<BaseBlock> baseBlock, int quantity, int typeStorage)
+    :Block(baseBlock, true, 1)
+    ,m_storageType(typeStorage)
+    ,m_quantity(quantity)
     ,m_capacity(20000)
 {
 }
 
-void BlockStorage::setQuantite(int quantite)
+void BlockStorage::setQuantity(int quantity)
 {
-    m_quantite = quantite;
+    m_quantity = quantity;
 }
-int BlockStorage::getQuantite()
+int BlockStorage::getQuantity()
 {
-    return m_quantite;
+    return m_quantity;
 }
-void BlockStorage::dimQuantite(int quantite)
+bool BlockStorage::dimQuantity(int quantity)
 {
-    m_quantite = m_quantite - quantite;
+    m_quantity = m_quantity - quantity;
+    return false;
 }
-void BlockStorage::addQuantite(int quantite)
+void BlockStorage::addQuantity(int quantity)
 {
-    m_quantite = m_quantite + quantite;
+    m_quantity = m_quantity + quantity;
 }
-int BlockStorage::getTypeStorage()
+int BlockStorage::getStorageType()
 {
-    return m_typeStorage;
+    return m_storageType;
 }
 
 int BlockStorage::getCapacity()
 {
     return m_capacity;
 }
+
+bool BlockStorage::isEmpty()
+{
+    return (m_quantity == 0);
+}
+
+std::string BlockStorage::getInfo()
+{
+    std::stringstream sstm;
+    sstm << Block::getInfo() << "    Resource Type : " << getStorageType() << "   Quantity : " << getQuantity();
+    return sstm.str();
+}
+

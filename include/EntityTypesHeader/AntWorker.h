@@ -11,17 +11,19 @@ class AntWorker : public Ant
     public:
         AntWorker(TileMap *tileMap, AntHill *antHill);
         AntWorker(int x, int y, TileMap *tileMap, AntHill *antHill);
+        ~AntWorker();
         void gather(int typeResource);
         bool store();
-        pair<int,int> getNotFullStorage();
+        std::pair<int,int> getNotFullStorage();
         virtual bool nextStep();
         StateWorker* getState();
         void setState(StateWorker newState);
+        Tile popBuildQueue();
 
     protected:
 
     private:
-        unique_ptr<StateWorker> m_state;
+        std::unique_ptr<StateWorker> m_state;
 };
 
 #endif // ANTWORKER_H

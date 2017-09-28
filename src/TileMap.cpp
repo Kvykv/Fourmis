@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "TileMap.h"
+#include <math.h>
 #include <iostream>
 using namespace std;
 
@@ -12,7 +13,10 @@ TileMap::TileMap(vector<vector<int> >& tableau)
     m_blockFactory[0].reset(new BaseBlockAir());
     m_blockFactory[1].reset(new BaseBlockDirt());
     m_blockFactory[2].reset(new BaseBlockFood());
-    m_blockFactory[3].reset (new BaseBlockStorage());
+    m_blockFactory[3].reset(new BaseBlockStorage());
+    m_blockFactory[4].reset(new BaseBlockStone());
+    m_blockFactory[5].reset(new BaseBlockGallery());
+
 
 
     m_terrain.resize(largeur);
@@ -24,8 +28,10 @@ TileMap::TileMap(vector<vector<int> >& tableau)
 }
 void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
 {
+    int depth(0);
     for (int x=0; x<largeur; x++)
     {
+        depth = 0;
         for (int y=0; y<hauteur; y++)
         {
             switch(tableau[x][y])
@@ -34,8 +40,13 @@ void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
                  m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
                  break;
             case 1:
-                 m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1]));
+                 depth+=1;
+                 m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1], 1000 + depth*depth/hauteur + rand()%500 - 250));
                  break;
+            case 4:
+                depth+=1;
+                m_terrain[x][y].reset(new BlockStone(m_blockFactory[4]));
+                break;
             default:
                  m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
                  break;
@@ -64,33 +75,16 @@ void TileMap::initFood()
 }
 void TileMap::createGrass(int x, int y)
 {
-    int height(rand()%7);
+    int height(rand()%7+1);
     int width(1);
-    for (int i= 0; i<height; i++)
+    setBlock(min(largeur-2,x), max(1,y), 2, 10000);
+    for (int i= 1; i<height; i++)
     {
         setBlock(min(largeur-2,x+width), max(1,y-i), 2, 10000);
         width = rand()%2;
     }
 }
-void creerTableau(vector<vector<int> >& tableau)
-{
-    double var(2 * hauteur/ 5); // Proportion ciel
-    for (int x = 0; x < largeur; x++)
-    {
-        var = var + rand()%7 - 3;
-        tableau[x].resize(hauteur);
-        for (int y = 0; y < hauteur; y++)
-        {
-            if (y > var)
-            {
-              tableau[x][y] = 1; // 1 : dirt
-            } else
-            {
-              tableau[x][y] = 0; // 0 : sky
-            }
-        }
-    }
-}
+
 
 
 // -------------------------- Graphique -----------------------------------
@@ -117,6 +111,14 @@ void TileMap::paintBlock(int x, int y)
     else if (blockType == 3)
     {
         color = sf::Color(0,0,0);
+    }
+    else if (blockType == 4)
+    {
+        color = sf::Color(115 - rand()%20,115- rand()%20,115- rand()%20);
+    }
+    else if (blockType == 5)
+    {
+        color = sf::Color(244,164,96,200);
     }
     else
     {
@@ -195,6 +197,12 @@ void TileMap::setBlock(int x, int y, int blockType, int blockValue)
         break;
     case 3:
         m_terrain[x][y].reset(new BlockStorage(m_blockFactory[3], 0, blockValue));
+        break;
+    case 4:
+        m_terrain[x][y].reset(new BlockStone(m_blockFactory[4]));
+        break;
+    case 5:
+        m_terrain[x][y].reset(new BlockGallery(m_blockFactory[5]));
     }
     setSurfaceVoisinage(x, y);
     paintVoisinage(x, y);
@@ -217,11 +225,9 @@ Block* TileMap::getBlock(pair<int,int> coord)
 }
 void TileMap::dimQuantiteBlock(pair<int,int> coord, int quantite)
 {
-    getBlock(coord)->dimQuantity(quantite);
-    if (getBlock(coord)->getQuantity() <= 0)
-    {
+    bool resetBlock(getBlock(coord)->dimQuantity(quantite));
+    if (getBlock(coord)->getQuantity() == 0 && getBlock(coord)->getBlockType() == 2)
         setBlock(coord, 0);
-    }
 }
 void TileMap::setSurfaceBlock(int x, int y)
 {
@@ -307,4 +313,9 @@ vector<pair<int, int> > TileMap::getNeighbours(int x, int y)
         neighbours.push_back(tmp);
     }
     return neighbours;
+}
+
+std::vector<std::pair<int, int> > TileMap::getNeighbours(pair<int,int> coord)
+{
+    return getNeighbours(coord.first, coord.second);
 }

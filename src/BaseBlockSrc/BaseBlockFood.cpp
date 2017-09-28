@@ -1,6 +1,6 @@
 #include "BaseBlockFood.h"
 
 BaseBlockFood::BaseBlockFood()
-    :BaseBlock(2, "Food")
+    :BaseBlock(2, "Food", true)
 {
 }

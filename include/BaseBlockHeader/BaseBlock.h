@@ -3,19 +3,20 @@
 
 #include <string>
 
-using namespace std;
 
 class BaseBlock
 {
     public:
-        BaseBlock(int blockType = 0, string tag = "air");
+        BaseBlock(int blockType = 0, std::string tag = "air", bool diggable = false);
 
         int getBlockType();
-        string getTag();
+        std::string getTag();
+        bool isDiggable();
 
     private:
         int m_blockType;
-        string m_tag;
+        std::string m_tag;
+        bool m_diggable;
 };
 
 #endif // BASEBLOCK_H

@@ -5,12 +5,10 @@ using namespace std;
 Block::Block(shared_ptr<BaseBlock> baseBlock):m_baseBlock(baseBlock)
 {
     m_isCrossable = false;
-    m_isDiggable = false;
 }
-Block::Block(shared_ptr<BaseBlock> baseBlock, bool crossable, bool diggable, int cost)
+Block::Block(shared_ptr<BaseBlock> baseBlock, bool crossable, int cost)
     :m_baseBlock(baseBlock)
     ,m_isCrossable(crossable)
-    ,m_isDiggable(diggable)
     ,m_cost(cost)
 {}
 int Block::getBlockType() const
@@ -36,15 +34,11 @@ bool Block::isCrossable()
 }
 bool Block::isDiggable()
 {
-    return m_isDiggable;
+    return m_baseBlock->isDiggable();
 }
 void Block::setCrossable(bool boolean)
 {
     m_isCrossable = boolean;
-}
-void Block::setDiggable(bool boolean)
-{
-    m_isDiggable = boolean;
 }
 
 /* --------------------- Heritage --------------------- */
@@ -54,15 +48,16 @@ void Block::setQuantity(int quantite)
 }
 int Block::getQuantity()
 {
-    return 1;
+    return 0;
 }
-void Block::dimQuantity(int quantite)
+bool Block::dimQuantity(int quantite)
 {
+    return false;
 }
 void Block::addQuantity(int quantite)
 {
 }
-int Block::getTypeStorage()
+int Block::getStorageType()
 {
     return 0;
 }
@@ -70,4 +65,16 @@ int Block::getTypeStorage()
 int Block::getCapacity()
 {
     return 0;
+}
+
+bool Block::isEmpty()
+{
+    return false;
+}
+
+string Block::getInfo()
+{
+    std::stringstream sstm;
+    sstm << "Block Infos : " << m_baseBlock->getTag();
+    return sstm.str();
 }

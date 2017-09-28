@@ -1,14 +1,16 @@
 #include "EntityTypesHeader/AntQueen.h"
 
+using namespace std;
 
 AntQueen::AntQueen(TileMap *tileMap, AntHill *antHill)
     :Ant(tileMap, antHill, 1)
     ,m_state(new StateQueenLaying(this))
     ,m_CDLaying(0)
 {
-    m_shape.setRadius(1.7*tailleTileLargeur);
+    float scale(4.0/m_sprite.getTexture()->getSize().x);
+    m_sprite.setScale(scale*tailleTileLargeur,scale*tailleTileHauteur);
     paintEntite();
-    m_shape.setFillColor(sf::Color::Black);
+    m_antHill->m_numberQueen ++;
 }
 
 AntQueen::AntQueen(int x, int y, TileMap *tileMap, AntHill *antHill)
@@ -16,9 +18,15 @@ AntQueen::AntQueen(int x, int y, TileMap *tileMap, AntHill *antHill)
     ,m_state(new StateQueenLaying(this))
     ,m_CDLaying(0)
 {
-    m_shape.setRadius(1.7*tailleTileLargeur);
+    float scale(4.0/m_sprite.getTexture()->getSize().x);
+    m_sprite.setScale(scale*tailleTileLargeur,scale*tailleTileHauteur);
     paintEntite();
-    m_shape.setFillColor(sf::Color::Black);
+    m_antHill->m_numberQueen ++;
+}
+
+AntQueen::~AntQueen()
+{
+    m_antHill->m_numberQueen --;
 }
 
 void AntQueen::setCDLaying(int par)
@@ -68,6 +76,5 @@ bool AntQueen::layEgg(int eggType)
 
 bool AntQueen::nextStep()
 {
-    falling();
     return m_state->execute(this);
 }
