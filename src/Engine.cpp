@@ -33,8 +33,6 @@ Engine::Engine()
 
 bool Engine::run()
 {
-    tileMap.setBlock(100,100, 2);
-    cout << tileMap.getBlock(100, 100)->getBlockType() << endl;
     antHill.addAnt(1);
     draw();
     sf::Clock clock;
@@ -66,7 +64,6 @@ void Engine::processEvents()
             worldPos.x = worldPos.x/tailleTileLargeur;
             worldPos.y = worldPos.y/tailleTileHauteur;
             m_targetCoord = pair<int,int>(worldPos.x, worldPos.y);
-            cout << "Mouse target coord : " << m_targetCoord.first << "  " << m_targetCoord.second << "  || Mouse coord : " << pixelPos.x << "  " << pixelPos.y << endl;
         }
     }
 
@@ -123,7 +120,7 @@ void Engine::drawInformations()
                         << "        Eggs : "                    << antHill.m_numberEggs
                         << "      ||        Food Capacity : "   << antHill.getFoodCapacity()
                         << "        Food Stored : "             << antHill.getCurrentFoodStorage()
-                        << "      || Dead : "                   << antHill.m_dead << endl
+                        << "      ||        Dead : "            << antHill.m_dead << endl
                         << getTargetInfo();
     string infos = sstm.str();
     sf::Font font;

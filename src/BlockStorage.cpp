@@ -18,9 +18,10 @@ int BlockStorage::getQuantity()
 {
     return m_quantity;
 }
-void BlockStorage::dimQuantity(int quantity)
+bool BlockStorage::dimQuantity(int quantity)
 {
     m_quantity = m_quantity - quantity;
+    return false;
 }
 void BlockStorage::addQuantity(int quantity)
 {

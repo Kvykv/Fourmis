@@ -20,7 +20,7 @@ class Block
         // Heritage
         virtual std::string getTag() const;
         virtual void setQuantity(int quantite);
-        virtual void dimQuantity(int quantite);
+        virtual bool dimQuantity(int quantite);
         virtual void addQuantity(int quantite);
         virtual int getQuantity();
         virtual int getStorageType();

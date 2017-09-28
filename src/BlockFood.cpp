@@ -16,9 +16,10 @@ int BlockFood::getQuantity()
 {
     return m_quantity;
 }
-void BlockFood::dimQuantity(int quantite)
+bool BlockFood::dimQuantity(int quantite)
 {
     m_quantity = m_quantity - quantite;
+    return (m_quantity <= 0);
 }
 void BlockFood::addQuantity(int quantite)
 {

@@ -48,10 +48,11 @@ void Block::setQuantity(int quantite)
 }
 int Block::getQuantity()
 {
-    return -1;
+    return 0;
 }
-void Block::dimQuantity(int quantite)
+bool Block::dimQuantity(int quantite)
 {
+    return false;
 }
 void Block::addQuantity(int quantite)
 {

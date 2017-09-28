@@ -28,8 +28,10 @@ TileMap::TileMap(vector<vector<int> >& tableau)
 }
 void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
 {
+    int depth(0);
     for (int x=0; x<largeur; x++)
     {
+        depth = 0;
         for (int y=0; y<hauteur; y++)
         {
             switch(tableau[x][y])
@@ -38,9 +40,11 @@ void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
                  m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
                  break;
             case 1:
-                 m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1]));
+                 depth+=1;
+                 m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1], 1000 + depth*depth/hauteur + rand()%500 - 250));
                  break;
             case 4:
+                depth+=1;
                 m_terrain[x][y].reset(new BlockStone(m_blockFactory[4]));
                 break;
             default:
@@ -221,11 +225,9 @@ Block* TileMap::getBlock(pair<int,int> coord)
 }
 void TileMap::dimQuantiteBlock(pair<int,int> coord, int quantite)
 {
-    getBlock(coord)->dimQuantity(quantite);
-    if (getBlock(coord)->getQuantity() <= 0 && getBlock(coord)->getBlockType() == 2)
-    {
+    bool resetBlock(getBlock(coord)->dimQuantity(quantite));
+    if (getBlock(coord)->getQuantity() == 0 && getBlock(coord)->getBlockType() == 2)
         setBlock(coord, 0);
-    }
 }
 void TileMap::setSurfaceBlock(int x, int y)
 {

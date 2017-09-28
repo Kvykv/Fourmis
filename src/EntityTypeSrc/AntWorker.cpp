@@ -66,7 +66,7 @@ void AntWorker::gather(int typeResource)
         int quantity(min(1000, m_ptrMap->getBlock(m_destination)->getQuantity()));
         setInventoryQuantity(quantity);
         setInventoryType(m_ptrMap->getBlock(m_destination)->getBlockType());
-        m_ptrMap->getBlock(m_destination)->dimQuantity(quantity);
+        m_ptrMap->dimQuantiteBlock(m_destination, quantity);
     }
 }
 bool AntWorker::store()
