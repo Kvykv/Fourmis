@@ -3,6 +3,7 @@
 #include <string>
 #include "BaseBlock.h"
 #include <memory>
+#include <sstream>
 
 class Block
 {
@@ -25,6 +26,7 @@ class Block
         virtual int getStorageType();
         virtual int getCapacity();
         virtual bool isEmpty();
+        virtual std::string getInfo();
 
     protected:
         std::shared_ptr<BaseBlock> m_baseBlock;

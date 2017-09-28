@@ -29,6 +29,7 @@ class Engine
         void processEvents();
         void handleRealTimeEvents();
         void drawInformations();
+        std::string getTargetInfo();
 
     private:
         TileMap tileMap;
@@ -43,6 +44,7 @@ class Engine
         bool m_statePause;
         float m_velocity;
         sf::RectangleShape m_outlineMiniMap;
+        std::pair<int,int> m_targetCoord;
 
 };
 

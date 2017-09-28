@@ -40,3 +40,11 @@ bool BlockStorage::isEmpty()
 {
     return (m_quantity == 0);
 }
+
+std::string BlockStorage::getInfo()
+{
+    std::stringstream sstm;
+    sstm << Block::getInfo() << "    Resource Type : " << getStorageType() << "   Quantity : " << getQuantity();
+    return sstm.str();
+}
+

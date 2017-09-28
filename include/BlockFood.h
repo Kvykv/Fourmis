@@ -13,6 +13,7 @@ class BlockFood : public Block
         virtual void dimQuantity(int quantite);
         virtual void addQuantity(int quantite);
         virtual int getStorageType();
+        virtual std::string getInfo();
 
     protected:
         int m_quantity;
