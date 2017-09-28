@@ -29,12 +29,3 @@ int BlockFood::getStorageType()
 {
     return m_baseBlock->getBlockType();
 }
-
-
-std::string BlockFood::getInfo()
-{
-    std::stringstream sstm;
-    sstm << Block::getInfo() << "    Resource Type : " << getStorageType() << "   Quantity : " << getQuantity();
-    return sstm.str();
-}
-

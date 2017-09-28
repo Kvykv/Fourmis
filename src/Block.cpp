@@ -70,10 +70,3 @@ bool Block::isEmpty()
 {
     return false;
 }
-
-string Block::getInfo()
-{
-    std::stringstream sstm;
-    sstm << "Block Infos : " << m_baseBlock->getTag();
-    return sstm.str();
-}

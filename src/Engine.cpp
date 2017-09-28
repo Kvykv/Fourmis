@@ -13,7 +13,6 @@ Engine::Engine()
     ,m_outlineMiniMap(sf::Vector2f(0, 0))
     ,m_counter(0)
     ,m_worldGen()
-    ,m_targetCoord(pair<int,int>(-1,-1))
 {                   //sf::VideoMode::getDesktopMode
     vector<vector<int> > tableau;
     tableau.resize(largeur);
@@ -33,8 +32,6 @@ Engine::Engine()
 
 bool Engine::run()
 {
-    tileMap.setBlock(100,100, 2);
-    cout << tileMap.getBlock(100, 100)->getBlockType() << endl;
     antHill.addAnt(1);
     draw();
     sf::Clock clock;
@@ -54,20 +51,14 @@ void Engine::processEvents()
     while (window.pollEvent(event))
     {
         if(event.type == sf::Event::Closed)
+        {
             window.close();
+        }
         if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
             window.close();
+
         if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
             m_statePause = !m_statePause;
-        if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
-        {
-            sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
-            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
-            worldPos.x = worldPos.x/tailleTileLargeur;
-            worldPos.y = worldPos.y/tailleTileHauteur;
-            m_targetCoord = pair<int,int>(worldPos.x, worldPos.y);
-            cout << "Mouse target coord : " << m_targetCoord.first << "  " << m_targetCoord.second << "  || Mouse coord : " << pixelPos.x << "  " << pixelPos.y << endl;
-        }
     }
 
     if(!m_statePause)
@@ -87,7 +78,6 @@ void Engine::processEvents()
         }
         Entite::nexStepArray(antHill.getEntityArray());
     }
-
 
     handleRealTimeEvents();
 }
@@ -123,8 +113,7 @@ void Engine::drawInformations()
                         << "        Eggs : "                    << antHill.m_numberEggs
                         << "      ||        Food Capacity : "   << antHill.getFoodCapacity()
                         << "        Food Stored : "             << antHill.getCurrentFoodStorage()
-                        << "      || Dead : "                   << antHill.m_dead << endl
-                        << getTargetInfo();
+                        << "      || Dead : "                   << antHill.m_dead;
     string infos = sstm.str();
     sf::Font font;
     sf::Text text;
@@ -184,14 +173,4 @@ void Engine::handleRealTimeEvents()
             m_mainView.setSize(window.getDefaultView().getSize()/10);
         }
     }
-}
-
-
-std::string Engine::getTargetInfo()
-{
-    if (m_targetCoord.first == -1)
-    {
-        return "";
-    }
-    return tileMap.getBlock(m_targetCoord)->getInfo();
 }
