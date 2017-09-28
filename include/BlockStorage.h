@@ -14,6 +14,7 @@ class BlockStorage : public Block
         virtual int getStorageType();
         virtual int getCapacity();
         virtual bool isEmpty();
+        virtual std::string getInfo();
 
     protected:
         int m_storageType;

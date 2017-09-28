@@ -9,6 +9,8 @@ class BlockDirt : public Block
     public:
         BlockDirt(std::shared_ptr<BaseBlock> baseBlock);
 
+        virtual std::string getInfo();
+
     protected:
 
     private:

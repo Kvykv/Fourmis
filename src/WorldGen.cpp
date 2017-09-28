@@ -66,7 +66,8 @@ void WorldGen::setWorldHeight(array<int, largeur + 1> &worldHeight)
             highEdge = i + step;
         }
         else
-            worldHeight[i] = interpolateLinear(worldHeight[lowEdge], worldHeight[highEdge], i - lowEdge, step);
+            worldHeight[i] = (interpolateSin(worldHeight[lowEdge], worldHeight[highEdge], i - lowEdge, step)
+                            + interpolateCubic(worldHeight[lowEdge], worldHeight[highEdge], i - lowEdge, step))/2;
     }
 }
 
@@ -77,4 +78,19 @@ int WorldGen::interpolateLinear(int lowEdge, int highEdge, int n, int delta)
         return lowEdge + n*(highEdge - lowEdge)/delta;
 }
 
+int WorldGen::interpolateCubic(int lowEdge, int highEdge, int n, int delta)
+{
+    float x = (float)n/delta;
+    float p1 = 3*pow(1-x, 2) - 2*pow(1-x, 3);
+    float p2 = 3*pow(x, 2) - 2*pow(x, 3);
+    return lowEdge*p1 + highEdge*p2;
+}
+
+int WorldGen::interpolateSin(int lowEdge, int highEdge, int n, int delta)
+{
+    float x = (float)n/delta;
+    float p1 = cos(3.14*x/2);
+    float p2 = sin(3.14*x/2);
+    return lowEdge*p1 + highEdge*p2;
+}
 
