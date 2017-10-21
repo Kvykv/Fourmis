@@ -1,4 +1,4 @@
-#include "Entite.h"
+#include "include/Entite.h"
 using namespace std;
 
 /* -------------------------- Constructeurs / get / set ---------------------------------------- */

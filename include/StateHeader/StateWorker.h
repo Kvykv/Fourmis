@@ -1,8 +1,8 @@
 #ifndef STATEWORKER_H
 #define STATEWORKER_H
 
-#include "State.h"
-#include "AntWorker.h"
+#include "include/StateHeader/State.h"
+#include "include/EntityTypesHeader/AntWorker.h"
 
 class AntWorker;
 

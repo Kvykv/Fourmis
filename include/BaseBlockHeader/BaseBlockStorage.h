@@ -1,7 +1,7 @@
 #ifndef BASEBLOCKSTORAGE_H
 #define BASEBLOCKSTORAGE_H
 
-#include <BaseBlock.h>
+#include <include/BaseBlockHeader/BaseBlock.h>
 
 
 class BaseBlockStorage : public BaseBlock

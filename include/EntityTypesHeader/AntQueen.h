@@ -1,8 +1,8 @@
 #ifndef ANTQUEEN_H
 #define ANTQUEEN_H
 
-#include "Ant.h"
-#include "StateQueen.h"
+#include "include/Ant.h"
+#include "include/StateHeader/StateQueen.h"
 
 class StateQueen;
 class AntQueen : public Ant

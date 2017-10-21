@@ -1,10 +1,10 @@
 #ifndef ENTITE_H
 #define ENTITE_H
 
-#include "MathHelp.h"
-#include "TileMap.h"
-#include "IAPathFinding.h"
-#include "State.h"
+#include "include/MathHelp.h"
+#include "include/TileMap.h"
+#include "include/IAPathFinding.h"
+#include "include/StateHeader/State.h"
 #include <vector>
 #include <iostream>
 

@@ -1,4 +1,4 @@
-#include "IA.h"
+#include "include/IA.h"
 
 using namespace std;
 

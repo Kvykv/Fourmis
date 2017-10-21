@@ -1,5 +1,5 @@
-#include "IAPathFinding.h"
-#include "MathHelp.h"
+#include "include/IAPathFinding.h"
+#include "include/MathHelp.h"
 #include <iostream>
 #include <windows.h>
 using namespace std;
