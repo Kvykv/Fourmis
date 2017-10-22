@@ -1,7 +1,6 @@
 #ifndef BLOCKFOOD_H
 #define BLOCKFOOD_H
 #include "Block.h"
-#include "BaseBlockHeader/BaseBlockFood.h"
 #include <iostream>
 
 class BlockFood : public Block

@@ -1,7 +1,6 @@
 #ifndef BLOCKSTORAGE_H
 #define BLOCKSTORAGE_H
 #include "Block.h"
-#include "BaseBlockHeader/BaseBlockStorage.h"
 
 class BlockStorage : public Block
 {

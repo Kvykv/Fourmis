@@ -2,12 +2,12 @@
 #define TILEMAP_H
 
 #include <SFML/Graphics.hpp>
-#include "Block.h"
-#include "BlockAir.h"
-#include "BlockDirt.h"
-#include "BlockFood.h"
+#include "BlockHeader/Block.h"
+#include "BlockHeader/BlockAir.h"
+#include "BlockHeader/BlockDirt.h"
+#include "BlockHeader/BlockFood.h"
 #include "BlockHeader/BlockStone.h"
-#include "BlockStorage.h"
+#include "BlockHeader/BlockStorage.h"
 #include "BlockHeader/BlockGallery.h"
 #include "WorldGen.h"
 #include <vector>

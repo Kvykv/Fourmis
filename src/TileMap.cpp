@@ -10,13 +10,12 @@ using namespace std;
 TileMap::TileMap(){}
 TileMap::TileMap(vector<vector<int> >& tableau)
 {
-    m_blockFactory[0].reset(new BaseBlockAir());
-    m_blockFactory[1].reset(new BaseBlockDirt());
-    m_blockFactory[2].reset(new BaseBlockFood());
-    m_blockFactory[3].reset(new BaseBlockStorage());
-    m_blockFactory[4].reset(new BaseBlockStone());
-    m_blockFactory[5].reset(new BaseBlockGallery());
-
+    m_blockFactory[0].reset(new BaseBlock(0, "Air", false));
+    m_blockFactory[1].reset(new BaseBlock(1, "Dirt", true));
+    m_blockFactory[2].reset(new BaseBlock(2, "Food", true));
+    m_blockFactory[3].reset(new BaseBlock(3, "Storage", true));
+    m_blockFactory[4].reset(new BaseBlock(4, "Stone", false));
+    m_blockFactory[5].reset(new BaseBlock(5, "Gallery", false));
 
 
     m_terrain.resize(largeur);
@@ -93,7 +92,7 @@ void TileMap::paintBlock(int x, int y)
 {
     int blockType(m_terrain[x][y]->getBlockType());
     sf::Vertex* quad = &m_array[(x+y*largeur)*4];
-    // Position carré
+    // Position carre
     quad[0].position = sf::Vector2f(x*tailleTileLargeur,y*tailleTileHauteur);
     quad[1].position = sf::Vector2f((x+1)*tailleTileLargeur, y*tailleTileHauteur);
     quad[2].position = sf::Vector2f((x+1)*tailleTileLargeur, (y+1)*tailleTileHauteur);
