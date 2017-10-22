@@ -6,9 +6,9 @@
 #include "BlockAir.h"
 #include "BlockDirt.h"
 #include "BlockFood.h"
-#include "BlockStone.h"
+#include "BlockHeader/BlockStone.h"
 #include "BlockStorage.h"
-#include "BlockGallery.h"
+#include "BlockHeader/BlockGallery.h"
 #include "WorldGen.h"
 #include <vector>
 #include <memory>

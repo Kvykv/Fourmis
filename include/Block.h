@@ -1,7 +1,7 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 #include <string>
-#include "BaseBlock.h"
+#include "include/BaseBlockHeader/BaseBlock.h"
 #include <memory>
 #include <sstream>
 

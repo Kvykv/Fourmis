@@ -1,9 +1,10 @@
 #ifndef ANTWORKER_H
 #define ANTWORKER_H
 
-#include "Ant.h"
 #include <memory>
-#include "StateWorker.h"
+
+#include "include/Ant.h"
+#include "include/StateHeader/StateWorker.h"
 
 class StateWorker;
 class AntWorker : public Ant

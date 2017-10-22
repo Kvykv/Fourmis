@@ -1,4 +1,4 @@
-#include "WorldGen.h"
+#include "include/WorldGen.h"
 #include <math.h>
 #include <cstdlib>
 #include <iostream>

@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include <SFML/System/Vector2.hpp>
+#include <D:/Programs/SFML/include/SFML/System/Vector2.hpp>
 
 
 class MathHelp

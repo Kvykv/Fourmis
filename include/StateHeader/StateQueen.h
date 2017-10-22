@@ -1,8 +1,8 @@
 #ifndef STATEQUEEN_H
 #define STATEQUEEN_H
 
-#include "State.h"
-#include "AntQueen.h"
+#include "include/StateHeader/State.h"
+#include "include/EntityTypesHeader/AntQueen.h"
 
 class AntQueen;
 

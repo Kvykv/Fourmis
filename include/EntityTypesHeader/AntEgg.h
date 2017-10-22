@@ -1,7 +1,7 @@
 #ifndef ANTEGG_H
 #define ANTEGG_H
 
-#include "Ant.h"
+#include "include/Ant.h"
 
 class AntEgg : public Ant
 {

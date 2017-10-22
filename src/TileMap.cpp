@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "TileMap.h"
+#include "include/TileMap.h"
 #include <math.h>
 #include <iostream>
 using namespace std;
@@ -41,7 +41,7 @@ void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
                  break;
             case 1:
                  depth+=1;
-                 m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1], 1000 + depth*depth/hauteur + rand()%500 - 250));
+                 m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1], 1000  + rand()%1000 - 500));
                  break;
             case 4:
                 depth+=1;

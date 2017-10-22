@@ -1,7 +1,7 @@
-#include "AntHill.h"
-#include "AntWorker.h"
-#include "AntQueen.h"
-#include "AntEgg.h"
+#include "include/AntHill.h"
+#include "include/EntityTypesHeader/AntWorker.h"
+#include "include/EntityTypesHeader/AntQueen.h"
+#include "include/EntityTypesHeader/AntEgg.h"
 
 using namespace std;
 

@@ -1,8 +1,8 @@
 #ifndef BLOCKGALLERY_H
 #define BLOCKGALLERY_H
 
-#include "Block.h"
-#include "BaseBlockGallery.h"
+#include "include/Block.h"
+#include "include/BaseBlockHeader/BaseBlockGallery.h"
 
 class BlockGallery : public Block
 {
