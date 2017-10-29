@@ -34,6 +34,7 @@ Engine::Engine()
 bool Engine::run()
 {
     antHill.addAnt(1);
+    antHill.addAnt(0);
     draw();
     sf::Clock clock;
     sf::Time time;
@@ -74,7 +75,7 @@ void Engine::processEvents()
         {
             antHill.updateFoodCapacity();
         }
-        if (m_counter%20 == 0)
+        if (m_counter%1000 == 0)
         {
             m_antHillAI.update();
         }

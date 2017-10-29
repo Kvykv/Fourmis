@@ -41,6 +41,17 @@ int AntQueen::getCDLaying()
 {
     return m_CDLaying;
 }
+void AntQueen::updateLaying(int incr)
+{
+    if (m_ptrMap->getBlock(getCoord())->getBlockType() == 6)
+        addCDLaying(2*incr);
+    else
+    {
+        addCDLaying(1);
+        if (hasArrived())
+            goTo(m_antHill->getSpecificUniqueTile("QueenChamber"));
+    }
+}
 
 StateQueen* AntQueen::getState()
 {
@@ -60,17 +71,21 @@ void AntQueen::setState(StateQueen newState)
 
 bool AntQueen::layEgg(int eggType)
 {
-    m_CDLaying = 0;
-    vector<pair<int,int> > neighbours(m_ptrMap->getNeighbours(m_coordX, m_coordY));
-    int par(rand()%8);
-    for (int i=0; i<neighbours.size(); i++)
+    if (hasArrived())
     {
-        if (m_ptrMap->getBlock(neighbours[(par+i)%8])->isCrossable())
+        m_CDLaying = 0;
+        vector<pair<int,int> > neighbours(m_ptrMap->getNeighbours(m_coordX, m_coordY));
+        int par(rand()%8);
+        for (int i=0; i<neighbours.size(); i++)
         {
-            m_antHill->addEgg(neighbours[(par+i)%8], eggType);
-            return true;
+            if (m_ptrMap->getBlock(neighbours[(par+i)%8])->isCrossable())
+            {
+                m_antHill->addEgg(neighbours[(par+i)%8], eggType);
+                return true;
+            }
         }
     }
+
     return false;
 }
 

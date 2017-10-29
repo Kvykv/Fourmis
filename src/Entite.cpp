@@ -294,6 +294,7 @@ bool Entite::oneMovement()
     {
         m_hasArrived = true;
         m_iter = 0;
+       // cout << m_coordX << "  " << m_coordY << endl;
     }
     m_iter++;
     return true;
@@ -396,7 +397,7 @@ pair<int,int> Entite::lookForFood(int typeBlock)
             }
         }
     }
-    if (airBlocks.size() != 0)          // On s'éloigne du dernier point franchi
+    if (airBlocks.size() != 0)          // On s'eloigne du dernier point franchi
     {
         coord = airBlocks[rand()%(airBlocks.size())];
         for (int i=0; i<airBlocks.size(); i++)
@@ -494,7 +495,7 @@ pair<int,int> Entite::lookFor(int typeBlock)
             }
         }
     }
-    if (airBlocks.size() != 0)          // On s'éloigne du dernier point franchi
+    if (airBlocks.size() != 0)          // On s'eloigne du dernier point franchi
     {
         coord = airBlocks[rand()%(airBlocks.size())];
         for (int i=0; i<airBlocks.size(); i++)
@@ -540,10 +541,13 @@ pair<int,int> Entite::lookUp(pair<int,int> coord, int typeBlock)
 
 void Entite::goTo(pair<int,int> coord)
 {
-    setDestination(coord);
-    setPath(IAPathFinding::pathFinding(m_ptrMap, m_destination, getCoord()));
-    m_hasArrived = false;
-    m_iter = 0;
+    if (coord.first >= 0)
+    {
+        setDestination(coord);
+        setPath(IAPathFinding::pathFinding(m_ptrMap, m_destination, getCoord()));
+        m_hasArrived = false;
+        m_iter = 0;
+    }
 }
 
 bool Entite::nextStep()
