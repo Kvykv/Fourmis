@@ -27,7 +27,9 @@ SOURCES += \
     src/EntityTypeSrc/AntQueen.cpp \
     src/StateSrc/State.cpp \
     src/StateSrc/StateQueen.cpp \
-    src/StateSrc/StateWorker.cpp
+    src/StateSrc/StateWorker.cpp \
+    src/BlockSrc/BlockQueenChamber.cpp \
+    src/BaseBlockSrc/BaseBlockMulti.cpp
 
 HEADERS += \
     include/Ant.h \
@@ -53,7 +55,9 @@ HEADERS += \
     include/EntityTypesHeader/AntQueen.h \
     include/StateHeader/State.h \
     include/StateHeader/StateQueen.h \
-    include/StateHeader/StateWorker.h
+    include/StateHeader/StateWorker.h \
+    include/BlockHeader/BlockQueenChamber.h \
+    include/BaseBlockHeader/BaseBlockMulti.h
 
 
 INCLUDEPATH += D:\Users\Kvykv\Projet\C++\Fourmis
