@@ -25,3 +25,10 @@ bool BaseBlock::isDiggable()
     return m_diggable;
 }
 
+std::array<std::vector<int>,8> BaseBlock::getStructure()
+{
+    std::array<std::vector<int>,8> structure = {{{-1},  {-1},   {-1},
+                                                 {-1},           {-1},
+                                                 {-1},{-1}, {-1}}};
+    return structure;
+}

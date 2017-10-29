@@ -13,9 +13,10 @@ TileMap::TileMap(vector<vector<int> >& tableau)
     m_blockFactory[0].reset(new BaseBlock(0, "Air", false));
     m_blockFactory[1].reset(new BaseBlock(1, "Dirt", true));
     m_blockFactory[2].reset(new BaseBlock(2, "Food", true));
-    m_blockFactory[3].reset(new BaseBlock(3, "Storage", true));
+    m_blockFactory[3].reset(new BaseBlockMulti(3, "Storage", true));
     m_blockFactory[4].reset(new BaseBlock(4, "Stone", false));
     m_blockFactory[5].reset(new BaseBlock(5, "Gallery", false));
+    m_blockFactory[6].reset(new BaseBlockMulti(6, "QueenChamber", false));
 
 
     m_terrain.resize(largeur);
@@ -109,7 +110,7 @@ void TileMap::paintBlock(int x, int y)
     }
     else if (blockType == 3)
     {
-        color = sf::Color(0,0,0);
+        color = sf::Color(166,22,0);
     }
     else if (blockType == 4)
     {
@@ -118,6 +119,10 @@ void TileMap::paintBlock(int x, int y)
     else if (blockType == 5)
     {
         color = sf::Color(244,164,96,200);
+    }
+    else if (blockType == 6)
+    {
+        color = sf::Color(171,33,12,200);
     }
     else
     {
@@ -202,6 +207,9 @@ void TileMap::setBlock(int x, int y, int blockType, int blockValue)
         break;
     case 5:
         m_terrain[x][y].reset(new BlockGallery(m_blockFactory[5]));
+        break;
+    case 6:
+        m_terrain[x][y].reset(new BlockQueenChamber(m_blockFactory[6]));
     }
     setSurfaceVoisinage(x, y);
     paintVoisinage(x, y);
@@ -271,45 +279,53 @@ vector<pair<int, int> > TileMap::getNeighbours(int x, int y)
 {
     pair<int,int> tmp;
     vector<pair<int, int> > neighbours;
-    if (x != largeur-1){
-        tmp.first = x+1;
-        tmp.second = y;
-        neighbours.push_back(tmp);
-        if (y != hauteur-1){
-            tmp.first = x+1;
-            tmp.second = y+1;
-            neighbours.push_back(tmp);
+    if (y != 0)
+    {
+        if (x != 0)
+        {
+            tmp.first = x-1;                                                        //  1
+            tmp.second = y-1;                                                       //  0
+            neighbours.push_back(tmp);                                              //  0
         }
-        if (y != 0){
-            tmp.first = x+1;
-            tmp.second = y-1;
-            neighbours.push_back(tmp);
-        }
-    }
-    if (x != 0){
-        tmp.first = x-1;
-        tmp.second = y;
-        neighbours.push_back(tmp);
-        if (y != hauteur-1){
-            tmp.first = x-1;
-            tmp.second = y+1;
-            neighbours.push_back(tmp);
-        }
-        if (y != 0){
-            tmp.first = x-1;
-            tmp.second = y-1;
-            neighbours.push_back(tmp);
+        tmp.first = x;                                                              //  01
+        tmp.second = y-1;                                                           //  0x
+        neighbours.push_back(tmp);                                                  //  00
+        if (x != largeur-1)
+        {
+            tmp.first = x+1;                                                        //  001
+            tmp.second = y-1;                                                       //  0x0
+            neighbours.push_back(tmp);                                              //  000
         }
     }
-    if (y != hauteur-1){
-        tmp.first = x;
-        tmp.second = y+1;
-        neighbours.push_back(tmp);
+    if (x != 0)
+    {
+        tmp.first = x-1;                                                            //  0
+        tmp.second = y;                                                             //  1
+        neighbours.push_back(tmp);                                                  //  0
     }
-    if (y != 0){
-        tmp.first = x;
-        tmp.second = y-1;
-        neighbours.push_back(tmp);
+    if (x != largeur -1)
+    {
+        tmp.first = x+1;                                                            //  000
+        tmp.second = y;                                                             //  0x1
+        neighbours.push_back(tmp);                                                  //  000
+    }
+    if (y != hauteur-1)
+    {
+        if (x != 0)
+        {
+            tmp.first = x-1;                                                        //  0
+            tmp.second = y+1;                                                       //  0
+            neighbours.push_back(tmp);                                              //  1
+        }
+        tmp.first = x;                                                              //  00
+        tmp.second = y+1;                                                           //  0x
+        neighbours.push_back(tmp);                                                  //  01
+        if (x != largeur - 1)
+        {
+            tmp.first = x+1;                                                        //  000
+            tmp.second = y+1;                                                       //  0x0
+            neighbours.push_back(tmp);                                              //  001
+        }
     }
     return neighbours;
 }
@@ -317,4 +333,9 @@ vector<pair<int, int> > TileMap::getNeighbours(int x, int y)
 std::vector<std::pair<int, int> > TileMap::getNeighbours(pair<int,int> coord)
 {
     return getNeighbours(coord.first, coord.second);
+}
+
+BaseBlock* TileMap::getBaseBlock(int blockType)
+{
+    return m_blockFactory[blockType].get();
 }

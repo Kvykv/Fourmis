@@ -41,7 +41,7 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
   		map<pair<int,int>, Node> ouverte;
 		vector<Node> fermee;
 		vector<pair<int,int> > path;
-		bool isReachable(false);
+        bool isReachable(false);
 		vector<pair<int,int> > neighbours(tileMap->getNeighbours(coordTarget.first, coordTarget.second));
 		for (int i=0; i<neighbours.size(); i++)
         {
@@ -51,7 +51,7 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
                 isReachable = true;
             }
         }
-        if (!isReachable || MathHelp::distance(coordEntite,coordTarget)<= 2)
+        if (!isReachable || MathHelp::distance(coordEntite,coordTarget)<= 1)
         {
             path.push_back(coordEntite);
             return path;
@@ -74,7 +74,7 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
 		Node current(rootNode);
 		int newCostF, newCostG;
 		if (current.m_coordNode != coordTarget){
-		do {
+        do {
             vector<pair<int, int> > neighbours = tileMap->getNeighbours(current.m_coordNode.first, current.m_coordNode.second);
 			for (int i = 0; i< neighbours.size(); i++){
                 if (tileMap->getBlock(neighbours[i].first, neighbours[i].second)->isCrossable() ||
@@ -86,7 +86,7 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
                         {
 							if (newCostF < ouverte[neighbours[i]].m_costF)
 							{
-								ouverte[neighbours[i]].m_costF = newCostF;              // ouverte a forcément neighbours[i] --> pas d'erreur
+                                ouverte[neighbours[i]].m_costF = newCostF;              // ouverte a forcement neighbours[i] --> pas d'erreur
 								ouverte[neighbours[i]].m_coordParent = current.m_coordNode;
 							}
 						}
@@ -97,15 +97,15 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
 						}
 					}
 				}
-			}
+            }
 			if (ouverte.size()!=0){
 				Node next = IAPathFinding::addIndexFermee(ouverte);
 				current = next;
 				isClosed[next.m_coordNode.first][next.m_coordNode.second] = true;
 				fermee.push_back(next);
 			}
-		} while (ouverte.size()!=0 && MathHelp::distance(current.m_coordNode,coordTarget)>2);
-		}
+        } while (ouverte.size()!=0 && MathHelp::distance(current.m_coordNode,coordTarget)>0);
+        }
 		// Get path
 		int ind;
 		Node node = fermee[fermee.size()-1];
@@ -115,7 +115,7 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
 				containsCoord(node.m_coordParent, fermee, ind);
 				node = fermee[ind];
 			}
-		}
+        }
 		return path;
 }
 Node IAPathFinding::addIndexFermee(map<pair<int,int>, Node> &ouverte){
