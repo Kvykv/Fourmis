@@ -110,7 +110,7 @@ void TileMap::paintBlock(int x, int y)
     }
     else if (blockType == 3)
     {
-        color = sf::Color(166,22,0);
+        color = sf::Color(153 - 50*m_terrain[x][y]->getQuantity()/m_terrain[x][y]->getCapacity(), 153, 51);
     }
     else if (blockType == 4)
     {
@@ -122,7 +122,7 @@ void TileMap::paintBlock(int x, int y)
     }
     else if (blockType == 6)
     {
-        color = sf::Color(171,33,12,200);
+        color = sf::Color(205, 133, 63, 200);
     }
     else
     {

@@ -5,7 +5,7 @@
 using namespace std;
 
 Engine::Engine()
-    :timePerFrame(sf::seconds(1.f/30.f))
+    :framePerSecond(30.f)
     ,window(sf::VideoMode(1920,1080), "TileMap"/*, sf::Style::Fullscreen*/)
     ,m_mainView(window.getDefaultView())
     ,m_miniView(window.getDefaultView())
@@ -38,6 +38,7 @@ bool Engine::run()
     draw();
     sf::Clock clock;
     sf::Time time;
+    updateTPS();
     while(window.isOpen())
     {
         clock.restart();
@@ -122,7 +123,8 @@ void Engine::drawInformations()
                         << "      ||        Food Capacity : "   << antHill.getFoodCapacity()
                         << "        Food Stored : "             << antHill.getCurrentFoodStorage()
                         << "      ||        Dead : "            << antHill.m_dead << endl
-                        << getTargetInfo();
+                        << getTargetInfo() << endl
+                        << "TPS : " << framePerSecond ;
     string infos = sstm.str();
     sf::Font font;
     sf::Text text;
@@ -182,6 +184,16 @@ void Engine::handleRealTimeEvents()
             m_mainView.setSize(window.getDefaultView().getSize()/10);
         }
     }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))         // Plus vite
+    {
+        framePerSecond = min(framePerSecond + 1.f, 80.f);
+        updateTPS();
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))         // Plus vite
+    {
+        framePerSecond = max (framePerSecond - 1.f, 10.f);
+        updateTPS();
+    }
 }
 
 
@@ -192,4 +204,9 @@ std::string Engine::getTargetInfo()
         return "";
     }
     return tileMap.getBlock(m_targetCoord)->getInfo();
+}
+
+void Engine::updateTPS()
+{
+    timePerFrame = sf::seconds(1.f/framePerSecond);
 }

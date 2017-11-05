@@ -78,3 +78,6 @@ string Block::getInfo()
     sstm << "Block Infos : " << m_baseBlock->getTag();
     return sstm.str();
 }
+
+void Block::update()
+{}

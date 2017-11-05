@@ -27,6 +27,7 @@ class Block
         virtual int getCapacity();
         virtual bool isEmpty();
         virtual std::string getInfo();
+        virtual void update();
 
     protected:
         std::shared_ptr<BaseBlock> m_baseBlock;
