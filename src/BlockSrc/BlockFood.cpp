@@ -18,8 +18,8 @@ int BlockFood::getQuantity()
 }
 bool BlockFood::dimQuantity(int quantite)
 {
-    m_quantity = m_quantity - quantite;
-    return (m_quantity <= 0);
+    m_quantity = max(m_quantity - quantite, 0);
+    return (m_quantity == 0);
 }
 void BlockFood::addQuantity(int quantite)
 {
@@ -39,3 +39,8 @@ std::string BlockFood::getInfo()
     return sstm.str();
 }
 
+void BlockFood::update(int i)
+{
+    if (i%100 == 0)
+        addQuantity(10);
+}

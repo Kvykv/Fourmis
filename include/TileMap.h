@@ -13,6 +13,7 @@
 #include "BaseBlockHeader/BaseBlockMulti.h"
 #include "WorldGen.h"
 #include <vector>
+#include <list>
 #include <memory>
 
 const double tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur);
@@ -40,6 +41,7 @@ public:
     void dimQuantiteBlock(std::pair<int,int> coord, int quantite);
     std::vector<std::pair<int, int>> getNeighbours(int x, int y);
     std::vector<std::pair<int, int>> getNeighbours(std::pair<int,int> coord);
+    void updateTileEntityArray(int i);
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -47,7 +49,7 @@ private:
     void paintVoisinage(int x, int y);
     sf::VertexArray m_array;
     std::array<std::shared_ptr<BaseBlock>, 7> m_blockFactory;
-
+    std::list<std::pair<int,int>> m_tileEntityArray;
     std::vector<std::vector<std::unique_ptr<Block>>> m_terrain;
 };
 

@@ -79,5 +79,5 @@ string Block::getInfo()
     return sstm.str();
 }
 
-void Block::update()
+void Block::update(int i)
 {}

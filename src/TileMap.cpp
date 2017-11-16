@@ -188,6 +188,8 @@ void TileMap::showTileMap() const
 
 void TileMap::setBlock(int x, int y, int blockType, int blockValue)
 {
+    pair<int,int> coord(x,y);
+    m_tileEntityArray.remove(coord);
     switch(blockType)
     {
     case 0:
@@ -197,9 +199,11 @@ void TileMap::setBlock(int x, int y, int blockType, int blockValue)
         m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1]));
         break;
     case 2:
+        m_tileEntityArray.push_back(coord);
         m_terrain[x][y].reset(new BlockFood(m_blockFactory[2], blockValue));
         break;
     case 3:
+        m_tileEntityArray.push_back(coord);
         m_terrain[x][y].reset(new BlockStorage(m_blockFactory[3], 0, blockValue));
         break;
     case 4:
@@ -230,9 +234,10 @@ Block* TileMap::getBlock(pair<int,int> coord)
 {
     return m_terrain[coord.first][coord.second].get();
 }
+
 void TileMap::dimQuantiteBlock(pair<int,int> coord, int quantite)
 {
-    bool resetBlock(getBlock(coord)->dimQuantity(quantite));
+    getBlock(coord)->dimQuantity(quantite);
     if (getBlock(coord)->getQuantity() == 0 && getBlock(coord)->getBlockType() == 2)
         setBlock(coord, 0);
 }
@@ -338,4 +343,10 @@ std::vector<std::pair<int, int> > TileMap::getNeighbours(pair<int,int> coord)
 BaseBlock* TileMap::getBaseBlock(int blockType)
 {
     return m_blockFactory[blockType].get();
+}
+
+void TileMap::updateTileEntityArray(int i)
+{
+    for (auto it = m_tileEntityArray.begin(); it != m_tileEntityArray.end(); ++it)
+        getBlock(*it)->update(i);
 }

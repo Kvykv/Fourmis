@@ -84,6 +84,7 @@ void Engine::processEvents()
         {
             m_counter = 0;
         }
+        tileMap.updateTileEntityArray(m_counter);
         Entite::nexStepArray(antHill.getEntityArray());
     }
 
