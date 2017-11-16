@@ -243,22 +243,25 @@ void TileMap::dimQuantiteBlock(pair<int,int> coord, int quantite)
 }
 void TileMap::setSurfaceBlock(int x, int y)
 {
-	if (x < (largeur -1)&& 0 < x && y < (hauteur - 1) && 0 < y)
+    if (m_terrain[x][y]->getBlockType() == 0)
     {
-		bool support((m_terrain[x + 1][y]->isDiggable())
-				|| (m_terrain[x][y + 1]->isDiggable()) || (m_terrain[x - 1][y]->isDiggable())
-				|| (m_terrain[x][y - 1]->isDiggable())||(m_terrain[x + 1][y+1]->isDiggable())
-				|| (m_terrain[x-1][y + 1]->isDiggable()) || (m_terrain[x - 1][y+1]->isDiggable())
-				|| (m_terrain[x-1][y - 1]->isDiggable()));
-		if (m_terrain[x][y]->getBlockType() == 0 && support)
+        if (x < (largeur -1)&& 0 < x && y < (hauteur - 1) && 0 < y)
         {
-            setBlockCrossable(x, y, true);
-		}
-		else if (m_terrain[x][y]->isCrossable() && !support)
-		{
-		    setBlockCrossable(x, y, false);
-		}
-	}
+            bool support((m_terrain[x + 1][y]->isDiggable())
+                    || (m_terrain[x][y + 1]->isDiggable()) || (m_terrain[x - 1][y]->isDiggable())
+                    || (m_terrain[x][y - 1]->isDiggable())||(m_terrain[x + 1][y+1]->isDiggable())
+                    || (m_terrain[x-1][y + 1]->isDiggable()) || (m_terrain[x - 1][y+1]->isDiggable())
+                    || (m_terrain[x-1][y - 1]->isDiggable()));
+            if (support)
+            {
+                setBlockCrossable(x, y, true);
+            }
+            else if (m_terrain[x][y]->isCrossable() && !support)
+            {
+                setBlockCrossable(x, y, false);
+            }
+        }
+    }
 }
 void TileMap::setSurfaceVoisinage(int x, int y)
 {
