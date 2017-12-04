@@ -81,3 +81,16 @@ string Block::getInfo()
 
 void Block::update(int i)
 {}
+
+int Block::getCare()
+{
+    return -1;
+}
+bool Block::addCare(int care)
+{
+    return false;
+}
+
+
+
+

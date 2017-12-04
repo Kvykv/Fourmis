@@ -55,6 +55,7 @@ class AntHill
         int m_numberWorkerIdle;
         int m_numberWorkerGather;
         int m_numberWorkerBuild;
+        int m_numberWorkerFarm;
         int m_numberEggs;
         int m_dead;
 

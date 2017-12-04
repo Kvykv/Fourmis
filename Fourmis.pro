@@ -29,7 +29,8 @@ SOURCES += \
     src/StateSrc/StateQueen.cpp \
     src/StateSrc/StateWorker.cpp \
     src/BlockSrc/BlockQueenChamber.cpp \
-    src/BaseBlockSrc/BaseBlockMulti.cpp
+    src/BaseBlockSrc/BaseBlockMulti.cpp \
+    src/BlockSrc/BlockMushroom.cpp
 
 HEADERS += \
     include/Ant.h \
@@ -57,7 +58,8 @@ HEADERS += \
     include/StateHeader/StateQueen.h \
     include/StateHeader/StateWorker.h \
     include/BlockHeader/BlockQueenChamber.h \
-    include/BaseBlockHeader/BaseBlockMulti.h
+    include/BaseBlockHeader/BaseBlockMulti.h \
+    include/BlockHeader/BlockMushroom.h
 
 
 INCLUDEPATH += D:\Users\Kvykv\Projet\C++\Fourmis

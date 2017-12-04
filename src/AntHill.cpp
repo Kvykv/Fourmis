@@ -6,8 +6,8 @@
 using namespace std;
 
 Tile::Tile(int aBlockType, pair<int,int> aCoord, int aBlockValue)
-    :blockType(aBlockType)
-    ,coord(aCoord)
+    :coord(aCoord)
+    ,blockType(aBlockType)
     ,blockValue(aBlockValue)
 {
 }
@@ -19,6 +19,7 @@ AntHill::AntHill(TileMap &tileMap)
     ,m_numberWorkerIdle(0)
     ,m_numberWorkerGather(0)
     ,m_numberWorkerBuild(0)
+    ,m_numberWorkerFarm(0)
     ,m_numberEggs(0)
     ,m_storageFoodCapacity(0)
     ,m_storageFoodCurrent(0)
@@ -108,7 +109,7 @@ pair<int,int> AntHill::getSpecificUniqueTile(string tag)
 void AntHill::setBlock(pair<int,int> coord, int blockType, int blockValue)
 {
     m_tileMap->setBlock(coord, blockType, blockValue);
-    if (blockType == 3 || blockType == 6)
+    if (blockType == 3 || blockType == 6 || blockType == 7)
         addTile(m_tileMap->getBlock(coord)->getTag(), coord);
 }
 

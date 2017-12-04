@@ -120,10 +120,11 @@ void Engine::drawInformations()
                         << "        Idle : "                    << antHill.m_numberWorkerIdle
                         << "        Gather : "                  << antHill.m_numberWorkerGather
                         << "        Build : "                   << antHill.m_numberWorkerBuild
+                        << "        Farm : "                    << antHill.m_numberWorkerFarm
                         << "        Eggs : "                    << antHill.m_numberEggs
                         << "      ||        Food Capacity : "   << antHill.getFoodCapacity()
-                        << "        Food Stored : "             << antHill.getCurrentFoodStorage()
-                        << "      ||        Dead : "            << antHill.m_dead << endl
+                        << "        Food Stored : "             << antHill.getCurrentFoodStorage() << endl
+                        << "Dead : "            << antHill.m_dead << endl
                         << getTargetInfo() << endl
                         << "TPS : " << framePerSecond ;
     string infos = sstm.str();

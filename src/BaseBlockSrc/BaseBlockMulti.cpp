@@ -15,6 +15,11 @@ BaseBlockMulti::BaseBlockMulti(int blockType, std::string tag, bool diggable)
                             {5},           {5},
                             {1,4},{1,4}, {1,4}}};
             break;
+        case 7 :            // Mushroom
+            m_structure = {{{5},  {5},   {5},
+                            {5,7},           {5,7},
+                            {1,4},{1,4}, {1,4}}};
+            break;
         default :
             BaseBlock::getStructure();
     }

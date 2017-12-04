@@ -28,6 +28,8 @@ class Block
         virtual bool isEmpty();
         virtual std::string getInfo();
         virtual void update(int i);
+        virtual int getCare();
+        virtual bool addCare(int care);
 
     protected:
         std::shared_ptr<BaseBlock> m_baseBlock;

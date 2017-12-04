@@ -15,6 +15,7 @@ class AntWorker : public Ant
         ~AntWorker();
         void gather(int typeResource);
         bool store();
+        bool farm();
         std::pair<int,int> getNotFullStorage();
         virtual bool nextStep();
         StateWorker* getState();

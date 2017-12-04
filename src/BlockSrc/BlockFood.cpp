@@ -23,7 +23,7 @@ bool BlockFood::dimQuantity(int quantite)
 }
 void BlockFood::addQuantity(int quantite)
 {
-    m_quantity = m_quantity + quantite;
+    m_quantity = min(50000, m_quantity + quantite);
 }
 
 int BlockFood::getStorageType()
@@ -42,5 +42,5 @@ std::string BlockFood::getInfo()
 void BlockFood::update(int i)
 {
     if (i%100 == 0)
-        addQuantity(10);
+        addQuantity(m_quantity/100);
 }

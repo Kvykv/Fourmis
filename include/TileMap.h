@@ -10,6 +10,7 @@
 #include "BlockHeader/BlockStorage.h"
 #include "BlockHeader/BlockGallery.h"
 #include "BlockHeader/BlockQueenChamber.h"
+#include "BlockHeader/BlockMushroom.h"
 #include "BaseBlockHeader/BaseBlockMulti.h"
 #include "WorldGen.h"
 #include <vector>
@@ -48,7 +49,7 @@ private:
     void paintBlock(int x, int y);
     void paintVoisinage(int x, int y);
     sf::VertexArray m_array;
-    std::array<std::shared_ptr<BaseBlock>, 7> m_blockFactory;
+    std::array<std::shared_ptr<BaseBlock>, 8> m_blockFactory;
     std::list<std::pair<int,int>> m_tileEntityArray;
     std::vector<std::vector<std::unique_ptr<Block>>> m_terrain;
 };

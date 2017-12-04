@@ -80,19 +80,13 @@ bool StateWorkerGather::execute(AntWorker* antWorker)
         return isDead;
     }
     if (antWorker->isGoingForFood())
-    {
         antWorker->eat();
-    }
     else
     {
         if (antWorker->getInventoryQuantity() != 0)
-        {
             antWorker->store();
-        }
         else
-        {
             antWorker->gather(2);
-        }
         setNextAction(antWorker);
     }
     return isDead;
@@ -102,13 +96,9 @@ bool StateWorkerGather::execute(AntWorker* antWorker)
 void StateWorkerGather::setNextAction(AntWorker* antWorker)
 {
     if(antWorker->getInventoryQuantity() != 0)
-    {
         antWorker->goTo(antWorker->getNotFullStorage());
-    }
     else
-    {
         antWorker->goTo(antWorker->lookFor(2));
-    }
 }
 
 
@@ -124,7 +114,6 @@ StateWorkerBuild::StateWorkerBuild(AntWorker* antWorker)
 
 bool StateWorkerBuild::execute(AntWorker* antWorker)
 {
-
     bool isDead(false);
     isDead = updateState(antWorker);
     while (!antWorker->hasArrived())
@@ -133,20 +122,14 @@ bool StateWorkerBuild::execute(AntWorker* antWorker)
         return isDead;
     }
     if (antWorker->isGoingForFood())
-    {
         antWorker->eat();
-    }
     else
     {
         bool success(build(antWorker));
         if (success)
-        {
-        setNextAction(antWorker);
-        }
+            setNextAction(antWorker);
         else
-        {
             antWorker->goTo(m_buildOrder.coord);
-        }
     }
     return isDead;
 }
@@ -154,13 +137,9 @@ bool StateWorkerBuild::execute(AntWorker* antWorker)
 bool StateWorkerBuild::build(AntWorker* antWorker)
 {
     if (m_buildOrder.blockType == -1)
-    {
         return true;
-    }
     else
-    {
         return antWorker->setBlock(m_buildOrder.coord, m_buildOrder.blockType, m_buildOrder.blockValue);
-    }
 }
 
 void StateWorkerBuild::setNextAction(AntWorker* antWorker)
@@ -173,3 +152,50 @@ void StateWorkerBuild::setBuildOrder(Tile tile)
 {
     m_buildOrder = tile;
 }
+
+/// State Worker Farmer
+
+StateWorkerFarm::StateWorkerFarm(AntWorker* antWorker)
+{
+    setNextAction(antWorker);
+    m_string = "farm";
+    antWorker->getAntHill()->m_numberWorkerFarm +=1;
+}
+
+bool StateWorkerFarm::execute(AntWorker* antWorker)
+{
+    bool isDead(false);
+    isDead = updateState(antWorker);
+    while (!antWorker->hasArrived())
+    {
+        antWorker->oneMovement();
+        return isDead;
+    }
+    if (antWorker->isGoingForFood())
+        antWorker->eat();
+    else
+    {
+        if (antWorker->getInventoryQuantity() != 0)
+        {
+            antWorker->store();
+            setNextAction(antWorker);
+        }
+        else
+            if(!antWorker->farm())
+                setNextAction(antWorker);
+
+    }
+    return isDead;
+}
+
+
+void StateWorkerFarm::setNextAction(AntWorker* antWorker)
+{
+    if(antWorker->getInventoryQuantity() != 0)
+        antWorker->goTo(antWorker->getNotFullStorage());
+    else
+        antWorker->goTo(antWorker->getAntHill()->getSpecificUniqueTile("Mushroom"));
+}
+
+
+

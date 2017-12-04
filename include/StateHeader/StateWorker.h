@@ -49,4 +49,14 @@ class StateWorkerBuild : public StateWorker
         Tile m_buildOrder;
 };
 
+class StateWorkerFarm : public StateWorker
+{
+    public:
+        StateWorkerFarm(AntWorker* antWorker);
+        ~StateWorkerFarm();
+        virtual bool execute(AntWorker* antWorker);
+        virtual void setNextAction(AntWorker* antWorker);
+};
+
+
 #endif // STATEWORKER_H

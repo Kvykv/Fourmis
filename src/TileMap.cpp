@@ -17,7 +17,9 @@ TileMap::TileMap(vector<vector<int> >& tableau)
     m_blockFactory[4].reset(new BaseBlock(4, "Stone", false));
     m_blockFactory[5].reset(new BaseBlock(5, "Gallery", false));
     m_blockFactory[6].reset(new BaseBlockMulti(6, "QueenChamber", false));
+    m_blockFactory[7].reset(new BaseBlockMulti(7, "Mushroom", true));
 
+    /// When adding a new block : update size of m_blockFactory
 
     m_terrain.resize(largeur);
     for (int i = 0; i < largeur; i++)
@@ -75,7 +77,7 @@ void TileMap::initFood()
 }
 void TileMap::createGrass(int x, int y)
 {
-    int height(rand()%7+1);
+    int height(rand()%6+1);
     int width(1);
     setBlock(min(largeur-2,x), max(1,y), 2, 10000);
     for (int i= 1; i<height; i++)
@@ -104,7 +106,7 @@ void TileMap::paintBlock(int x, int y)
         int cost(m_terrain[x][y]->getCost());
         color = sf::Color(91 - cost/50 + 20, 60 - cost/50 + 20, 20 - cost/50 + 20);
     }
-    else if (blockType == 2)
+    else if (blockType == 2 || blockType == 7)
     {
         color = sf::Color(58, 157, 35);
     }
@@ -214,6 +216,11 @@ void TileMap::setBlock(int x, int y, int blockType, int blockValue)
         break;
     case 6:
         m_terrain[x][y].reset(new BlockQueenChamber(m_blockFactory[6]));
+        break;
+    case 7:
+        m_tileEntityArray.push_back(coord);
+        m_terrain[x][y].reset(new BlockMushroom(m_blockFactory[7]));
+        break;
     }
     setSurfaceVoisinage(x, y);
     paintVoisinage(x, y);

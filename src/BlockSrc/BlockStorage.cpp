@@ -52,5 +52,5 @@ std::string BlockStorage::getInfo()
 void BlockStorage::update(int i)
 {
     if (i%100 == 0)
-        dimQuantity(20);
+        dimQuantity(m_quantity/100);
 }

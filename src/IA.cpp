@@ -9,17 +9,14 @@ AntHillAI::AntHillAI(AntHill* antHill)
     ,m_tileMap(antHill->getTileMap())
 {
     addBlock(Tile(6, pair<int,int>(300,350)));
-    int a(0);
-    a = a+1;
-
     addBlock(Tile(3, pair<int,int>(280,340), 2));
-    a = a+1;
+    addBlock(Tile(7, pair<int,int>(360, 320)));
 }
 
 void AntHillAI::update()
 {
     double rate(double(m_antHill->getCurrentFoodStorage())/double(m_antHill->getFoodCapacity()+1));
-    if (rate > 0.2)
+    if (rate > 0.8)
     {
         expandStorage();
     }
