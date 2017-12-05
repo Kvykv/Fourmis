@@ -19,6 +19,7 @@ class WorldGen
         int interpolateCubic(int lowEdge, int highEdge, int n, int delta);
         int interpolateSin(int lowEdge, int highEdge, int n, int delta);
         void setWorldHeight(std::array<int, largeur + 1> &worldHeight);
+        void setStone(std::vector<std::vector<int>>& tableau);
 
 };
 

@@ -1,6 +1,7 @@
 #include "include/WorldGen.h"
 #include <math.h>
 #include <cstdlib>
+#include <random>
 #include <iostream>
 
 using namespace std;
@@ -31,22 +32,7 @@ void WorldGen::creerTableau(vector<vector<int> >& tableau)
         }
     }
 
-    // Stone
-
-    for (int y = 0 ; y < hauteur; y++)
-    {
-        var = pow(y, 9)/pow(hauteur, 9)*100 ;
-        for (int x = 0; x < largeur; x++)
-        {
-            if ((rand()%100 + 1)<var)
-            {
-                if (tableau[x][y] == 1)
-                {
-                    tableau[x][y] = 4; // 4 : stone
-                }
-            }
-        }
-    }
+    setStone(tableau);
 }
 
 void WorldGen::setWorldHeight(array<int, largeur + 1> &worldHeight)
@@ -68,6 +54,27 @@ void WorldGen::setWorldHeight(array<int, largeur + 1> &worldHeight)
         else
             worldHeight[i] = (interpolateSin(worldHeight[lowEdge], worldHeight[highEdge], i - lowEdge, step)
                             + interpolateCubic(worldHeight[lowEdge], worldHeight[highEdge], i - lowEdge, step))/2;
+    }
+}
+
+void WorldGen::setStone(std::vector<std::vector<int>>& tableau)
+{
+    std::default_random_engine generator;
+    std::normal_distribution<double> distribution(0,0.15);
+    float var;
+    for (int y = 0 ; y < hauteur; y++)
+    {
+        for (int x = 0; x < largeur; x++)
+        {
+            var = distribution(generator)*tableau[0].size();
+            if ((tableau[0].size()-y)<std::abs(var))
+            {
+                if (tableau[x][y] == 1)
+                {
+                    tableau[x][y] = 4; // 4 : stone
+                }
+            }
+        }
     }
 }
 
