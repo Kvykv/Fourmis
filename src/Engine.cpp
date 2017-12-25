@@ -67,6 +67,30 @@ void Engine::processEvents()
             worldPos.y = worldPos.y/tailleTileHauteur;
             m_targetCoord = pair<int,int>(worldPos.x, worldPos.y);
         }
+        if(event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Num3 || event.key.code == sf::Keyboard::Num3))
+        {
+            sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
+            worldPos.x = worldPos.x/tailleTileLargeur;
+            worldPos.y = worldPos.y/tailleTileHauteur;
+            m_antHillAI.addBlock(3, pair<int,int>(worldPos.x, worldPos.y), 2);
+        }
+        if(event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Num6 || event.key.code == sf::Keyboard::Num6))
+        {
+            sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
+            worldPos.x = worldPos.x/tailleTileLargeur;
+            worldPos.y = worldPos.y/tailleTileHauteur;
+            m_antHillAI.addBlock(6, pair<int,int>(worldPos.x, worldPos.y));
+        }
+        if(event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Num7 || event.key.code == sf::Keyboard::Num7))
+        {
+            sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
+            worldPos.x = worldPos.x/tailleTileLargeur;
+            worldPos.y = worldPos.y/tailleTileHauteur;
+            m_antHillAI.addBlock(7, pair<int,int>(worldPos.x, worldPos.y));
+        }
     }
 
     if(!m_statePause)
@@ -76,7 +100,7 @@ void Engine::processEvents()
         {
             antHill.updateFoodCapacity();
         }
-        if (m_counter%1000 == 0)
+        if (m_counter%100 == 0)
         {
             m_antHillAI.update();
         }

@@ -116,7 +116,7 @@ void TileMap::paintBlock(int x, int y)
     }
     else if (blockType == 4)
     {
-        color = sf::Color(115 - rand()%20,115- rand()%20,115- rand()%20);
+        color = sf::Color(100 - rand()%20,87- rand()%20,75- rand()%20);
     }
     else if (blockType == 5)
     {
@@ -254,11 +254,11 @@ void TileMap::setSurfaceBlock(int x, int y)
     {
         if (x < (largeur -1)&& 0 < x && y < (hauteur - 1) && 0 < y)
         {
-            bool support((m_terrain[x + 1][y]->isDiggable())
-                    || (m_terrain[x][y + 1]->isDiggable()) || (m_terrain[x - 1][y]->isDiggable())
-                    || (m_terrain[x][y - 1]->isDiggable())||(m_terrain[x + 1][y+1]->isDiggable())
-                    || (m_terrain[x-1][y + 1]->isDiggable()) || (m_terrain[x - 1][y+1]->isDiggable())
-                    || (m_terrain[x-1][y - 1]->isDiggable()));
+            bool support((m_terrain[x + 1][y]->isSupport())
+                    || (m_terrain[x][y + 1]->isSupport()) || (m_terrain[x - 1][y]->isSupport())
+                    || (m_terrain[x][y - 1]->isSupport())||(m_terrain[x + 1][y+1]->isSupport())
+                    || (m_terrain[x-1][y + 1]->isSupport()) || (m_terrain[x - 1][y+1]->isSupport())
+                    || (m_terrain[x-1][y - 1]->isSupport()));
             if (support)
             {
                 setBlockCrossable(x, y, true);

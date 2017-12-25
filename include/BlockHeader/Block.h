@@ -15,6 +15,7 @@ class Block
         void setCost(int cost);
         bool isDiggable();
         bool isCrossable();
+        bool isSupport();
         void setCrossable(bool boolean);
 
         // Heritage

@@ -15,6 +15,7 @@ class MathHelp
         static int distance(std::pair<int,int> coord1, std::pair<int,int> coord2);
         static int distancePath(int x1, int y1, int x2, int y2);
         static int distancePath(std::pair<int,int> coord1, std::pair<int,int> coord2);
+        static std::vector<std::pair<int, int> > getNeighbours(int x, int y, int largeur, int hauteur);
 };
 
 template <typename T>

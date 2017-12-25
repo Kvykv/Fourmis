@@ -14,6 +14,8 @@ class BaseBlock
         int getBlockType();
         std::string getTag();
         bool isDiggable();
+        bool isSupport();
+
 
         virtual std::array<std::vector<int>,8> getStructure();
     private:

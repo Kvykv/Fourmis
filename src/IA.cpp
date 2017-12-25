@@ -8,9 +8,6 @@ AntHillAI::AntHillAI(AntHill* antHill)
     :m_antHill(antHill)
     ,m_tileMap(antHill->getTileMap())
 {
-    addBlock(Tile(6, pair<int,int>(300,350)));
-    addBlock(Tile(3, pair<int,int>(280,340), 2));
-    addBlock(Tile(7, pair<int,int>(360, 320)));
 }
 
 void AntHillAI::update()
@@ -65,8 +62,11 @@ void AntHillAI::buildStructure(Tile tile)
 
 void AntHillAI::addBlock(Tile tile)
 {
-    buildStructure(tile);
-    m_antHill->addBuildQueue(tile);
+    if(m_tileMap->getBlock(tile.coord)->isDiggable() || m_tileMap->getBlock(tile.coord)->isCrossable())
+    {
+        buildStructure(tile);
+        m_antHill->addBuildQueue(tile);
+    }
 }
 
 void AntHillAI::addBlock(int blockType, pair<int,int> coord, int blockValue)

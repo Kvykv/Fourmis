@@ -36,6 +36,11 @@ bool Block::isDiggable()
 {
     return m_baseBlock->isDiggable();
 }
+bool Block::isSupport()
+{
+    return m_baseBlock->isSupport();
+}
+
 void Block::setCrossable(bool boolean)
 {
     m_isCrossable = boolean;
@@ -90,7 +95,5 @@ bool Block::addCare(int care)
 {
     return false;
 }
-
-
 
 
