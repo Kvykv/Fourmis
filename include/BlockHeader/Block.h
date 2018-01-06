@@ -15,6 +15,7 @@ class Block
         void setCost(int cost);
         bool isDiggable();
         bool isCrossable();
+        bool isSupport();
         void setCrossable(bool boolean);
 
         // Heritage
@@ -27,6 +28,9 @@ class Block
         virtual int getCapacity();
         virtual bool isEmpty();
         virtual std::string getInfo();
+        virtual void update(int i);
+        virtual int getCare();
+        virtual bool addCare(int care);
 
     protected:
         std::shared_ptr<BaseBlock> m_baseBlock;

@@ -1,4 +1,4 @@
-#include "include/BlockStorage.h"
+#include "include/BlockHeader/BlockStorage.h"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ int BlockStorage::getQuantity()
 }
 bool BlockStorage::dimQuantity(int quantity)
 {
-    m_quantity = m_quantity - quantity;
+    m_quantity = max(m_quantity - quantity,0);
     return false;
 }
 void BlockStorage::addQuantity(int quantity)
@@ -49,3 +49,8 @@ std::string BlockStorage::getInfo()
     return sstm.str();
 }
 
+void BlockStorage::update(int i)
+{
+    if (i%100 == 0)
+        dimQuantity(m_quantity/100);
+}

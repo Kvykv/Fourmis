@@ -25,11 +25,7 @@ bool Ant::setBlock(pair<int,int> coord, int blockType, int blockValue)
 {
     if(MathHelp::distance(coord, getCoord())<=2)
     {
-        m_ptrMap->setBlock(coord, blockType, blockValue);
-        if (blockType == 3)
-        {
-            m_antHill->addTile(m_ptrMap->getBlock(coord)->getTag(), coord);
-        }
+        m_antHill->setBlock(coord, blockType, blockValue);
         return true;
     }
     return false;
@@ -123,10 +119,10 @@ pair<int,int> Ant::lookForFood(int typeBlock)
             }
         }
     }
-    if (airBlocks.size() != 0)          // On s'éloigne du dernier point franchi
+    if (airBlocks.size() != 0)          // On s'eloigne du dernier point franchi
     {
         coord = airBlocks[rand()%(airBlocks.size())];
-        for (int i=0; i<airBlocks.size(); i++)
+        for (unsigned int i=0; i<airBlocks.size(); i++)
         {
             if (MathHelp::distancePath(airBlocks[i], m_previousCoord) > MathHelp::distancePath(coord, m_previousCoord))
             {

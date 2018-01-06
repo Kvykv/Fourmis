@@ -6,8 +6,8 @@ AntHillAI::AntHillAI(){}
 
 AntHillAI::AntHillAI(AntHill* antHill)
     :m_antHill(antHill)
+    ,m_tileMap(antHill->getTileMap())
 {
-    m_antHill->addBuildQueue(Tile(3, pair<int,int>(280,340), 2));
 }
 
 void AntHillAI::update()
@@ -28,13 +28,51 @@ void AntHillAI::expandStorage()
     {
         if (m_antHill->getTileMap()->getBlock(listNeighbours[i%(listNeighbours.size())])->getBlockType() <= 1)
         {
-            m_antHill->addBuildQueue(Tile(3, listNeighbours[i%(listNeighbours.size())], 2));
+            addBlock(Tile(3, listNeighbours[i%(listNeighbours.size())], 2));
+        }
+    }
+}
+
+std::array<std::vector<int>,8> AntHillAI::getStructure(int blockType)
+{
+    return m_tileMap->getBaseBlock(blockType)->getStructure();
+}
+
+void AntHillAI::buildStructure(Tile tile)
+{
+    auto structure(getStructure(tile.blockType));
+    int a(0);
+    a = a + 1;
+    if (structure[0][0] != -1)
+    {
+        auto neighbours(m_tileMap->getNeighbours(tile.coord));
+        for (unsigned int i = 0; i != neighbours.size(); ++i)
+        {
+            auto it(std::find_if(structure[i].begin(), structure[i].end(), [&] (int x) {return x == m_tileMap->getBlock(neighbours[i])->getBlockType();}));
+            if (it == structure[i].end())
+            {
+                auto itQueue(std::find_if(m_antHill->getQueueBuild()->begin(), m_antHill->getQueueBuild()->end(), [&] (Tile tile) {return tile.coord == neighbours[i];}));
+                if (itQueue == m_antHill->getQueueBuild()->end())
+                    addBlock(structure[i][0], neighbours[i]);
+            }
         }
     }
 }
 
 
+void AntHillAI::addBlock(Tile tile)
+{
+    if(m_tileMap->getBlock(tile.coord)->isDiggable() || m_tileMap->getBlock(tile.coord)->isCrossable())
+    {
+        buildStructure(tile);
+        m_antHill->addBuildQueue(tile);
+    }
+}
 
+void AntHillAI::addBlock(int blockType, pair<int,int> coord, int blockValue)
+{
+    addBlock(Tile(blockType, coord, blockValue));
+}
 
 
 

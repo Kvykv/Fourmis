@@ -1,8 +1,7 @@
 #ifndef BLOCKSTONE_H
 #define BLOCKSTONE_H
 
-#include "include/Block.h"
-#include "include/BaseBlockHeader/BaseBlockStone.h"
+#include "include/BlockHeader/Block.h"
 
 class BlockStone : public Block
 {

@@ -1,4 +1,4 @@
-#include "include/BlockFood.h"
+#include "include/BlockHeader/BlockFood.h"
 
 using namespace std;
 
@@ -18,12 +18,12 @@ int BlockFood::getQuantity()
 }
 bool BlockFood::dimQuantity(int quantite)
 {
-    m_quantity = m_quantity - quantite;
-    return (m_quantity <= 0);
+    m_quantity = max(m_quantity - quantite, 0);
+    return (m_quantity == 0);
 }
 void BlockFood::addQuantity(int quantite)
 {
-    m_quantity = m_quantity + quantite;
+    m_quantity = min(50000, m_quantity + quantite);
 }
 
 int BlockFood::getStorageType()
@@ -39,3 +39,8 @@ std::string BlockFood::getInfo()
     return sstm.str();
 }
 
+void BlockFood::update(int i)
+{
+    if (i%100 == 0)
+        addQuantity(m_quantity/100);
+}

@@ -2,7 +2,6 @@
 #define BLOCKDIRT_H
 
 #include "Block.h"
-#include "BaseBlockHeader/BaseBlockDirt.h"
 
 class BlockDirt : public Block
 {

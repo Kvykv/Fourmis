@@ -6,8 +6,8 @@
 using namespace std;
 
 Tile::Tile(int aBlockType, pair<int,int> aCoord, int aBlockValue)
-    :blockType(aBlockType)
-    ,coord(aCoord)
+    :coord(aCoord)
+    ,blockType(aBlockType)
     ,blockValue(aBlockValue)
 {
 }
@@ -19,6 +19,7 @@ AntHill::AntHill(TileMap &tileMap)
     ,m_numberWorkerIdle(0)
     ,m_numberWorkerGather(0)
     ,m_numberWorkerBuild(0)
+    ,m_numberWorkerFarm(0)
     ,m_numberEggs(0)
     ,m_storageFoodCapacity(0)
     ,m_storageFoodCurrent(0)
@@ -53,7 +54,7 @@ void AntHill::updateFoodCapacity()
 {
     m_storageFoodCapacity = 0;
     m_storageFoodCurrent = 0;
-    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> storage = m_tileArray.equal_range("Storage");
+    auto storage = m_tileArray.equal_range("Storage");
     if (storage.first!=m_tileArray.end())
     {
         for (multimap<string, pair<int,int> >::iterator i = storage.first; i != storage.second; i++)
@@ -73,7 +74,7 @@ int AntHill::getCurrentFoodStorage()
     return m_storageFoodCurrent;
 }
 
-std::queue<Tile>* AntHill::getQueueBuild()
+std::deque<Tile>* AntHill::getQueueBuild()
 {
     return &m_buildQueue;
 }
@@ -96,6 +97,23 @@ vector<pair<int,int>> AntHill::getSpecificTile(string tag)
     }
     return listCoord;
 }
+pair<int,int> AntHill::getSpecificUniqueTile(string tag)
+{
+    vector<pair<int,int>> tileVect(getSpecificTile(tag));
+    if (tileVect.size() == 0)
+        return pair<int,int>(-1,-1);
+    else
+        return tileVect[rand()%tileVect.size()];
+}
+
+void AntHill::setBlock(pair<int,int> coord, int blockType, int blockValue)
+{
+    m_tileMap->setBlock(coord, blockType, blockValue);
+    if (blockType == 3 || blockType == 6 || blockType == 7)
+        addTile(m_tileMap->getBlock(coord)->getTag(), coord);
+}
+
+
 
 void AntHill::addAnt(int antType)
 {
@@ -139,13 +157,13 @@ void AntHill::addEgg(pair<int,int> coord, int eggType)
 
 void AntHill::addBuildQueue(Tile tile)
 {
-    m_buildQueue.push(tile);
+    m_buildQueue.push_back(tile);
 }
 
 Tile AntHill::popBuildQueue()
 {
     Tile tile = m_buildQueue.front();
-    m_buildQueue.pop();
+    m_buildQueue.pop_front();
     return tile;
 }
 

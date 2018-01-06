@@ -1,6 +1,6 @@
 #ifndef ENGINE_H
 #define ENGINE_H
-#include "Block.h"
+#include "BlockHeader/Block.h"
 #include "EntityTypesHeader/AntQueen.h"
 #include "EntityTypesHeader/AntWorker.h"
 #include "TileMap.h"
@@ -30,12 +30,14 @@ class Engine
         void handleRealTimeEvents();
         void drawInformations();
         std::string getTargetInfo();
+        void updateTPS();
 
     private:
         TileMap tileMap;
         WorldGen m_worldGen;
         AntHill antHill;
         AntHillAI m_antHillAI;
+        float framePerSecond;
         sf::Time timePerFrame;
         sf::RenderWindow window;
         sf::View m_mainView;

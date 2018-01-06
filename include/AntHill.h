@@ -1,11 +1,11 @@
 #ifndef ANTHILL_H
 #define ANTHILL_H
-#include "Block.h"
+#include "BlockHeader/Block.h"
 #include "Entite.h"
 #include <map>
 #include <memory>
 #include <string>
-#include <queue>
+#include <deque>
 #include "ResourceHolder.h"
 
 struct Tile
@@ -38,7 +38,9 @@ class AntHill
         int getCurrentFoodStorage();
         TileMap* getTileMap();
         std::vector<std::pair<int,int>> getSpecificTile(std::string tag);
-        std::queue<Tile>* getQueueBuild();
+        std::pair<int,int> getSpecificUniqueTile(std::string tag);
+        std::deque<Tile>* getQueueBuild();
+        void setBlock(std::pair<int,int> coord, int blockType, int blockValue = 0);
 
         void addAnt(std::pair<int,int> coord, int antType);
         void addAnt(int antType);
@@ -53,6 +55,7 @@ class AntHill
         int m_numberWorkerIdle;
         int m_numberWorkerGather;
         int m_numberWorkerBuild;
+        int m_numberWorkerFarm;
         int m_numberEggs;
         int m_dead;
 
@@ -66,7 +69,7 @@ class AntHill
         TileMap* m_tileMap;
         int m_storageFoodCapacity;
         int m_storageFoodCurrent;
-        std::queue<Tile> m_buildQueue;
+        std::deque<Tile> m_buildQueue;
         TextureHolder m_resourceHolder;
 };
 

@@ -1,7 +1,6 @@
 #ifndef BLOCKSTORAGE_H
 #define BLOCKSTORAGE_H
 #include "Block.h"
-#include "BaseBlockHeader/BaseBlockStorage.h"
 
 class BlockStorage : public Block
 {
@@ -15,6 +14,7 @@ class BlockStorage : public Block
         virtual int getCapacity();
         virtual bool isEmpty();
         virtual std::string getInfo();
+        virtual void update(int i);
 
     protected:
         int m_storageType;

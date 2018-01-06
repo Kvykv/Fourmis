@@ -5,7 +5,7 @@
 using namespace std;
 
 Engine::Engine()
-    :timePerFrame(sf::seconds(1.f/30.f))
+    :framePerSecond(30.f)
     ,window(sf::VideoMode(1920,1080), "TileMap"/*, sf::Style::Fullscreen*/)
     ,m_mainView(window.getDefaultView())
     ,m_miniView(window.getDefaultView())
@@ -34,9 +34,11 @@ Engine::Engine()
 bool Engine::run()
 {
     antHill.addAnt(1);
+    antHill.addAnt(0);
     draw();
     sf::Clock clock;
     sf::Time time;
+    updateTPS();
     while(window.isOpen())
     {
         clock.restart();
@@ -65,6 +67,30 @@ void Engine::processEvents()
             worldPos.y = worldPos.y/tailleTileHauteur;
             m_targetCoord = pair<int,int>(worldPos.x, worldPos.y);
         }
+        if(event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Num3 || event.key.code == sf::Keyboard::Num3))
+        {
+            sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
+            worldPos.x = worldPos.x/tailleTileLargeur;
+            worldPos.y = worldPos.y/tailleTileHauteur;
+            m_antHillAI.addBlock(3, pair<int,int>(worldPos.x, worldPos.y), 2);
+        }
+        if(event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Num6 || event.key.code == sf::Keyboard::Num6))
+        {
+            sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
+            worldPos.x = worldPos.x/tailleTileLargeur;
+            worldPos.y = worldPos.y/tailleTileHauteur;
+            m_antHillAI.addBlock(6, pair<int,int>(worldPos.x, worldPos.y));
+        }
+        if(event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Num7 || event.key.code == sf::Keyboard::Num7))
+        {
+            sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
+            worldPos.x = worldPos.x/tailleTileLargeur;
+            worldPos.y = worldPos.y/tailleTileHauteur;
+            m_antHillAI.addBlock(7, pair<int,int>(worldPos.x, worldPos.y));
+        }
     }
 
     if(!m_statePause)
@@ -74,7 +100,7 @@ void Engine::processEvents()
         {
             antHill.updateFoodCapacity();
         }
-        if (m_counter%20 == 0)
+        if (m_counter%100 == 0)
         {
             m_antHillAI.update();
         }
@@ -82,6 +108,7 @@ void Engine::processEvents()
         {
             m_counter = 0;
         }
+        tileMap.updateTileEntityArray(m_counter);
         Entite::nexStepArray(antHill.getEntityArray());
     }
 
@@ -117,11 +144,13 @@ void Engine::drawInformations()
                         << "        Idle : "                    << antHill.m_numberWorkerIdle
                         << "        Gather : "                  << antHill.m_numberWorkerGather
                         << "        Build : "                   << antHill.m_numberWorkerBuild
+                        << "        Farm : "                    << antHill.m_numberWorkerFarm
                         << "        Eggs : "                    << antHill.m_numberEggs
                         << "      ||        Food Capacity : "   << antHill.getFoodCapacity()
-                        << "        Food Stored : "             << antHill.getCurrentFoodStorage()
-                        << "      ||        Dead : "            << antHill.m_dead << endl
-                        << getTargetInfo();
+                        << "        Food Stored : "             << antHill.getCurrentFoodStorage() << endl
+                        << "Dead : "            << antHill.m_dead << endl
+                        << getTargetInfo() << endl
+                        << "TPS : " << framePerSecond ;
     string infos = sstm.str();
     sf::Font font;
     sf::Text text;
@@ -181,6 +210,16 @@ void Engine::handleRealTimeEvents()
             m_mainView.setSize(window.getDefaultView().getSize()/10);
         }
     }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))         // Plus vite
+    {
+        framePerSecond = min(framePerSecond + 1.f, 80.f);
+        updateTPS();
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))         // Plus vite
+    {
+        framePerSecond = max (framePerSecond - 1.f, 10.f);
+        updateTPS();
+    }
 }
 
 
@@ -191,4 +230,9 @@ std::string Engine::getTargetInfo()
         return "";
     }
     return tileMap.getBlock(m_targetCoord)->getInfo();
+}
+
+void Engine::updateTPS()
+{
+    timePerFrame = sf::seconds(1.f/framePerSecond);
 }

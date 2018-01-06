@@ -1,7 +1,6 @@
 #ifndef BLOCKFOOD_H
 #define BLOCKFOOD_H
 #include "Block.h"
-#include "BaseBlockHeader/BaseBlockFood.h"
 #include <iostream>
 
 class BlockFood : public Block
@@ -14,6 +13,7 @@ class BlockFood : public Block
         virtual void addQuantity(int quantite);
         virtual int getStorageType();
         virtual std::string getInfo();
+        virtual void update(int i);
 
     protected:
         int m_quantity;

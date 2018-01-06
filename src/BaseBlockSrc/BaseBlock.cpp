@@ -9,7 +9,6 @@ BaseBlock::BaseBlock(int blockType, string tag, bool diggable)
 {
 }
 
-
 int BaseBlock::getBlockType()
 {
     return m_blockType;
@@ -25,3 +24,15 @@ bool BaseBlock::isDiggable()
     return m_diggable;
 }
 
+bool BaseBlock::isSupport()
+{
+    return m_diggable || (m_blockType == 4);
+}
+
+std::array<std::vector<int>,8> BaseBlock::getStructure()
+{
+    std::array<std::vector<int>,8> structure = {{{-1},  {-1},   {-1},
+                                                 {-1},           {-1},
+                                                 {-1},{-1}, {-1}}};
+    return structure;
+}

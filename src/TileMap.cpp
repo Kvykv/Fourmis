@@ -10,14 +10,16 @@ using namespace std;
 TileMap::TileMap(){}
 TileMap::TileMap(vector<vector<int> >& tableau)
 {
-    m_blockFactory[0].reset(new BaseBlockAir());
-    m_blockFactory[1].reset(new BaseBlockDirt());
-    m_blockFactory[2].reset(new BaseBlockFood());
-    m_blockFactory[3].reset(new BaseBlockStorage());
-    m_blockFactory[4].reset(new BaseBlockStone());
-    m_blockFactory[5].reset(new BaseBlockGallery());
+    m_blockFactory[0].reset(new BaseBlock(0, "Air", false));
+    m_blockFactory[1].reset(new BaseBlock(1, "Dirt", true));
+    m_blockFactory[2].reset(new BaseBlock(2, "Food", true));
+    m_blockFactory[3].reset(new BaseBlockMulti(3, "Storage", true));
+    m_blockFactory[4].reset(new BaseBlock(4, "Stone", false));
+    m_blockFactory[5].reset(new BaseBlock(5, "Gallery", false));
+    m_blockFactory[6].reset(new BaseBlockMulti(6, "QueenChamber", false));
+    m_blockFactory[7].reset(new BaseBlockMulti(7, "Mushroom", true));
 
-
+    /// When adding a new block : update size of m_blockFactory
 
     m_terrain.resize(largeur);
     for (int i = 0; i < largeur; i++)
@@ -75,7 +77,7 @@ void TileMap::initFood()
 }
 void TileMap::createGrass(int x, int y)
 {
-    int height(rand()%7+1);
+    int height(rand()%6+1);
     int width(1);
     setBlock(min(largeur-2,x), max(1,y), 2, 10000);
     for (int i= 1; i<height; i++)
@@ -93,7 +95,7 @@ void TileMap::paintBlock(int x, int y)
 {
     int blockType(m_terrain[x][y]->getBlockType());
     sf::Vertex* quad = &m_array[(x+y*largeur)*4];
-    // Position carré
+    // Position carre
     quad[0].position = sf::Vector2f(x*tailleTileLargeur,y*tailleTileHauteur);
     quad[1].position = sf::Vector2f((x+1)*tailleTileLargeur, y*tailleTileHauteur);
     quad[2].position = sf::Vector2f((x+1)*tailleTileLargeur, (y+1)*tailleTileHauteur);
@@ -104,21 +106,25 @@ void TileMap::paintBlock(int x, int y)
         int cost(m_terrain[x][y]->getCost());
         color = sf::Color(91 - cost/50 + 20, 60 - cost/50 + 20, 20 - cost/50 + 20);
     }
-    else if (blockType == 2)
+    else if (blockType == 2 || blockType == 7)
     {
         color = sf::Color(58, 157, 35);
     }
     else if (blockType == 3)
     {
-        color = sf::Color(0,0,0);
+        color = sf::Color(153 - 50*m_terrain[x][y]->getQuantity()/m_terrain[x][y]->getCapacity(), 153, 51);
     }
     else if (blockType == 4)
     {
-        color = sf::Color(115 - rand()%20,115- rand()%20,115- rand()%20);
+        color = sf::Color(100 - rand()%20,87- rand()%20,75- rand()%20);
     }
     else if (blockType == 5)
     {
         color = sf::Color(244,164,96,200);
+    }
+    else if (blockType == 6)
+    {
+        color = sf::Color(205, 133, 63, 200);
     }
     else
     {
@@ -184,6 +190,8 @@ void TileMap::showTileMap() const
 
 void TileMap::setBlock(int x, int y, int blockType, int blockValue)
 {
+    pair<int,int> coord(x,y);
+    m_tileEntityArray.remove(coord);
     switch(blockType)
     {
     case 0:
@@ -193,9 +201,11 @@ void TileMap::setBlock(int x, int y, int blockType, int blockValue)
         m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1]));
         break;
     case 2:
+        m_tileEntityArray.push_back(coord);
         m_terrain[x][y].reset(new BlockFood(m_blockFactory[2], blockValue));
         break;
     case 3:
+        m_tileEntityArray.push_back(coord);
         m_terrain[x][y].reset(new BlockStorage(m_blockFactory[3], 0, blockValue));
         break;
     case 4:
@@ -203,6 +213,14 @@ void TileMap::setBlock(int x, int y, int blockType, int blockValue)
         break;
     case 5:
         m_terrain[x][y].reset(new BlockGallery(m_blockFactory[5]));
+        break;
+    case 6:
+        m_terrain[x][y].reset(new BlockQueenChamber(m_blockFactory[6]));
+        break;
+    case 7:
+        m_tileEntityArray.push_back(coord);
+        m_terrain[x][y].reset(new BlockMushroom(m_blockFactory[7]));
+        break;
     }
     setSurfaceVoisinage(x, y);
     paintVoisinage(x, y);
@@ -223,30 +241,34 @@ Block* TileMap::getBlock(pair<int,int> coord)
 {
     return m_terrain[coord.first][coord.second].get();
 }
+
 void TileMap::dimQuantiteBlock(pair<int,int> coord, int quantite)
 {
-    bool resetBlock(getBlock(coord)->dimQuantity(quantite));
+    getBlock(coord)->dimQuantity(quantite);
     if (getBlock(coord)->getQuantity() == 0 && getBlock(coord)->getBlockType() == 2)
         setBlock(coord, 0);
 }
 void TileMap::setSurfaceBlock(int x, int y)
 {
-	if (x < (largeur -1)&& 0 < x && y < (hauteur - 1) && 0 < y)
+    if (m_terrain[x][y]->getBlockType() == 0)
     {
-		bool support((m_terrain[x + 1][y]->isDiggable())
-				|| (m_terrain[x][y + 1]->isDiggable()) || (m_terrain[x - 1][y]->isDiggable())
-				|| (m_terrain[x][y - 1]->isDiggable())||(m_terrain[x + 1][y+1]->isDiggable())
-				|| (m_terrain[x-1][y + 1]->isDiggable()) || (m_terrain[x - 1][y+1]->isDiggable())
-				|| (m_terrain[x-1][y - 1]->isDiggable()));
-		if (m_terrain[x][y]->getBlockType() == 0 && support)
+        if (x < (largeur -1)&& 0 < x && y < (hauteur - 1) && 0 < y)
         {
-            setBlockCrossable(x, y, true);
-		}
-		else if (m_terrain[x][y]->isCrossable() && !support)
-		{
-		    setBlockCrossable(x, y, false);
-		}
-	}
+            bool support((m_terrain[x + 1][y]->isSupport())
+                    || (m_terrain[x][y + 1]->isSupport()) || (m_terrain[x - 1][y]->isSupport())
+                    || (m_terrain[x][y - 1]->isSupport())||(m_terrain[x + 1][y+1]->isSupport())
+                    || (m_terrain[x-1][y + 1]->isSupport()) || (m_terrain[x - 1][y+1]->isSupport())
+                    || (m_terrain[x-1][y - 1]->isSupport()));
+            if (support)
+            {
+                setBlockCrossable(x, y, true);
+            }
+            else if (m_terrain[x][y]->isCrossable() && !support)
+            {
+                setBlockCrossable(x, y, false);
+            }
+        }
+    }
 }
 void TileMap::setSurfaceVoisinage(int x, int y)
 {
@@ -272,45 +294,53 @@ vector<pair<int, int> > TileMap::getNeighbours(int x, int y)
 {
     pair<int,int> tmp;
     vector<pair<int, int> > neighbours;
-    if (x != largeur-1){
-        tmp.first = x+1;
-        tmp.second = y;
-        neighbours.push_back(tmp);
-        if (y != hauteur-1){
-            tmp.first = x+1;
-            tmp.second = y+1;
-            neighbours.push_back(tmp);
+    if (y != 0)
+    {
+        if (x != 0)
+        {
+            tmp.first = x-1;                                                        //  1
+            tmp.second = y-1;                                                       //  0
+            neighbours.push_back(tmp);                                              //  0
         }
-        if (y != 0){
-            tmp.first = x+1;
-            tmp.second = y-1;
-            neighbours.push_back(tmp);
-        }
-    }
-    if (x != 0){
-        tmp.first = x-1;
-        tmp.second = y;
-        neighbours.push_back(tmp);
-        if (y != hauteur-1){
-            tmp.first = x-1;
-            tmp.second = y+1;
-            neighbours.push_back(tmp);
-        }
-        if (y != 0){
-            tmp.first = x-1;
-            tmp.second = y-1;
-            neighbours.push_back(tmp);
+        tmp.first = x;                                                              //  01
+        tmp.second = y-1;                                                           //  0x
+        neighbours.push_back(tmp);                                                  //  00
+        if (x != largeur-1)
+        {
+            tmp.first = x+1;                                                        //  001
+            tmp.second = y-1;                                                       //  0x0
+            neighbours.push_back(tmp);                                              //  000
         }
     }
-    if (y != hauteur-1){
-        tmp.first = x;
-        tmp.second = y+1;
-        neighbours.push_back(tmp);
+    if (x != 0)
+    {
+        tmp.first = x-1;                                                            //  0
+        tmp.second = y;                                                             //  1
+        neighbours.push_back(tmp);                                                  //  0
     }
-    if (y != 0){
-        tmp.first = x;
-        tmp.second = y-1;
-        neighbours.push_back(tmp);
+    if (x != largeur -1)
+    {
+        tmp.first = x+1;                                                            //  000
+        tmp.second = y;                                                             //  0x1
+        neighbours.push_back(tmp);                                                  //  000
+    }
+    if (y != hauteur-1)
+    {
+        if (x != 0)
+        {
+            tmp.first = x-1;                                                        //  0
+            tmp.second = y+1;                                                       //  0
+            neighbours.push_back(tmp);                                              //  1
+        }
+        tmp.first = x;                                                              //  00
+        tmp.second = y+1;                                                           //  0x
+        neighbours.push_back(tmp);                                                  //  01
+        if (x != largeur - 1)
+        {
+            tmp.first = x+1;                                                        //  000
+            tmp.second = y+1;                                                       //  0x0
+            neighbours.push_back(tmp);                                              //  001
+        }
     }
     return neighbours;
 }
@@ -318,4 +348,15 @@ vector<pair<int, int> > TileMap::getNeighbours(int x, int y)
 std::vector<std::pair<int, int> > TileMap::getNeighbours(pair<int,int> coord)
 {
     return getNeighbours(coord.first, coord.second);
+}
+
+BaseBlock* TileMap::getBaseBlock(int blockType)
+{
+    return m_blockFactory[blockType].get();
+}
+
+void TileMap::updateTileEntityArray(int i)
+{
+    for (auto it = m_tileEntityArray.begin(); it != m_tileEntityArray.end(); ++it)
+        getBlock(*it)->update(i);
 }

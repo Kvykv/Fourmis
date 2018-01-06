@@ -14,6 +14,7 @@ class AntQueen : public Ant
         void setCDLaying(int par);
         void addCDLaying(int incr);
         int getCDLaying();
+        void updateLaying(int incr);
         bool layEgg(int eggType);
         virtual bool nextStep();
         StateQueen* getState();

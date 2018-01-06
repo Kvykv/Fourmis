@@ -1,4 +1,4 @@
-#include "include/Block.h"
+#include "include/BlockHeader/Block.h"
 #include <iostream>
 using namespace std;
 
@@ -36,6 +36,11 @@ bool Block::isDiggable()
 {
     return m_baseBlock->isDiggable();
 }
+bool Block::isSupport()
+{
+    return m_baseBlock->isSupport();
+}
+
 void Block::setCrossable(bool boolean)
 {
     m_isCrossable = boolean;
@@ -78,3 +83,17 @@ string Block::getInfo()
     sstm << "Block Infos : " << m_baseBlock->getTag();
     return sstm.str();
 }
+
+void Block::update(int i)
+{}
+
+int Block::getCare()
+{
+    return -1;
+}
+bool Block::addCare(int care)
+{
+    return false;
+}
+
+
