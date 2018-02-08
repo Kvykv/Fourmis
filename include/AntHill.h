@@ -7,6 +7,7 @@
 #include <string>
 #include <deque>
 #include "ResourceHolder.h"
+#include "Config.h"
 
 struct Tile
 {
@@ -26,7 +27,7 @@ class AntHill
 
     public:
         AntHill();
-        AntHill(TileMap &tileMap);
+        AntHill(TileMap &tileMap, std::shared_ptr<Config> config);
         std::vector<std::unique_ptr<Entite> >* getEntityArray();
         std::multimap<std::string, std::pair<int,int> >* getTileArray();
         void addTile(std::string aString, std::pair<int,int> coord);
@@ -38,6 +39,7 @@ class AntHill
         int getCurrentFoodStorage();
         TileMap* getTileMap();
         std::vector<std::pair<int,int>> getSpecificTile(std::string tag);
+        int getSpecificNumberTile(std::string tag);
         std::pair<int,int> getSpecificUniqueTile(std::string tag);
         std::deque<Tile>* getQueueBuild();
         void setBlock(std::pair<int,int> coord, int blockType, int blockValue = 0);
@@ -71,6 +73,7 @@ class AntHill
         int m_storageFoodCurrent;
         std::deque<Tile> m_buildQueue;
         TextureHolder m_resourceHolder;
+        std::shared_ptr<Config> m_config;
 };
 
 #endif // ANTHILL_H

@@ -8,16 +8,17 @@ using namespace std;
 /* -------------------------- Load ---------------------------------------- */
 
 TileMap::TileMap(){}
-TileMap::TileMap(vector<vector<int> >& tableau)
+TileMap::TileMap(vector<vector<int> >& tableau, std::shared_ptr<Config> config)
+    :m_config(config)
 {
-    m_blockFactory[0].reset(new BaseBlock(0, "Air", false));
-    m_blockFactory[1].reset(new BaseBlock(1, "Dirt", true));
-    m_blockFactory[2].reset(new BaseBlock(2, "Food", true));
-    m_blockFactory[3].reset(new BaseBlockMulti(3, "Storage", true));
-    m_blockFactory[4].reset(new BaseBlock(4, "Stone", false));
-    m_blockFactory[5].reset(new BaseBlock(5, "Gallery", false));
-    m_blockFactory[6].reset(new BaseBlockMulti(6, "QueenChamber", false));
-    m_blockFactory[7].reset(new BaseBlockMulti(7, "Mushroom", true));
+    m_blockFactory[0].reset(new BaseBlock(0, "Air", false, config));
+    m_blockFactory[1].reset(new BaseBlock(1, "Dirt", true, config));
+    m_blockFactory[2].reset(new BaseBlock(2, "Food", true, config));
+    m_blockFactory[3].reset(new BaseBlockMulti(3, "Storage", true, config));
+    m_blockFactory[4].reset(new BaseBlock(4, "Stone", false, config));
+    m_blockFactory[5].reset(new BaseBlock(5, "Gallery", false, config));
+    m_blockFactory[6].reset(new BaseBlockMulti(6, "QueenChamber", false, config));
+    m_blockFactory[7].reset(new BaseBlockMulti(7, "Mushroom", true, config));
 
     /// When adding a new block : update size of m_blockFactory
 
@@ -120,7 +121,7 @@ void TileMap::paintBlock(int x, int y)
     }
     else if (blockType == 5)
     {
-        color = sf::Color(244,164,96,200);
+        color = sf::Color(244 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),164 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),96 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),200);
     }
     else if (blockType == 6)
     {

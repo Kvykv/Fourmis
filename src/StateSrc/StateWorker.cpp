@@ -6,7 +6,10 @@ StateWorker::StateWorker()
 {
 }
 
-bool StateWorker::execute(AntWorker* antWorker){}
+bool StateWorker::execute(AntWorker* antWorker)
+{
+    return false;
+}
 
 bool StateWorker::updateState(AntWorker* antWorker)
 {

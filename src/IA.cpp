@@ -8,6 +8,8 @@ AntHillAI::AntHillAI(AntHill* antHill)
     :m_antHill(antHill)
     ,m_tileMap(antHill->getTileMap())
 {
+    addBlock(Tile(3, pair<int,int>(320,320), 2));
+    addBlock(Tile(6, pair<int,int>(340,340), 2));
 }
 
 void AntHillAI::update()
@@ -24,7 +26,7 @@ void AntHillAI::expandStorage()
     vector<pair<int,int>> listCoord(m_antHill->getSpecificTile("Storage"));
     vector<pair<int,int>> listNeighbours(m_antHill->getTileMap()->getNeighbours(listCoord[rand()%listCoord.size()]));
     int inc(rand()%listNeighbours.size());
-    for (int i = inc; i < listNeighbours.size() + inc; i++)
+    for (unsigned int i = inc; i < listNeighbours.size() + inc; i++)
     {
         if (m_antHill->getTileMap()->getBlock(listNeighbours[i%(listNeighbours.size())])->getBlockType() <= 1)
         {

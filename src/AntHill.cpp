@@ -13,7 +13,7 @@ Tile::Tile(int aBlockType, pair<int,int> aCoord, int aBlockValue)
 }
 
 AntHill::AntHill(){}
-AntHill::AntHill(TileMap &tileMap)
+AntHill::AntHill(TileMap &tileMap, std::shared_ptr<Config> config)
     :m_tileMap(&tileMap)
     ,m_numberQueen(0)
     ,m_numberWorkerIdle(0)
@@ -21,9 +21,10 @@ AntHill::AntHill(TileMap &tileMap)
     ,m_numberWorkerBuild(0)
     ,m_numberWorkerFarm(0)
     ,m_numberEggs(0)
+    ,m_dead(0)
     ,m_storageFoodCapacity(0)
     ,m_storageFoodCurrent(0)
-    ,m_dead(0)
+    ,m_config(config)
 {
     loadTextures();
 }
@@ -97,6 +98,12 @@ vector<pair<int,int>> AntHill::getSpecificTile(string tag)
     }
     return listCoord;
 }
+
+int AntHill::getSpecificNumberTile(string tag)
+{
+    return getSpecificTile(tag).size();
+}
+
 pair<int,int> AntHill::getSpecificUniqueTile(string tag)
 {
     vector<pair<int,int>> tileVect(getSpecificTile(tag));

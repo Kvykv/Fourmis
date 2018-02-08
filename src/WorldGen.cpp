@@ -63,7 +63,7 @@ void WorldGen::setWorldHeight(array<int, largeur + 1> &worldHeight)
 
 void WorldGen::setStone(std::vector<std::vector<int>>& tableau, std::default_random_engine& generator)
 {
-    std::normal_distribution<double> distribution(0,0.25);
+    std::normal_distribution<double> distribution(0,0.20);
     float var;
     for (int y = 0 ; y < hauteur; y++)
     {

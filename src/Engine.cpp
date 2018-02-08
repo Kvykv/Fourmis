@@ -1,4 +1,5 @@
 #include "include/Engine.h"
+#include "include/Config.h"
 #include <string>
 #include <sstream>
 
@@ -6,6 +7,7 @@ using namespace std;
 
 Engine::Engine()
     :framePerSecond(30.f)
+    ,m_config(new Config)
     ,window(sf::VideoMode(1920,1080), "TileMap"/*, sf::Style::Fullscreen*/)
     ,m_mainView(window.getDefaultView())
     ,m_miniView(window.getDefaultView())
@@ -15,11 +17,13 @@ Engine::Engine()
     ,m_worldGen()
     ,m_targetCoord(pair<int,int>(-1,-1))
 {                   //sf::VideoMode::getDesktopMode
+    m_config->loadConfig("config.json");
+
     vector<vector<int> > tableau;
     tableau.resize(largeur);
     m_worldGen.creerTableau(tableau);
-    tileMap = TileMap(tableau);
-    antHill =  AntHill(tileMap);
+    tileMap = TileMap(tableau, m_config);
+    antHill =  AntHill(tileMap, m_config);
     m_antHillAI = AntHillAI(&antHill);
 
 
@@ -215,7 +219,7 @@ void Engine::handleRealTimeEvents()
         framePerSecond = min(framePerSecond + 1.f, 80.f);
         updateTPS();
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))         // Plus vite
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))         // Moins vite
     {
         framePerSecond = max (framePerSecond - 1.f, 10.f);
         updateTPS();

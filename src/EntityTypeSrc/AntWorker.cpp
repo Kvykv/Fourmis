@@ -32,7 +32,7 @@ AntWorker::AntWorker(int x, int y, TileMap *tileMap, AntHill *antHill)
     {
         m_state.reset(new StateWorkerBuild(this));
     }
-    if (antHill->m_numberWorkerFarm == 0)
+    if (antHill->m_numberWorkerFarm != antHill->getSpecificNumberTile("Mushroom"))
     {
         m_state.reset(new StateWorkerFarm(this));
     }
@@ -145,9 +145,11 @@ Tile AntWorker::popBuildQueue()
 
 bool AntWorker::farm()
 {
-    if(getBlock(m_destination)->getCare() < 1200)
-        return (getBlock(m_destination)->addCare(1));
-    else
+    if (getBlock(m_destination)->getQuantity() >= 500 && getBlock(m_destination)->getCare() > 1400)
+    {
         gather(7);
-    return false;
+        return false;
+    }
+    return (getBlock(m_destination)->addCare(1));
+
 }

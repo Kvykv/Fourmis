@@ -8,8 +8,6 @@ Entite::Entite(TileMap *tileMap, int type)
     ,m_hunger(2000)
     ,m_goingForFood(false)
     ,m_entityType(type)
-    ,m_inventoryQuantity(0)
-    ,m_inventoryType(0)
 {
     int x = (rand()%(largeur-2)) + 1;
     for (int y = 0; y < hauteur; y ++)
@@ -30,8 +28,6 @@ Entite::Entite(int x, int y, TileMap *tileMap, int type)
     ,m_hunger(2000)
     ,m_goingForFood(false)
     ,m_entityType(type)
-    ,m_inventoryQuantity(0)
-    ,m_inventoryType(0)
 {
     m_sprite.setScale(1*tailleTileLargeur, 1*tailleTileHauteur);
 }
@@ -93,22 +89,19 @@ void Entite::setHasArrived(bool boolean)
 }
 void Entite::setInventoryType(int type)
 {
-    if (type != 0)
-    {
-        m_inventoryType = type;
-    }
+    m_inventory.setType(type);
 }
 void Entite::setInventoryQuantity(int quantity)
 {
-    m_inventoryQuantity = quantity;
+    m_inventory.setQuantity(quantity);
 }
 int Entite::getInventoryType()
 {
-    return m_inventoryType;
+    return m_inventory.getType();
 }
 int Entite::getInventoryQuantity()
 {
-    return m_inventoryQuantity;
+    return m_inventory.getQuantity();
 }
 
 int Entite::getHunger()
@@ -259,7 +252,7 @@ void Entite::eat()
 void Entite::nexStepArray(vector<unique_ptr<Entite> > *entiteArray)
 {
     vector<int> areDead;
-    for (int i=0; i < entiteArray->size() ; i++)
+    for (unsigned int i=0; i < entiteArray->size() ; i++)
     {
         bool isDead((*entiteArray)[i]->nextStep());
         if (isDead)
@@ -400,7 +393,7 @@ pair<int,int> Entite::lookForFood(int typeBlock)
     if (airBlocks.size() != 0)          // On s'eloigne du dernier point franchi
     {
         coord = airBlocks[rand()%(airBlocks.size())];
-        for (int i=0; i<airBlocks.size(); i++)
+        for (unsigned int i=0; i<airBlocks.size(); i++)
         {
             if (MathHelp::distancePath(airBlocks[i], m_previousCoord) > MathHelp::distancePath(coord, m_previousCoord))
             {
@@ -498,7 +491,7 @@ pair<int,int> Entite::lookFor(int typeBlock)
     if (airBlocks.size() != 0)          // On s'eloigne du dernier point franchi
     {
         coord = airBlocks[rand()%(airBlocks.size())];
-        for (int i=0; i<airBlocks.size(); i++)
+        for (unsigned int i=0; i<airBlocks.size(); i++)
         {
             if (MathHelp::distancePath(airBlocks[i], m_previousCoord) > MathHelp::distancePath(coord, m_previousCoord))
             {

@@ -1,0 +1,14 @@
+{
+    "test": 0.1,
+	"blockFood":
+	{
+		"growthRate" : 10,
+		"blockMushroom":
+		{
+			"maxCare" : 1500,
+			"decayLimit" : 1000,
+			"decayRate" : 10,
+			"flatGrowthRate" : 10
+		}
+	}
+}

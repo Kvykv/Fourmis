@@ -16,8 +16,8 @@ public:
 	std::pair<int,int> m_coordParent;
 	int m_costG;
 	int m_costH;
-	int m_costF;
-	std::pair<int,int> m_coordNode;
+    std::pair<int,int> m_coordNode;
+    int m_costF;
 	bool operator<=(Node const&b);
 	void setCostH(std::pair<int,int>& coordTarget);
 	void setCost(int n);

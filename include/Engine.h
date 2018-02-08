@@ -47,7 +47,7 @@ class Engine
         float m_velocity;
         sf::RectangleShape m_outlineMiniMap;
         std::pair<int,int> m_targetCoord;
-
+        std::shared_ptr<Config> m_config;
 };
 
 #endif // ENGINE_H

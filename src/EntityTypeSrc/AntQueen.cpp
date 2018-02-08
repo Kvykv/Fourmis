@@ -76,7 +76,7 @@ bool AntQueen::layEgg(int eggType)
         m_CDLaying = 0;
         vector<pair<int,int> > neighbours(m_ptrMap->getNeighbours(m_coordX, m_coordY));
         int par(rand()%8);
-        for (int i=0; i<neighbours.size(); i++)
+        for (unsigned int i=0; i<neighbours.size(); i++)
         {
             if (m_ptrMap->getBlock(neighbours[(par+i)%8])->isCrossable())
             {

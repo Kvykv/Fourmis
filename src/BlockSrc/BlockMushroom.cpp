@@ -1,4 +1,5 @@
 #include "include\BlockHeader\BlockMushroom.h"
+#include "include\Config.h"
 
 using namespace std;
 
@@ -13,10 +14,10 @@ void BlockMushroom::update(int i)
     if (i%100 == 0)
     {
         m_care-=50;
-        if (m_care < 1000)
-           dimQuantity(m_quantity/10);
+        if (m_care < getConfig()->m_mushroomDecayLimit)
+           dimQuantity(m_quantity/getConfig()->m_mushroomDecayRate);
         else
-           addQuantity(100 + m_quantity/10);
+           addQuantity(getConfig()->m_mushroomFlatGrowthRate + m_quantity/getConfig()->m_foodGrowthRate);
     }
 
 }
@@ -28,7 +29,7 @@ int BlockMushroom::getCare()
 
 bool BlockMushroom::addCare(int care)
 {
-    m_care = min(1200, m_care + care);
+    m_care = min(getConfig()->m_mushroomMaxCare, m_care + care);
     return true;
 }
 
@@ -47,4 +48,9 @@ std::string BlockMushroom::getInfo()
 bool BlockMushroom::isEmpty()
 {
     return (m_quantity == 0);
+}
+
+std::shared_ptr<Config> BlockMushroom::getConfig()
+{
+    return m_baseBlock->getConfig();
 }

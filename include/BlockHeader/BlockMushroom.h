@@ -13,6 +13,7 @@ public:
     virtual int getStorageType();
     virtual std::string getInfo();
     virtual bool isEmpty();
+    std::shared_ptr<Config> getConfig();
 
 
 private:

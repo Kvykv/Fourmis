@@ -5,6 +5,7 @@
 #include "include/TileMap.h"
 #include "include/IAPathFinding.h"
 #include "include/StateHeader/State.h"
+#include "include/ItemHeader/item.h"
 #include <vector>
 #include <iostream>
 
@@ -72,14 +73,13 @@ class Entite : public sf::Drawable, public sf::Transformable
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         int m_entityType=0;
-        int m_coordY;
         int m_coordX;
+        int m_coordY;
         bool m_hasArrived;
         bool m_goingForFood;
         int m_iter;
         int m_hunger;
-        int m_inventoryType;
-        int m_inventoryQuantity;
+        Item m_inventory;
         std::pair <int,int> m_destination;
         TileMap *m_ptrMap;
         sf::Sprite m_sprite;

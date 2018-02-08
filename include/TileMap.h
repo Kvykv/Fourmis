@@ -2,6 +2,7 @@
 #define TILEMAP_H
 
 #include <SFML/Graphics.hpp>
+#include "Config.h"
 #include "BlockHeader/Block.h"
 #include "BlockHeader/BlockAir.h"
 #include "BlockHeader/BlockDirt.h"
@@ -24,7 +25,7 @@ class TileMap : public sf::Drawable, public sf::Transformable
 {
 public:
     TileMap();
-    TileMap(std::vector<std::vector<int> >& tableau);
+    TileMap(std::vector<std::vector<int> >& tableau, std::shared_ptr<Config> config);
     void initialiserTileMap(std::vector<std::vector<int> >& tableau);
     void showTileMap() const;
     void load();
@@ -52,6 +53,7 @@ private:
     std::array<std::shared_ptr<BaseBlock>, 8> m_blockFactory;
     std::list<std::pair<int,int>> m_tileEntityArray;
     std::vector<std::vector<std::unique_ptr<Block>>> m_terrain;
+    std::shared_ptr<Config> m_config;
 };
 
 

@@ -26,7 +26,7 @@ void Node::setCostH(pair<int,int>& coordTarget)
 
 bool IAPathFinding::containsCoord(pair<int,int> coord, vector<Node> liste, int &index)
 {
-    for (int i = 0; i<liste.size(); i++ )
+    for (unsigned int i = 0; i<liste.size(); i++ )
     {
         if (coord == liste[i].m_coordNode)
         {
@@ -43,7 +43,7 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
 		vector<pair<int,int> > path;
         bool isReachable(false);
 		vector<pair<int,int> > neighbours(tileMap->getNeighbours(coordTarget.first, coordTarget.second));
-		for (int i=0; i<neighbours.size(); i++)
+        for (unsigned int i=0; i<neighbours.size(); i++)
         {
             if((tileMap->getBlock(neighbours[i]))->isCrossable() ||
                         tileMap->getBlock(neighbours[i])->isDiggable())
@@ -76,7 +76,7 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
 		if (current.m_coordNode != coordTarget){
         do {
             vector<pair<int, int> > neighbours = tileMap->getNeighbours(current.m_coordNode.first, current.m_coordNode.second);
-			for (int i = 0; i< neighbours.size(); i++){
+            for (unsigned int i = 0; i< neighbours.size(); i++){
                 if (tileMap->getBlock(neighbours[i].first, neighbours[i].second)->isCrossable() ||
                      tileMap->getBlock(neighbours[i].first, neighbours[i].second)->isDiggable()){
 					if (!isClosed[neighbours[i].first][neighbours[i].second]){
