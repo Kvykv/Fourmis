@@ -32,8 +32,19 @@ void Config::loadConfig(const std::string& configFileName)
 
 void Config::setConfig(rapidjson::Document& document)
 {
-    m_test = document["test"].GetFloat();
+    /// Air
+    m_airThermalCond = document["blockAir"]["thermalCond"].GetFloat();
+
+    /// Dirt
+    m_dirtThermalCond = document["blockDirt"]["thermalCond"].GetFloat();
+
+    /// Stone
+    m_stoneThermalCond = document["blockStone"]["thermalCond"].GetFloat();
+
+    /// Food
     m_foodGrowthRate = document["blockFood"]["growthRate"].GetInt();
+
+    /// Mushroom
     m_mushroomMaxCare = document["blockFood"]["blockMushroom"]["maxCare"].GetInt();
     m_mushroomDecayLimit = document["blockFood"]["blockMushroom"]["decayLimit"].GetInt();
     m_mushroomDecayRate = document["blockFood"]["blockMushroom"]["decayRate"].GetInt();

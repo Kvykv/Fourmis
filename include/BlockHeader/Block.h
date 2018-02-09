@@ -9,7 +9,7 @@ class Block
 {
     public:
         Block(std::shared_ptr<BaseBlock> baseBlock);
-        Block(std::shared_ptr<BaseBlock> baseBlock , bool crossable, int cost);
+        Block(std::shared_ptr<BaseBlock> baseBlock , bool crossable, int cost, int temperature = 0);
         int getBlockType() const;
         int getCost() const;
         void setCost(int cost);
@@ -17,6 +17,10 @@ class Block
         bool isCrossable();
         bool isSupport();
         void setCrossable(bool boolean);
+        float getThermalCond();
+        int getTemperature();
+        void setTemperature(int temperature);
+
 
         // Heritage
         virtual std::string getTag() const;
@@ -35,6 +39,7 @@ class Block
     protected:
         std::shared_ptr<BaseBlock> m_baseBlock;
         int m_cost;
+        int m_temperature;
         bool m_isCrossable = false;
 
     private:

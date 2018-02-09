@@ -9,7 +9,7 @@
 class BaseBlockMulti : public BaseBlock
 {
     public:
-        BaseBlockMulti(int blockType, std::string tag, bool diggable, std::shared_ptr<Config> config);
+        BaseBlockMulti(int blockType, std::string tag, bool diggable, int thermalConductivity, std::shared_ptr<Config> config);
         virtual std::array<std::vector<int>,8> getStructure();
 
     private:

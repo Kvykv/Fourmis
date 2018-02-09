@@ -63,6 +63,11 @@ void Engine::processEvents()
             window.close();
         if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
             m_statePause = !m_statePause;
+        if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::T)
+        {
+            tileMap.setDisplayModeTemperature(!tileMap.getDisplayModeTemperature());
+            tileMap.paintMap();
+        }
         if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
         {
             sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
@@ -112,6 +117,8 @@ void Engine::processEvents()
         {
             m_counter = 0;
         }
+        for(int i = 0; i < 1000; i++)
+            tileMap.updateRandomChunk();
         tileMap.updateTileEntityArray(m_counter);
         Entite::nexStepArray(antHill.getEntityArray());
     }
@@ -153,8 +160,8 @@ void Engine::drawInformations()
                         << "      ||        Food Capacity : "   << antHill.getFoodCapacity()
                         << "        Food Stored : "             << antHill.getCurrentFoodStorage() << endl
                         << "Dead : "            << antHill.m_dead << endl
-                        << getTargetInfo() << endl
-                        << "TPS : " << framePerSecond ;
+                        << "Target : " << m_targetCoord.first << " " << m_targetCoord.second << "  ||  " << getTargetInfo() << endl
+                        << "TPS : " << framePerSecond << "   || State Pause : " << m_statePause;
     string infos = sstm.str();
     sf::Font font;
     sf::Text text;

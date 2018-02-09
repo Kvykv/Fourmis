@@ -10,15 +10,16 @@ using namespace std;
 TileMap::TileMap(){}
 TileMap::TileMap(vector<vector<int> >& tableau, std::shared_ptr<Config> config)
     :m_config(config)
+    ,m_displayModeTemperature(false)
 {
-    m_blockFactory[0].reset(new BaseBlock(0, "Air", false, config));
-    m_blockFactory[1].reset(new BaseBlock(1, "Dirt", true, config));
-    m_blockFactory[2].reset(new BaseBlock(2, "Food", true, config));
-    m_blockFactory[3].reset(new BaseBlockMulti(3, "Storage", true, config));
-    m_blockFactory[4].reset(new BaseBlock(4, "Stone", false, config));
-    m_blockFactory[5].reset(new BaseBlock(5, "Gallery", false, config));
-    m_blockFactory[6].reset(new BaseBlockMulti(6, "QueenChamber", false, config));
-    m_blockFactory[7].reset(new BaseBlockMulti(7, "Mushroom", true, config));
+    m_blockFactory[0].reset(new BaseBlock(0, "Air", false, m_config->m_airThermalCond, config));
+    m_blockFactory[1].reset(new BaseBlock(1, "Dirt", true, m_config->m_dirtThermalCond, config));
+    m_blockFactory[2].reset(new BaseBlock(2, "Food", true, m_config->m_airThermalCond, config));
+    m_blockFactory[3].reset(new BaseBlockMulti(3, "Storage", true, m_config->m_airThermalCond, config));
+    m_blockFactory[4].reset(new BaseBlock(4, "Stone", false, m_config->m_stoneThermalCond, config));
+    m_blockFactory[5].reset(new BaseBlock(5, "Gallery", false, m_config->m_airThermalCond, config));
+    m_blockFactory[6].reset(new BaseBlockMulti(6, "QueenChamber", false, m_config->m_airThermalCond, config));
+    m_blockFactory[7].reset(new BaseBlockMulti(7, "Mushroom", true, m_config->m_airThermalCond, config));
 
     /// When adding a new block : update size of m_blockFactory
 
@@ -41,19 +42,25 @@ void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
             {
             case 0:
                  m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
+                 getBlock(x, y)->setTemperature(0);
                  break;
             case 1:
                  depth+=1;
                  m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1], 1000  + rand()%1000 - 500));
+                 getBlock(x, y)->setTemperature(2000);
                  break;
             case 4:
                 depth+=1;
                 m_terrain[x][y].reset(new BlockStone(m_blockFactory[4]));
+                getBlock(x, y)->setTemperature(3000);
                 break;
             default:
                  m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
+                 getBlock(x, y)->setTemperature(0);
                  break;
             }
+            if(y == hauteur -1)
+                getBlock(x,y)->setTemperature(5000);
         }
     }
     load();
@@ -102,34 +109,42 @@ void TileMap::paintBlock(int x, int y)
     quad[2].position = sf::Vector2f((x+1)*tailleTileLargeur, (y+1)*tailleTileHauteur);
     quad[3].position = sf::Vector2f(x*tailleTileLargeur, (y+1)*tailleTileHauteur);
     sf::Color color;
-    if (blockType == 1)
+
+    if(!getDisplayModeTemperature())
     {
-        int cost(m_terrain[x][y]->getCost());
-        color = sf::Color(91 - cost/50 + 20, 60 - cost/50 + 20, 20 - cost/50 + 20);
-    }
-    else if (blockType == 2 || blockType == 7)
-    {
-        color = sf::Color(58, 157, 35);
-    }
-    else if (blockType == 3)
-    {
-        color = sf::Color(153 - 50*m_terrain[x][y]->getQuantity()/m_terrain[x][y]->getCapacity(), 153, 51);
-    }
-    else if (blockType == 4)
-    {
-        color = sf::Color(100 - rand()%20,87- rand()%20,75- rand()%20);
-    }
-    else if (blockType == 5)
-    {
-        color = sf::Color(244 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),164 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),96 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),200);
-    }
-    else if (blockType == 6)
-    {
-        color = sf::Color(205, 133, 63, 200);
+        if (blockType == 1)
+        {
+            int cost(m_terrain[x][y]->getCost());
+            color = sf::Color(91 - cost/50 + 20, 60 - cost/50 + 20, 20 - cost/50 + 20);
+        }
+        else if (blockType == 2 || blockType == 7)
+        {
+            color = sf::Color(58, 157, 35);
+        }
+        else if (blockType == 3)
+        {
+            color = sf::Color(153 - 50*m_terrain[x][y]->getQuantity()/m_terrain[x][y]->getCapacity(), 153, 51);
+        }
+        else if (blockType == 4)
+        {
+            color = sf::Color(100 - rand()%20,87- rand()%20,75- rand()%20);
+        }
+        else if (blockType == 5)
+        {
+            color = sf::Color(244 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),164 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),96 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),200);
+        }
+        else if (blockType == 6)
+        {
+            color = sf::Color(205, 133, 63, 200);
+        }
+        else
+        {
+            color = sf::Color(119 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),(181 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2)), (254 + 10 * ((static_cast<float>(rand()%100))/100 - 1)));
+        }
     }
     else
     {
-            color = sf::Color(119 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2),(181 + 10 * ((static_cast<float>(rand()%100))/100 - 1 / 2)), (254 + 10 * ((static_cast<float>(rand()%100))/100 - 1)));
+        color = sf::Color(((float)m_terrain[x][y]->getTemperature())*0.051, 255 - ((float)m_terrain[x][y]->getTemperature())*0.051, 255 - ((float)m_terrain[x][y]->getTemperature())*0.051);
     }
     quad[0].color = color;
     quad[1].color = color;
@@ -144,13 +159,8 @@ void TileMap::paintVoisinage(int x, int y)
 	paintBlock(x, y + 1);
 	paintBlock(x, y - 1);
 }
-void TileMap::load()
+void TileMap::paintMap()
 {
-    // Set du VertexArray
-    m_array.setPrimitiveType(sf::Quads);
-    m_array.resize(hauteur * largeur * 4);
-
-    // Remplissage du tableau de Vertex
     for (int x = 0; x < largeur; x++)
     {
         for (int y = 0; y < hauteur; y++)
@@ -158,6 +168,16 @@ void TileMap::load()
             paintBlock(x, y);
         }
     }
+}
+void TileMap::load()
+{
+    // Set du VertexArray
+    m_array.setPrimitiveType(sf::Quads);
+    m_array.resize(hauteur * largeur * 4);
+
+    // Remplissage du tableau de Vertex
+    paintMap();
+
 }
 void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -184,6 +204,16 @@ void TileMap::showTileMap() const
     cout << endl;
     }
 }
+
+bool TileMap::getDisplayModeTemperature()
+{
+    return m_displayModeTemperature;
+}
+void TileMap::setDisplayModeTemperature(bool mode)
+{
+    m_displayModeTemperature = mode;
+}
+
 
 
 // -------------------------- Gameplay -------------------------------------
@@ -223,12 +253,22 @@ void TileMap::setBlock(int x, int y, int blockType, int blockValue)
         m_terrain[x][y].reset(new BlockMushroom(m_blockFactory[7]));
         break;
     }
+    setTemperatureBlock(x, y);
     setSurfaceVoisinage(x, y);
-    paintVoisinage(x, y);
+    paintBlock(x, y);
 }
 void TileMap::setBlock(pair<int,int> coord, int blockType, int blockValue)
 {
     setBlock(coord.first, coord.second, blockType, blockValue);
+}
+void TileMap::setTemperatureBlock(int x, int y)
+{
+    int temperature(0);
+    vector<pair<int,int>> neighbours(getNeighbours(x,y));
+    for(auto it = neighbours.begin(); it != neighbours.end(); it++)
+        temperature += (int)(((float)(getBlock(*it)->getTemperature()))/(float)neighbours.size());
+    getBlock(x,y)->setTemperature(temperature);
+    paintBlock(x,y);
 }
 void TileMap::setBlockCrossable(int x, int y, bool boolean)
 {
@@ -360,4 +400,34 @@ void TileMap::updateTileEntityArray(int i)
 {
     for (auto it = m_tileEntityArray.begin(); it != m_tileEntityArray.end(); ++it)
         getBlock(*it)->update(i);
+}
+
+
+
+/// Temperature
+
+void TileMap::updateBlockTemperature(std::pair<int,int> coord)
+{
+    if(coord.second != 0 && coord.second != m_terrain[0].size() - 1)
+    {
+        int temperature(getBlock(coord)->getTemperature());
+        float conductivity(getBlock(coord)->getThermalCond());
+        vector<pair<int,int>> neighbours(getNeighbours(coord));
+        for(auto it = neighbours.begin(); it != neighbours.end(); it++)
+        {
+            temperature += (int)((conductivity*(float)(getBlock(*it)->getTemperature() - temperature))/(float)neighbours.size());
+        }
+        getBlock(coord)->setTemperature(temperature);
+        if(getDisplayModeTemperature())
+            paintBlock(coord.first, coord.second);
+    }
+}
+
+void TileMap::updateRandomChunk()
+{
+    vector<pair<int,int>> neighbours(getNeighbours(std::pair<int,int>(rand()%m_terrain.size(), rand()%m_terrain[0].size())));
+    for(auto it = neighbours.begin(); it != neighbours.end(); it++)
+    {
+        updateBlockTemperature(*it);
+    }
 }

@@ -1,7 +1,7 @@
 #include "include/BaseBlockHeader/BaseBlockMulti.h"
 
-BaseBlockMulti::BaseBlockMulti(int blockType, std::string tag, bool diggable, std::shared_ptr<Config> config)
-    :BaseBlock(blockType, tag, diggable, config)
+BaseBlockMulti::BaseBlockMulti(int blockType, std::string tag, bool diggable, int thermalConductivity, std::shared_ptr<Config> config)
+    :BaseBlock(blockType, tag, diggable, thermalConductivity, config)
 {
     switch (blockType)       // Premier element de chaque case : par defaut
     {

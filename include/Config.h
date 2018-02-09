@@ -11,16 +11,22 @@ public:
     void setConfig(rapidjson::Document& document);
     void loadConfig(const std::string& configFileName);
 
-    float m_test;
-
     /// Queen
     int m_queenHatchingTime;
     int m_queenLayingCost;
     int m_queenLayingCD;
     int m_queenSize;
 
-    /// Food
+    /// Air
+    float m_airThermalCond;
 
+    /// Dirt
+    float m_dirtThermalCond;
+
+    /// Stone
+    float m_stoneThermalCond;
+
+    /// Food
     int m_foodGrowthRate;
 
     /// Mushroom

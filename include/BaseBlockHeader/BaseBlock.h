@@ -11,10 +11,11 @@
 class BaseBlock
 {
     public:
-        BaseBlock(int blockType, std::string tag, bool diggable, std::shared_ptr<Config> config);
+        BaseBlock(int blockType, std::string tag, bool diggable, float thermalConductivity, std::shared_ptr<Config> config);
 
         int getBlockType();
         std::string getTag();
+        float getThermalCond();
         bool isDiggable();
         bool isSupport();
         std::shared_ptr<Config> getConfig();
@@ -27,6 +28,7 @@ class BaseBlock
         int m_blockType;
         std::string m_tag;
         bool m_diggable;
+        float m_thermalConductivity;
         std::shared_ptr<Config> m_config;
 };
 

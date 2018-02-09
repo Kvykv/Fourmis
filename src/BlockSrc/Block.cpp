@@ -5,11 +5,13 @@ using namespace std;
 Block::Block(shared_ptr<BaseBlock> baseBlock):m_baseBlock(baseBlock)
 {
     m_isCrossable = false;
+    m_temperature = 0;
 }
-Block::Block(shared_ptr<BaseBlock> baseBlock, bool crossable, int cost)
+Block::Block(shared_ptr<BaseBlock> baseBlock, bool crossable, int cost, int temperature)
     :m_baseBlock(baseBlock)
     ,m_isCrossable(crossable)
     ,m_cost(cost)
+    ,m_temperature(temperature)
 {}
 int Block::getBlockType() const
 {
@@ -46,6 +48,20 @@ void Block::setCrossable(bool boolean)
     m_isCrossable = boolean;
 }
 
+float Block::getThermalCond()
+{
+    return m_baseBlock->getThermalCond();
+}
+
+int Block::getTemperature()
+{
+    return m_temperature;
+}
+void Block::setTemperature(int temperature)
+{
+    m_temperature = max(0, min(10000,temperature));
+}
+
 /* --------------------- Heritage --------------------- */
 
 void Block::setQuantity(int quantite)
@@ -80,7 +96,7 @@ bool Block::isEmpty()
 string Block::getInfo()
 {
     std::stringstream sstm;
-    sstm << "Block Infos : " << m_baseBlock->getTag();
+    sstm << "Block Infos : " << m_baseBlock->getTag() << "   Temperature (cC) : " << m_temperature;
     return sstm.str();
 }
 

@@ -19,7 +19,6 @@ void BlockMushroom::update(int i)
         else
            addQuantity(getConfig()->m_mushroomFlatGrowthRate + m_quantity/getConfig()->m_foodGrowthRate);
     }
-
 }
 
 int BlockMushroom::getCare()
