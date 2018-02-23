@@ -6,7 +6,7 @@ AntWorker::AntWorker(TileMap *tileMap, AntHill *antHill)
     :Ant(tileMap, antHill, 0)
 {
     float scale(3.0/m_sprite.getTexture()->getSize().x);
-    m_sprite.setScale(scale*tailleTileLargeur,scale*tailleTileHauteur);
+    m_sprite.setScale(scale*m_ptrMap->getTailleTileLargeur(),scale*m_ptrMap->getTailleTileHauteur());
     paintEntite();
     if (antHill->m_numberWorkerBuild == 0)
     {
@@ -26,13 +26,13 @@ AntWorker::AntWorker(int x, int y, TileMap *tileMap, AntHill *antHill)
     :Ant(x, y, tileMap, antHill, 0)
 {
     float scale(3.0/m_sprite.getTexture()->getSize().x);
-    m_sprite.setScale(scale*tailleTileLargeur,scale*tailleTileHauteur);
+    m_sprite.setScale(scale*m_ptrMap->getTailleTileLargeur(),scale*m_ptrMap->getTailleTileHauteur());
     paintEntite();
     if (antHill->m_numberWorkerBuild == -1)
     {
         m_state.reset(new StateWorkerBuild(this));
     }
-    if (antHill->m_numberWorkerFarm != antHill->getSpecificNumberTile("Mushroom"))
+    if (antHill->m_numberWorkerFarm != antHill->getSpecificStructure("Field")->getSpecificNumberTile("Mushroom"))
     {
         m_state.reset(new StateWorkerFarm(this));
     }
@@ -67,7 +67,7 @@ void AntWorker::gather(int typeResource)
 {
     if (getBlock(m_destination)->getBlockType() == typeResource)
     {
-        int quantity(min(2000, m_ptrMap->getBlock(m_destination)->getQuantity()));
+        int quantity(min(4000, m_ptrMap->getBlock(m_destination)->getQuantity()));
         setInventoryQuantity(quantity);
         setInventoryType(m_ptrMap->getBlock(m_destination)->getStorageType());
         m_ptrMap->dimQuantiteBlock(m_destination, quantity);
@@ -112,19 +112,21 @@ void AntWorker::setState(StateWorker newState)
 
 pair<int,int> AntWorker::getNotFullStorage()
 {
-    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> storage = m_antHill->getTileArray()->equal_range("Storage");
-    if (storage.first!=m_antHill->getTileArray()->end())
+    auto storage = m_antHill->getSpecificStructure("Storage")->getSpecificTile("Storage");
+    if (storage.size()!=0)
     {
-        for (multimap<string, pair<int,int> >::iterator i = storage.first; i != storage.second; i++)
+        for (unsigned int i = 0; i != storage.size(); i++)
         {
-            if (getBlock(i->second)->getQuantity() < getBlock(i->second)->getCapacity())
+            if (m_ptrMap->getBlock(storage[i])->getQuantity()  < getBlock(storage[i])->getCapacity())
             {
-                return i->second;
+                return storage[i];
             }
         }
     }
     return getCoord();
 }
+
+
 
 bool AntWorker::nextStep()
 {

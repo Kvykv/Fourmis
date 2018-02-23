@@ -2,16 +2,17 @@
 #include <iostream>
 using namespace std;
 
-Block::Block(shared_ptr<BaseBlock> baseBlock):m_baseBlock(baseBlock)
+Block::Block(shared_ptr<BaseBlock> baseBlock)
+    :m_baseBlock(baseBlock)
+    ,m_temperature(0)
+    ,m_isCrossable(false)
 {
-    m_isCrossable = false;
-    m_temperature = 0;
 }
 Block::Block(shared_ptr<BaseBlock> baseBlock, bool crossable, int cost, int temperature)
     :m_baseBlock(baseBlock)
-    ,m_isCrossable(crossable)
     ,m_cost(cost)
     ,m_temperature(temperature)
+    ,m_isCrossable(crossable)
 {}
 int Block::getBlockType() const
 {
@@ -66,6 +67,7 @@ void Block::setTemperature(int temperature)
 
 void Block::setQuantity(int quantite)
 {
+    (void)quantite;
 }
 int Block::getQuantity()
 {
@@ -73,10 +75,12 @@ int Block::getQuantity()
 }
 bool Block::dimQuantity(int quantite)
 {
+    (void)quantite;
     return false;
 }
 void Block::addQuantity(int quantite)
 {
+    (void)quantite;
 }
 int Block::getStorageType()
 {
@@ -101,7 +105,9 @@ string Block::getInfo()
 }
 
 void Block::update(int i)
-{}
+{
+    (void)i;
+}
 
 int Block::getCare()
 {
@@ -109,6 +115,7 @@ int Block::getCare()
 }
 bool Block::addCare(int care)
 {
+    (void)care;
     return false;
 }
 

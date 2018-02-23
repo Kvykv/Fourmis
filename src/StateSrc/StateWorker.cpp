@@ -142,7 +142,7 @@ bool StateWorkerBuild::build(AntWorker* antWorker)
     if (m_buildOrder.blockType == -1)
         return true;
     else
-        return antWorker->setBlock(m_buildOrder.coord, m_buildOrder.blockType, m_buildOrder.blockValue);
+        return antWorker->setBlock(m_buildOrder.coord, m_buildOrder.blockType, m_buildOrder.blockValue, m_buildOrder.structureTag);
 }
 
 void StateWorkerBuild::setNextAction(AntWorker* antWorker)
@@ -197,7 +197,7 @@ void StateWorkerFarm::setNextAction(AntWorker* antWorker)
     if(antWorker->getInventoryQuantity() != 0)
         antWorker->goTo(antWorker->getNotFullStorage());
     else
-        antWorker->goTo(antWorker->getAntHill()->getSpecificUniqueTile("Mushroom"));
+        antWorker->goTo(antWorker->getAntHill()->getSpecificStructure("Field")->getSpecificUniqueTile("Mushroom"));
 }
 
 

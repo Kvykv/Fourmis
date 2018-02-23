@@ -6,7 +6,7 @@
 class BlockMushroom : public BlockFood
 {
 public:
-    BlockMushroom(std::shared_ptr<BaseBlock> baseBlock, int quantite = 0, int care = 1000);
+    BlockMushroom(std::shared_ptr<BaseBlock> baseBlock, int quantite = 0, int care = 800);
     virtual void update(int i);
     virtual int getCare();
     virtual bool addCare(int care);

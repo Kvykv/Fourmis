@@ -5,9 +5,9 @@ using namespace std;
 
 Entite::Entite(TileMap *tileMap, int type)
     :m_ptrMap(tileMap)
-    ,m_hunger(2000)
-    ,m_goingForFood(false)
     ,m_entityType(type)
+    ,m_goingForFood(false)
+    ,m_hunger(2000)
 {
     int x = (rand()%(largeur-2)) + 1;
     for (int y = 0; y < hauteur; y ++)
@@ -16,20 +16,20 @@ Entite::Entite(TileMap *tileMap, int type)
         {
             m_coordX = x;
             m_coordY = y;
-            m_sprite.setScale(1*tailleTileLargeur, 1*tailleTileHauteur);
+            m_sprite.setScale(1*m_ptrMap->getTailleTileLargeur(), 1*m_ptrMap->getTailleTileHauteur());
             break;
         }
     }
 }
 Entite::Entite(int x, int y, TileMap *tileMap, int type)
-    :m_coordX(x)
-    ,m_coordY(y)
-    ,m_ptrMap(tileMap)
-    ,m_hunger(2000)
-    ,m_goingForFood(false)
+    :m_ptrMap(tileMap)
     ,m_entityType(type)
+    ,m_coordX(x)
+    ,m_coordY(y)
+    ,m_goingForFood(false)
+    ,m_hunger(2000)
 {
-    m_sprite.setScale(1*tailleTileLargeur, 1*tailleTileHauteur);
+    m_sprite.setScale(1*m_ptrMap->getTailleTileLargeur(), 1*m_ptrMap->getTailleTileHauteur());
 }
 int Entite::getCoordX()
 {
@@ -145,7 +145,7 @@ TileMap* Entite::getPtrMap()
 
 void Entite::paintEntite()
 {
-    m_sprite.setPosition(m_coordX*tailleTileLargeur - 0.5*m_sprite.getScale().x * m_sprite.getTexture()->getSize().x,m_coordY*tailleTileHauteur - 0.5*m_sprite.getScale().y*m_sprite.getTexture()->getSize().y);
+    m_sprite.setPosition(m_coordX*m_ptrMap->getTailleTileLargeur() - 0.5*m_sprite.getScale().x * m_sprite.getTexture()->getSize().x,m_coordY*m_ptrMap->getTailleTileHauteur() - 0.5*m_sprite.getScale().y*m_sprite.getTexture()->getSize().y);
 }
 void Entite::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -239,7 +239,7 @@ void Entite::eat()
 {
     if (getBlock(m_destination)->getStorageType() == 2)
     {
-        int quantity(min(1000, getBlock(m_destination)->getQuantity()));
+        int quantity(min(2000, getBlock(m_destination)->getQuantity()));
         m_ptrMap->dimQuantiteBlock(m_destination, quantity);
         m_hunger+=quantity;
         m_goingForFood = false;
@@ -268,7 +268,7 @@ void Entite::nexStepArray(vector<unique_ptr<Entite> > *entiteArray)
         }
     }
 }
-bool Entite::falling()
+void Entite::falling()
 {
     if (!getBlock(getCoord())->isCrossable())
     {

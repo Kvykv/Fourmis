@@ -13,7 +13,7 @@ void BlockMushroom::update(int i)
 {
     if (i%100 == 0)
     {
-        m_care-=50;
+        m_care=max(0, m_care - 50);
         if (m_care < getConfig()->m_mushroomDecayLimit)
            dimQuantity(m_quantity/getConfig()->m_mushroomDecayRate);
         else

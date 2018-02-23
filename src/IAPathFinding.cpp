@@ -15,8 +15,8 @@ Node::Node(pair<int,int> coordNode, pair<int,int> coordTarget, Node& parent, int
 }
 Node::Node(pair<int,int> coordNode, pair<int,int> coordParent)
     :m_coordParent(coordParent)
-    ,m_coordNode(coordNode)
     ,m_costG(0)
+    ,m_coordNode(coordNode)
 {
 }
 void Node::setCostH(pair<int,int>& coordTarget)
@@ -107,7 +107,7 @@ vector<pair<int,int> > IAPathFinding::pathFinding(TileMap* tileMap, const pair<i
         } while (ouverte.size()!=0 && MathHelp::distance(current.m_coordNode,coordTarget)>0);
         }
 		// Get path
-		int ind;
+        int ind(0);
 		Node node = fermee[fermee.size()-1];
 		if (node.m_coordParent.first != -1){
 			while (!(node.m_coordParent.first == -1)){

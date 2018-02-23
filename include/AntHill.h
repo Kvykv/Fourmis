@@ -8,17 +8,20 @@
 #include <deque>
 #include "ResourceHolder.h"
 #include "Config.h"
+#include "StructureHeader/Structure.h"
 
 struct Tile
 {
 public :
-    Tile(int aBlockType, std::pair<int,int> aCoord, int aBlockValue = 0);
+    Tile(int aBlockType, std::pair<int,int> aCoord, int aBlockValue = 0, std::string aStructureTag = "");
     std::pair<int,int> coord;
     int blockType;
     int blockValue;
+    std::string structureTag;
 };
 
 class AntHillAI;
+class Structure;
 
 class AntHill
 {
@@ -29,8 +32,8 @@ class AntHill
         AntHill();
         AntHill(TileMap &tileMap, std::shared_ptr<Config> config);
         std::vector<std::unique_ptr<Entite> >* getEntityArray();
-        std::multimap<std::string, std::pair<int,int> >* getTileArray();
-        void addTile(std::string aString, std::pair<int,int> coord);
+        std::map<std::string, Structure>* getStructureArray();
+        void addTile(std::string aStructure, std::string aString, std::pair<int,int> coord);
 
         ///Set and get
         int getPopulation();
@@ -38,11 +41,9 @@ class AntHill
         int getFoodCapacity();
         int getCurrentFoodStorage();
         TileMap* getTileMap();
-        std::vector<std::pair<int,int>> getSpecificTile(std::string tag);
-        int getSpecificNumberTile(std::string tag);
-        std::pair<int,int> getSpecificUniqueTile(std::string tag);
+        Structure* getSpecificStructure(std::string tag);
         std::deque<Tile>* getQueueBuild();
-        void setBlock(std::pair<int,int> coord, int blockType, int blockValue = 0);
+        void setBlock(std::pair<int,int> coord, int blockType, int blockValue = 0, std::string aStructureTag = "");
 
         void addAnt(std::pair<int,int> coord, int antType);
         void addAnt(int antType);
@@ -67,7 +68,7 @@ class AntHill
 
     protected:
         std::vector<Entite::Ptr> m_entityArray;
-        TileArray m_tileArray;
+        std::map<std::string, Structure> m_structureArray;
         TileMap* m_tileMap;
         int m_storageFoodCapacity;
         int m_storageFoodCurrent;

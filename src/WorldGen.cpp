@@ -88,6 +88,7 @@ int WorldGen::interpolateLinear(int lowEdge, int highEdge, int n, int delta)
 {
     if (delta != 0)
         return lowEdge + n*(highEdge - lowEdge)/delta;
+    return 0;
 }
 
 int WorldGen::interpolateCubic(int lowEdge, int highEdge, int n, int delta)

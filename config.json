@@ -1,14 +1,29 @@
 {
-    "test": 0.1,
+    "blockAir":
+	{
+		"thermalCond":0.1,
+		"origineTemp":0
+	},
+    "blockDirt":
+	{
+		"thermalCond":0.9,
+		"origineTemp":1000
+	},	
+	"blockStone":
+	{
+		"thermalCond":0.6,
+		"origineTemp":1500
+	},
 	"blockFood":
 	{
 		"growthRate" : 10,
+		"baseQuantity" : 20000,
 		"blockMushroom":
 		{
 			"maxCare" : 1500,
-			"decayLimit" : 1000,
+			"decayLimit" : 750,
 			"decayRate" : 10,
-			"flatGrowthRate" : 10
+			"flatGrowthRate" : 400
 		}
 	}
 }

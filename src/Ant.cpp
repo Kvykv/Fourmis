@@ -21,11 +21,11 @@ AntHill* Ant::getAntHill()
     return m_antHill;
 }
 
-bool Ant::setBlock(pair<int,int> coord, int blockType, int blockValue)
+bool Ant::setBlock(pair<int,int> coord, int blockType, int blockValue, string structureTag)
 {
     if(MathHelp::distance(coord, getCoord())<=2)
     {
-        m_antHill->setBlock(coord, blockType, blockValue);
+        m_antHill->setBlock(coord, blockType, blockValue, structureTag);
         return true;
     }
     return false;
@@ -137,14 +137,14 @@ pair<int,int> Ant::lookForFood(int typeBlock)
 
 pair<int,int> Ant::getNotEmptyStorage()
 {
-    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> storage = m_antHill->getTileArray()->equal_range("Storage");
-    if (storage.first!=m_antHill->getTileArray()->end())
+    auto storage = m_antHill->getSpecificStructure("Storage")->getSpecificTile("Storage");
+    if (storage.size()!=0)
     {
-        for (multimap<string, pair<int,int> >::iterator i = storage.first; i != storage.second; i++)
+        for (unsigned int i = 0; i != storage.size(); i++)
         {
-            if (m_ptrMap->getBlock(i->second)->getQuantity() != 0)
+            if (m_ptrMap->getBlock(storage[i])->getQuantity() != 0)
             {
-                return i->second;
+                return storage[i];
             }
         }
     }

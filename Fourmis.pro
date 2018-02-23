@@ -32,7 +32,8 @@ SOURCES += \
     src/BaseBlockSrc/BaseBlockMulti.cpp \
     src/BlockSrc/BlockMushroom.cpp \
     src/ItemSrc/item.cpp \
-    src/Config.cpp
+    src/Config.cpp \
+    src/StructureSrc/Structure.cpp
 
 HEADERS += \
     include/Ant.h \
@@ -63,7 +64,8 @@ HEADERS += \
     include/BaseBlockHeader/BaseBlockMulti.h \
     include/BlockHeader/BlockMushroom.h \
     include/ItemHeader/item.h \
-    include/Config.h
+    include/Config.h \
+    include/StructureHeader/Structure.h
 
 
 INCLUDEPATH += D:\Users\Kvykvzx\Projet\C++\

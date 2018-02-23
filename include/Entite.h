@@ -57,7 +57,7 @@ class Entite : public sf::Drawable, public sf::Transformable
         void creuserBlock(int x, int y);
         void eat();
         bool oneMovement();
-        bool falling();
+        void falling();
         std::pair<int,int> getRandomDestination();
 
         // Entite IA base
@@ -72,6 +72,7 @@ class Entite : public sf::Drawable, public sf::Transformable
         std::vector<std::pair<int,int> > m_path;
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        TileMap *m_ptrMap;
         int m_entityType=0;
         int m_coordX;
         int m_coordY;
@@ -81,7 +82,6 @@ class Entite : public sf::Drawable, public sf::Transformable
         int m_hunger;
         Item m_inventory;
         std::pair <int,int> m_destination;
-        TileMap *m_ptrMap;
         sf::Sprite m_sprite;
 };
 

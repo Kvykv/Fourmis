@@ -7,16 +7,19 @@ using namespace std;
 
 Engine::Engine()
     :framePerSecond(30.f)
-    ,m_config(new Config)
+    ,m_worldGen()
     ,window(sf::VideoMode(1920,1080), "TileMap"/*, sf::Style::Fullscreen*/)
     ,m_mainView(window.getDefaultView())
     ,m_miniView(window.getDefaultView())
-    ,m_velocity(15.0f)
-    ,m_outlineMiniMap(sf::Vector2f(0, 0))
     ,m_counter(0)
-    ,m_worldGen()
+    ,m_statePause(0)
+    ,m_velocity(15.0f)
+    ,tailleTileHauteur(((double)sf::VideoMode::getDesktopMode().height/hauteur))
+    ,tailleTileLargeur(((double)sf::VideoMode::getDesktopMode().width/largeur))
+    ,m_outlineMiniMap(sf::Vector2f(0, 0))
     ,m_targetCoord(pair<int,int>(-1,-1))
-{                   //sf::VideoMode::getDesktopMode
+    ,m_config(new Config)
+{
     m_config->loadConfig("config.json");
 
     vector<vector<int> > tableau;
@@ -82,7 +85,7 @@ void Engine::processEvents()
             sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
             worldPos.x = worldPos.x/tailleTileLargeur;
             worldPos.y = worldPos.y/tailleTileHauteur;
-            m_antHillAI.addBlock(3, pair<int,int>(worldPos.x, worldPos.y), 2);
+            m_antHillAI.addBlock(3, pair<int,int>(worldPos.x, worldPos.y), 2, "Storage");
         }
         if(event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Num6 || event.key.code == sf::Keyboard::Num6))
         {
@@ -90,7 +93,7 @@ void Engine::processEvents()
             sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
             worldPos.x = worldPos.x/tailleTileLargeur;
             worldPos.y = worldPos.y/tailleTileHauteur;
-            m_antHillAI.addBlock(6, pair<int,int>(worldPos.x, worldPos.y));
+            m_antHillAI.addBlock(6, pair<int,int>(worldPos.x, worldPos.y), 0, "ThroneRoom");
         }
         if(event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Num7 || event.key.code == sf::Keyboard::Num7))
         {
@@ -98,7 +101,7 @@ void Engine::processEvents()
             sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, m_mainView);
             worldPos.x = worldPos.x/tailleTileLargeur;
             worldPos.y = worldPos.y/tailleTileHauteur;
-            m_antHillAI.addBlock(7, pair<int,int>(worldPos.x, worldPos.y));
+            m_antHillAI.addBlock(7, pair<int,int>(worldPos.x, worldPos.y), 0, "Field");
         }
     }
 
@@ -117,7 +120,7 @@ void Engine::processEvents()
         {
             m_counter = 0;
         }
-        for(int i = 0; i < 1000; i++)
+        for(int i = 0; i < 2000; i++)
             tileMap.updateRandomChunk();
         tileMap.updateTileEntityArray(m_counter);
         Entite::nexStepArray(antHill.getEntityArray());

@@ -6,7 +6,10 @@ BlockFood::BlockFood(shared_ptr<BaseBlock> baseBlock, int quantite)
     :Block(baseBlock, true, 1)
     ,m_quantity(quantite)
 {
+    if (quantite == -1)
+        m_quantity = baseBlock->getConfig()->m_foodBaseQuantity;
 }
+
 
 void BlockFood::setQuantity(int quantite)
 {

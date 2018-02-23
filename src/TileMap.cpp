@@ -11,6 +11,8 @@ TileMap::TileMap(){}
 TileMap::TileMap(vector<vector<int> >& tableau, std::shared_ptr<Config> config)
     :m_config(config)
     ,m_displayModeTemperature(false)
+    ,tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur)
+    ,tailleTileLargeur((double)sf::VideoMode::getDesktopMode().width/largeur)
 {
     m_blockFactory[0].reset(new BaseBlock(0, "Air", false, m_config->m_airThermalCond, config));
     m_blockFactory[1].reset(new BaseBlock(1, "Dirt", true, m_config->m_dirtThermalCond, config));
@@ -42,25 +44,25 @@ void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
             {
             case 0:
                  m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
-                 getBlock(x, y)->setTemperature(0);
+                 getBlock(x, y)->setTemperature(m_config->m_airOrigineTemp);
                  break;
             case 1:
                  depth+=1;
                  m_terrain[x][y].reset(new BlockDirt(m_blockFactory[1], 1000  + rand()%1000 - 500));
-                 getBlock(x, y)->setTemperature(2000);
+                 getBlock(x, y)->setTemperature(m_config->m_dirtOrigineTemp+hauteur/100*y);
                  break;
             case 4:
                 depth+=1;
                 m_terrain[x][y].reset(new BlockStone(m_blockFactory[4]));
-                getBlock(x, y)->setTemperature(3000);
+                getBlock(x, y)->setTemperature(m_config->m_stoneOrigineTemp+hauteur/100*y);
                 break;
             default:
                  m_terrain[x][y].reset(new BlockAir(m_blockFactory[0]));
-                 getBlock(x, y)->setTemperature(0);
+                 getBlock(x, y)->setTemperature(m_config->m_airOrigineTemp);
                  break;
             }
             if(y == hauteur -1)
-                getBlock(x,y)->setTemperature(5000);
+                getBlock(x,y)->setTemperature(4000);
         }
     }
     load();
@@ -70,7 +72,7 @@ void TileMap::initialiserTileMap(vector<vector<int> >& tableau)
 void TileMap::initFood()
 {
     int x(0);
-    for (int i = 0; i < largeur/20; i++)
+    for (int i = 0; i < largeur/50; i++)
     {
         x = (rand()%(largeur-2)) + 1;
         for (int y = 0; y < hauteur; y ++)
@@ -87,10 +89,10 @@ void TileMap::createGrass(int x, int y)
 {
     int height(rand()%6+1);
     int width(1);
-    setBlock(min(largeur-2,x), max(1,y), 2, 10000);
+    setBlock(min(largeur-2,x), max(1,y), 2,-1);
     for (int i= 1; i<height; i++)
     {
-        setBlock(min(largeur-2,x+width), max(1,y-i), 2, 10000);
+        setBlock(min(largeur-2,x+width), max(1,y-i), 2,-1);
         width = rand()%2;
     }
 }
@@ -144,7 +146,12 @@ void TileMap::paintBlock(int x, int y)
     }
     else
     {
-        color = sf::Color(((float)m_terrain[x][y]->getTemperature())*0.051, 255 - ((float)m_terrain[x][y]->getTemperature())*0.051, 255 - ((float)m_terrain[x][y]->getTemperature())*0.051);
+        if(m_terrain[x][y]->getTemperature()<1000)
+            color = sf::Color(0,0,255);
+        else if(m_terrain[x][y]->getTemperature()>4000)
+            color = sf::Color(255,0,0);
+        else
+            color = sf::Color(((float)m_terrain[x][y]->getTemperature()-1000)*0.085, 255 - abs((float)m_terrain[x][y]->getTemperature()-2500)*0.17, 255 - ((float)m_terrain[x][y]->getTemperature()-1000)*0.085);
     }
     quad[0].color = color;
     quad[1].color = color;
@@ -178,6 +185,14 @@ void TileMap::load()
     // Remplissage du tableau de Vertex
     paintMap();
 
+}
+double TileMap::getTailleTileHauteur()
+{
+    return tailleTileHauteur;
+}
+double TileMap::getTailleTileLargeur()
+{
+    return tailleTileLargeur;
 }
 void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -408,7 +423,7 @@ void TileMap::updateTileEntityArray(int i)
 
 void TileMap::updateBlockTemperature(std::pair<int,int> coord)
 {
-    if(coord.second != 0 && coord.second != m_terrain[0].size() - 1)
+    if(coord.second != 0 && coord.second != (int)m_terrain[0].size() - 1)
     {
         int temperature(getBlock(coord)->getTemperature());
         float conductivity(getBlock(coord)->getThermalCond());

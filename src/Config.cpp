@@ -34,15 +34,19 @@ void Config::setConfig(rapidjson::Document& document)
 {
     /// Air
     m_airThermalCond = document["blockAir"]["thermalCond"].GetFloat();
+    m_airOrigineTemp = document["blockAir"]["origineTemp"].GetInt();
 
     /// Dirt
     m_dirtThermalCond = document["blockDirt"]["thermalCond"].GetFloat();
+    m_dirtOrigineTemp = document["blockDirt"]["origineTemp"].GetInt();
 
     /// Stone
     m_stoneThermalCond = document["blockStone"]["thermalCond"].GetFloat();
+    m_stoneOrigineTemp = document["blockStone"]["origineTemp"].GetInt();
 
     /// Food
     m_foodGrowthRate = document["blockFood"]["growthRate"].GetInt();
+    m_foodBaseQuantity = document["blockFood"]["baseQuantity"].GetInt();
 
     /// Mushroom
     m_mushroomMaxCare = document["blockFood"]["blockMushroom"]["maxCare"].GetInt();

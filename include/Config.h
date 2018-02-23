@@ -19,15 +19,19 @@ public:
 
     /// Air
     float m_airThermalCond;
+    int m_airOrigineTemp;
 
     /// Dirt
     float m_dirtThermalCond;
+    int m_dirtOrigineTemp;
 
     /// Stone
     float m_stoneThermalCond;
+    int m_stoneOrigineTemp;
 
     /// Food
     int m_foodGrowthRate;
+    int m_foodBaseQuantity;
 
     /// Mushroom
     int m_mushroomMaxCare;

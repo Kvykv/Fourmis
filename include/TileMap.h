@@ -18,8 +18,6 @@
 #include <list>
 #include <memory>
 
-const double tailleTileHauteur((double)sf::VideoMode::getDesktopMode().height/hauteur);
-const double tailleTileLargeur((double)sf::VideoMode::getDesktopMode().width/largeur);
 
 class TileMap : public sf::Drawable, public sf::Transformable
 {
@@ -30,6 +28,8 @@ public:
     void showTileMap() const;
     void paintMap();
     void load();
+    double getTailleTileHauteur();
+    double getTailleTileLargeur();
     bool getDisplayModeTemperature();
     void setDisplayModeTemperature(bool mode);
     void initFood();
@@ -60,11 +60,14 @@ private:
     void paintBlock(int x, int y);
     void paintVoisinage(int x, int y);
     sf::VertexArray m_array;
+    double tailleTileHauteur;
+    double tailleTileLargeur;
+
+    std::shared_ptr<Config> m_config;
     bool m_displayModeTemperature;
     std::array<std::shared_ptr<BaseBlock>, 8> m_blockFactory;
     std::list<std::pair<int,int>> m_tileEntityArray;
     std::vector<std::vector<std::unique_ptr<Block>>> m_terrain;
-    std::shared_ptr<Config> m_config;
 };
 
 
