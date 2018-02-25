@@ -13,7 +13,7 @@ void BlockMushroom::update(int i)
 {
     if (i%100 == 0)
     {
-        m_care=max(0, m_care - 50);
+        m_care=max(0, m_care - 25);
         if (m_care < getConfig()->m_mushroomDecayLimit)
            dimQuantity(m_quantity/getConfig()->m_mushroomDecayRate);
         else
@@ -30,6 +30,14 @@ bool BlockMushroom::addCare(int care)
 {
     m_care = min(getConfig()->m_mushroomMaxCare, m_care + care);
     return true;
+}
+
+int BlockMushroom::getResourceType()
+{
+    if(m_quantity < 1000)
+        return 0;
+    else
+        return 2;
 }
 
 int BlockMushroom::getStorageType()

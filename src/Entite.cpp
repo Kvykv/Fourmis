@@ -8,6 +8,7 @@ Entite::Entite(TileMap *tileMap, int type)
     ,m_entityType(type)
     ,m_goingForFood(false)
     ,m_hunger(2000)
+    ,m_cooldown(0)
 {
     int x = (rand()%(largeur-2)) + 1;
     for (int y = 0; y < hauteur; y ++)
@@ -28,6 +29,7 @@ Entite::Entite(int x, int y, TileMap *tileMap, int type)
     ,m_coordY(y)
     ,m_goingForFood(false)
     ,m_hunger(2000)
+    ,m_cooldown(0)
 {
     m_sprite.setScale(1*m_ptrMap->getTailleTileLargeur(), 1*m_ptrMap->getTailleTileHauteur());
 }
@@ -141,6 +143,20 @@ TileMap* Entite::getPtrMap()
     return m_ptrMap;
 }
 
+void Entite::resetCooldown()
+{
+    m_cooldown = 0;
+}
+void Entite::incrCooldown()
+{
+    m_cooldown += 1;
+}
+int Entite::getCooldown()
+{
+    return m_cooldown;
+}
+
+
 /* -------------------------- Graphics ---------------------------------------- */
 
 void Entite::paintEntite()
@@ -237,16 +253,22 @@ void Entite::creuserBlock(int x, int y)
 
 void Entite::eat()
 {
-    if (getBlock(m_destination)->getStorageType() == 2)
-    {
-        int quantity(min(2000, getBlock(m_destination)->getQuantity()));
-        m_ptrMap->dimQuantiteBlock(m_destination, quantity);
-        m_hunger+=quantity;
-        m_goingForFood = false;
-    }
+    if(m_cooldown < 20)
+        incrCooldown();
     else
     {
-        getFood();
+        resetCooldown();
+        if (getBlock(m_destination)->getStorageType() == 2)
+        {
+            int quantity(min(2000, getBlock(m_destination)->getQuantity()));
+            m_ptrMap->dimQuantiteBlock(m_destination, quantity);
+            m_hunger+=quantity;
+            m_goingForFood = false;
+        }
+        else
+        {
+            getFood();
+        }
     }
 }
 void Entite::nexStepArray(vector<unique_ptr<Entite> > *entiteArray)
@@ -287,7 +309,6 @@ bool Entite::oneMovement()
     {
         m_hasArrived = true;
         m_iter = 0;
-       // cout << m_coordX << "  " << m_coordY << endl;
     }
     m_iter++;
     return true;
@@ -405,7 +426,7 @@ pair<int,int> Entite::lookForFood(int typeBlock)
     return coord;
 }
 
-pair<int,int> Entite::lookFor(int typeBlock)
+pair<int,int> Entite::lookFor(int typeResource)
 {
     pair<int,int> coord = getCoord();
     int x(coord.first);
@@ -415,14 +436,14 @@ pair<int,int> Entite::lookFor(int typeBlock)
     while(ite < 40)
     {
         ite++;
-        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->getBlockType() == typeBlock)
+        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->getResourceType() == typeResource)
         {
             coord.first = x;
             coord.second = min(hauteur-1, y + ite);
             coord = lookUp(coord, 2);
             return coord;
         }
-        else if (m_ptrMap->getBlock(x, max(0, y - ite))->getBlockType() == typeBlock)
+        else if (m_ptrMap->getBlock(x, max(0, y - ite))->getResourceType() == typeResource)
         {
             coord.first = x;
             coord.second = max(0, y - ite);
@@ -431,28 +452,28 @@ pair<int,int> Entite::lookFor(int typeBlock)
         }
         for (int i = 0; i < ite + 2; i++)       // Scan en losange
         {
-            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->getBlockType() == typeBlock)
+            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->getResourceType() == typeResource)
             {
                 coord.first = min(largeur-1, x+i);
                 coord.second = min(hauteur-1, y + ite - i);
                 coord = lookUp(coord, 2);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->getBlockType() == typeBlock)
+            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->getResourceType() == typeResource)
             {
                 coord.first = max(0, x-i);
                 coord.second = min(hauteur-1, y + ite - i);
                 coord = lookUp(coord, 2);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->getBlockType() == typeBlock)
+            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->getResourceType() == typeResource)
             {
                 coord.first = min(largeur-1, x+i);
                 coord.second = max(0, y - ite + i);
                 coord = lookUp(coord, 2);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->getBlockType() == typeBlock)
+            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->getResourceType() == typeResource)
             {
                 coord.first = max(0, x-i);
                 coord.second = max(0, y - ite + i);

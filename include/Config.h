@@ -25,10 +25,6 @@ public:
     float m_dirtThermalCond;
     int m_dirtOrigineTemp;
 
-    /// Stone
-    float m_stoneThermalCond;
-    int m_stoneOrigineTemp;
-
     /// Food
     int m_foodGrowthRate;
     int m_foodBaseQuantity;
@@ -38,6 +34,14 @@ public:
     int m_mushroomDecayLimit;
     int m_mushroomDecayRate;
     int m_mushroomFlatGrowthRate;
+
+    /// Storage
+    int m_storageDefaultCapacity;
+
+    /// Stone
+    float m_stoneThermalCond;
+    int m_stoneOrigineTemp;
+
 
 };
 

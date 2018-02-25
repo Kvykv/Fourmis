@@ -10,6 +10,7 @@ public:
     virtual void update(int i);
     virtual int getCare();
     virtual bool addCare(int care);
+    virtual int getResourceType();
     virtual int getStorageType();
     virtual std::string getInfo();
     virtual bool isEmpty();

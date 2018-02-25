@@ -44,6 +44,9 @@ class Entite : public sf::Drawable, public sf::Transformable
         bool checkFood();
         std::pair<int,int> getDestination();
         void setDestination(std::pair<int,int> coord);
+        void resetCooldown();
+        void incrCooldown();
+        int getCooldown();
 
 
         // Graphic
@@ -65,11 +68,12 @@ class Entite : public sf::Drawable, public sf::Transformable
         void goTo(std::pair<int,int> coord);
         bool getFood();
         virtual std::pair<int,int> lookForFood(int typeBlock);
-        std::pair<int,int> lookFor(int typeBlock);
+        std::pair<int,int> lookFor(int typeResource);
         std::pair<int,int> lookUp(std::pair<int,int> coord, int typeBlock);
 
         std::pair <int,int> m_previousCoord;
         std::vector<std::pair<int,int> > m_path;
+
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         TileMap *m_ptrMap;
@@ -83,6 +87,7 @@ class Entite : public sf::Drawable, public sf::Transformable
         Item m_inventory;
         std::pair <int,int> m_destination;
         sf::Sprite m_sprite;
+        int m_cooldown;
 };
 
 #endif // ENTITE_H

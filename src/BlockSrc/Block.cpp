@@ -86,6 +86,11 @@ int Block::getStorageType()
 {
     return 0;
 }
+int Block::getResourceType()
+{
+    return 0;
+}
+
 
 int Block::getCapacity()
 {

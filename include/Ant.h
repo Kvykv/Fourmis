@@ -14,6 +14,7 @@ class Ant : public Entite
         virtual std::pair<int,int> lookForFood(int typeBlock);
         std::pair<int,int> getNotEmptyStorage();
         AntHill* getAntHill();
+        std::pair<int,int> getRandomDestination();
 
     protected:
         AntHill *m_antHill;

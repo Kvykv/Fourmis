@@ -29,6 +29,7 @@ class Block
         virtual void addQuantity(int quantite);
         virtual int getQuantity();
         virtual int getStorageType();
+        virtual int getResourceType();
         virtual int getCapacity();
         virtual bool isEmpty();
         virtual std::string getInfo();

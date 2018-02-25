@@ -40,10 +40,6 @@ void Config::setConfig(rapidjson::Document& document)
     m_dirtThermalCond = document["blockDirt"]["thermalCond"].GetFloat();
     m_dirtOrigineTemp = document["blockDirt"]["origineTemp"].GetInt();
 
-    /// Stone
-    m_stoneThermalCond = document["blockStone"]["thermalCond"].GetFloat();
-    m_stoneOrigineTemp = document["blockStone"]["origineTemp"].GetInt();
-
     /// Food
     m_foodGrowthRate = document["blockFood"]["growthRate"].GetInt();
     m_foodBaseQuantity = document["blockFood"]["baseQuantity"].GetInt();
@@ -53,6 +49,14 @@ void Config::setConfig(rapidjson::Document& document)
     m_mushroomDecayLimit = document["blockFood"]["blockMushroom"]["decayLimit"].GetInt();
     m_mushroomDecayRate = document["blockFood"]["blockMushroom"]["decayRate"].GetInt();
     m_mushroomFlatGrowthRate = document["blockFood"]["blockMushroom"]["flatGrowthRate"].GetInt();
+
+    /// Storage
+    m_storageDefaultCapacity = document["blockStorage"]["defaultCapacity"].GetInt();
+
+    /// Stone
+    m_stoneThermalCond = document["blockStone"]["thermalCond"].GetFloat();
+    m_stoneOrigineTemp = document["blockStone"]["origineTemp"].GetInt();
+
 }
 
 

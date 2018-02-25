@@ -69,11 +69,11 @@ class AntHill
     protected:
         std::vector<Entite::Ptr> m_entityArray;
         std::map<std::string, Structure> m_structureArray;
-        TileMap* m_tileMap;
         int m_storageFoodCapacity;
         int m_storageFoodCurrent;
         std::deque<Tile> m_buildQueue;
         TextureHolder m_resourceHolder;
+        TileMap* m_tileMap;
         std::shared_ptr<Config> m_config;
 };
 
