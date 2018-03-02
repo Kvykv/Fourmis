@@ -78,6 +78,8 @@ void AntWorker::gather(int typeResource)
             m_ptrMap->dimQuantiteBlock(m_destination, quantity);
         }
     }
+    else
+        resetCooldown();
 }
 bool AntWorker::store()
 {

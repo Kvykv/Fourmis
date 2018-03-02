@@ -161,7 +161,7 @@ int Entite::getCooldown()
 
 void Entite::paintEntite()
 {
-    m_sprite.setPosition(m_coordX*m_ptrMap->getTailleTileLargeur() - 0.5*m_sprite.getScale().x * m_sprite.getTexture()->getSize().x,m_coordY*m_ptrMap->getTailleTileHauteur() - 0.5*m_sprite.getScale().y*m_sprite.getTexture()->getSize().y);
+    m_sprite.setPosition(m_coordX*m_ptrMap->getTailleTileLargeur() - 0.4*m_sprite.getScale().x * m_sprite.getTexture()->getSize().x,m_coordY*m_ptrMap->getTailleTileHauteur() - 0.4*m_sprite.getScale().y*m_sprite.getTexture()->getSize().y);
 }
 void Entite::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -253,22 +253,23 @@ void Entite::creuserBlock(int x, int y)
 
 void Entite::eat()
 {
-    if(m_cooldown < 20)
-        incrCooldown();
-    else
+    if (getBlock(m_destination)->getStorageType() == 2)
     {
-        resetCooldown();
-        if (getBlock(m_destination)->getStorageType() == 2)
+        if(m_cooldown < 20)
+            incrCooldown();
+        else
         {
+            resetCooldown();
             int quantity(min(2000, getBlock(m_destination)->getQuantity()));
             m_ptrMap->dimQuantiteBlock(m_destination, quantity);
             m_hunger+=quantity;
             m_goingForFood = false;
         }
-        else
-        {
-            getFood();
-        }
+    }
+    else
+    {
+        resetCooldown();
+        getFood();
     }
 }
 void Entite::nexStepArray(vector<unique_ptr<Entite> > *entiteArray)

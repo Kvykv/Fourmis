@@ -61,7 +61,7 @@ class Entite : public sf::Drawable, public sf::Transformable
         void eat();
         bool oneMovement();
         void falling();
-        std::pair<int,int> getRandomDestination();
+        virtual std::pair<int,int> getRandomDestination();
 
         // Entite IA base
         virtual bool nextStep();

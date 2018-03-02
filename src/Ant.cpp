@@ -168,13 +168,13 @@ pair<int,int> Ant::getRandomDestination()
     while(ite < 50)
     {
         ite++;
-        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->isCrossable())
+        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->getBlockType() == 5)
         {
             coord.first = x;
             coord.second = min(hauteur-1, y + ite);
             return coord;
         }
-        else if (m_ptrMap->getBlock(x, max(0, y - ite))->isCrossable())
+        else if (m_ptrMap->getBlock(x, max(0, y - ite))->getBlockType() == 5)
         {
             coord.first = x;
             coord.second = max(0, y - ite);
@@ -182,25 +182,25 @@ pair<int,int> Ant::getRandomDestination()
         }
         for (int i = 0; i < ite + 2; i++)       // Scan en losange
         {
-            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->isCrossable())
+            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->getBlockType() == 5)
             {
                 coord.first = min(largeur-1, x+i);
                 coord.second = min(hauteur-1, y + ite - i);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->isCrossable())
+            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->getBlockType() == 5)
             {
                 coord.first = max(0, x-i);
                 coord.second = min(hauteur-1, y + ite - i);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->isCrossable())
+            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->getBlockType() == 5)
             {
                 coord.first = min(largeur-1, x+i);
                 coord.second = max(0, y - ite + i);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->isCrossable())
+            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->getBlockType() == 5)
             {
                 coord.first = max(0, x-i);
                 coord.second = max(0, y - ite + i);
