@@ -8,10 +8,12 @@ StateQueen::StateQueen()
 
 bool StateQueen::execute(AntQueen* antQueen)
 {
+    return false;
 }
 
 bool  StateQueen::updateState(AntQueen* AntQueen)
 {
+    return false;
 }
 
 

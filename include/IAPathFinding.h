@@ -16,8 +16,8 @@ public:
 	std::pair<int,int> m_coordParent;
 	int m_costG;
 	int m_costH;
-	int m_costF;
-	std::pair<int,int> m_coordNode;
+    std::pair<int,int> m_coordNode;
+    int m_costF;
 	bool operator<=(Node const&b);
 	void setCostH(std::pair<int,int>& coordTarget);
 	void setCost(int n);
@@ -29,6 +29,7 @@ class IAPathFinding
 {
     public:
         static std::vector<std::pair<int,int> > pathFinding(TileMap* tileMap, std::pair<int,int> coordTarget, std::pair<int,int> coordEntite);
+        static std::vector<std::pair<int,int> > pathFindingDigging(TileMap* tileMap, std::pair<int,int> coordTarget, std::pair<int,int> coordEntite);
         static bool containsCoord(std::pair<int,int> coord, std::vector<Node> liste, int &index);
         static Node addIndexFermee(std::map<std::pair<int,int>, Node> &ouverte);
 

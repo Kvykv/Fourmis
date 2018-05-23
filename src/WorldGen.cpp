@@ -63,7 +63,7 @@ void WorldGen::setWorldHeight(array<int, largeur + 1> &worldHeight)
 
 void WorldGen::setStone(std::vector<std::vector<int>>& tableau, std::default_random_engine& generator)
 {
-    std::normal_distribution<double> distribution(0,0.25);
+    std::normal_distribution<double> distribution(0,0.20);
     float var;
     for (int y = 0 ; y < hauteur; y++)
     {
@@ -88,6 +88,7 @@ int WorldGen::interpolateLinear(int lowEdge, int highEdge, int n, int delta)
 {
     if (delta != 0)
         return lowEdge + n*(highEdge - lowEdge)/delta;
+    return 0;
 }
 
 int WorldGen::interpolateCubic(int lowEdge, int highEdge, int n, int delta)

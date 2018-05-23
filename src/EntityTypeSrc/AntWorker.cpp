@@ -6,7 +6,7 @@ AntWorker::AntWorker(TileMap *tileMap, AntHill *antHill)
     :Ant(tileMap, antHill, 0)
 {
     float scale(3.0/m_sprite.getTexture()->getSize().x);
-    m_sprite.setScale(scale*tailleTileLargeur,scale*tailleTileHauteur);
+    m_sprite.setScale(scale*m_ptrMap->getTailleTileLargeur(),scale*m_ptrMap->getTailleTileHauteur());
     paintEntite();
     if (antHill->m_numberWorkerBuild == 0)
     {
@@ -26,13 +26,13 @@ AntWorker::AntWorker(int x, int y, TileMap *tileMap, AntHill *antHill)
     :Ant(x, y, tileMap, antHill, 0)
 {
     float scale(3.0/m_sprite.getTexture()->getSize().x);
-    m_sprite.setScale(scale*tailleTileLargeur,scale*tailleTileHauteur);
+    m_sprite.setScale(scale*m_ptrMap->getTailleTileLargeur(),scale*m_ptrMap->getTailleTileHauteur());
     paintEntite();
     if (antHill->m_numberWorkerBuild == -1)
     {
         m_state.reset(new StateWorkerBuild(this));
     }
-    if (antHill->m_numberWorkerFarm == 0)
+    if (antHill->m_numberWorkerFarm != antHill->getSpecificStructure("Field")->getSpecificNumberTile("Mushroom")/2+1)
     {
         m_state.reset(new StateWorkerFarm(this));
     }
@@ -65,31 +65,45 @@ AntWorker::~AntWorker()
 
 void AntWorker::gather(int typeResource)
 {
-    if (getBlock(m_destination)->getBlockType() == typeResource)
+    if (getBlock(m_destination)->getResourceType() == typeResource)
     {
-        int quantity(min(2000, m_ptrMap->getBlock(m_destination)->getQuantity()));
-        setInventoryQuantity(quantity);
-        setInventoryType(m_ptrMap->getBlock(m_destination)->getStorageType());
-        m_ptrMap->dimQuantiteBlock(m_destination, quantity);
+        if(m_cooldown < 30)
+            incrCooldown();
+        else
+        {
+            resetCooldown();
+            int quantity(min(4000, m_ptrMap->getBlock(m_destination)->getQuantity()));
+            setInventoryQuantity(quantity);
+            setInventoryType(m_ptrMap->getBlock(m_destination)->getResourceType());
+            m_ptrMap->dimQuantiteBlock(m_destination, quantity);
+        }
     }
+    else
+        resetCooldown();
 }
 bool AntWorker::store()
 {
-    if (getBlock(m_destination)->getBlockType() != 3)
+    if(m_cooldown < 20)
+        incrCooldown();
+    else
     {
-        goTo(getNotFullStorage());
-        return true;
-    }
-    else if(getBlock(m_destination)->getQuantity() >= getBlock(m_destination)->getCapacity())
-    {
-        goTo(getNotFullStorage());
-        return true;
-    }
-    if(getInventoryType() == getBlock(m_destination)->getStorageType())
-    {
-        int quantity(min(getBlock(m_destination)->getCapacity()-getBlock(m_destination)->getQuantity(), getInventoryQuantity()));
-        getBlock(m_destination)->addQuantity(quantity);
-        setInventoryQuantity(getInventoryQuantity()-quantity);
+        resetCooldown();
+        if (getBlock(m_destination)->getBlockType() != 3)
+        {
+            goTo(getNotFullStorage());
+            return true;
+        }
+        else if(getBlock(m_destination)->getQuantity() >= getBlock(m_destination)->getCapacity())
+        {
+            goTo(getNotFullStorage());
+            return true;
+        }
+        if(getInventoryType() == getBlock(m_destination)->getStorageType())
+        {
+            int quantity(min(getBlock(m_destination)->getCapacity()-getBlock(m_destination)->getQuantity(), getInventoryQuantity()));
+            getBlock(m_destination)->addQuantity(quantity);
+            setInventoryQuantity(getInventoryQuantity()-quantity);
+        }
     }
     return true;
 }
@@ -112,19 +126,21 @@ void AntWorker::setState(StateWorker newState)
 
 pair<int,int> AntWorker::getNotFullStorage()
 {
-    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> storage = m_antHill->getTileArray()->equal_range("Storage");
-    if (storage.first!=m_antHill->getTileArray()->end())
+    auto storage = m_antHill->getSpecificStructure("Storage")->getSpecificTile("Storage");
+    if (storage.size()!=0)
     {
-        for (multimap<string, pair<int,int> >::iterator i = storage.first; i != storage.second; i++)
+        for (unsigned int i = 0; i != storage.size(); i++)
         {
-            if (getBlock(i->second)->getQuantity() < getBlock(i->second)->getCapacity())
+            if (m_ptrMap->getBlock(storage[i])->getQuantity()  < getBlock(storage[i])->getCapacity() && getInventoryType() == getBlock(storage[i])->getStorageType())
             {
-                return i->second;
+                return storage[i];
             }
         }
     }
     return getCoord();
 }
+
+
 
 bool AntWorker::nextStep()
 {
@@ -145,9 +161,12 @@ Tile AntWorker::popBuildQueue()
 
 bool AntWorker::farm()
 {
-    if(getBlock(m_destination)->getCare() < 1200)
-        return (getBlock(m_destination)->addCare(1));
-    else
-        gather(7);
-    return false;
+
+    if (m_cooldown > 100 && getBlock(m_destination)->getCare() > 1400)
+    {
+        resetCooldown();
+        return false;
+    }
+    incrCooldown();
+    return (getBlock(m_destination)->addCare(1));
 }

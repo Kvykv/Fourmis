@@ -6,7 +6,10 @@ BlockFood::BlockFood(shared_ptr<BaseBlock> baseBlock, int quantite)
     :Block(baseBlock, true, 1)
     ,m_quantity(quantite)
 {
+    if (quantite == -1)
+        m_quantity = baseBlock->getConfig()->m_foodBaseQuantity;
 }
+
 
 void BlockFood::setQuantity(int quantite)
 {
@@ -31,11 +34,16 @@ int BlockFood::getStorageType()
     return m_baseBlock->getBlockType();
 }
 
+int BlockFood::getResourceType()
+{
+    return m_baseBlock->getBlockType();
+}
+
 
 std::string BlockFood::getInfo()
 {
     std::stringstream sstm;
-    sstm << Block::getInfo() << "    Resource Type : " << getStorageType() << "   Quantity : " << getQuantity();
+    sstm << Block::getInfo() << "    Resource Type : " << getResourceType() << "   Quantity : " << getQuantity();
     return sstm.str();
 }
 

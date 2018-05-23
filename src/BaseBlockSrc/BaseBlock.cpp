@@ -2,10 +2,12 @@
 
 using namespace std;
 
-BaseBlock::BaseBlock(int blockType, string tag, bool diggable)
+BaseBlock::BaseBlock(int blockType, string tag, bool diggable, float thermalConductivity, std::shared_ptr<Config> config)
     :m_blockType(blockType)
     ,m_tag(tag)
     ,m_diggable(diggable)
+    ,m_thermalConductivity(thermalConductivity)
+    ,m_config(config)
 {
 }
 
@@ -17,6 +19,11 @@ int BaseBlock::getBlockType()
 string BaseBlock::getTag()
 {
     return m_tag;
+}
+
+float BaseBlock::getThermalCond()
+{
+    return m_thermalConductivity;
 }
 
 bool BaseBlock::isDiggable()
@@ -35,4 +42,9 @@ std::array<std::vector<int>,8> BaseBlock::getStructure()
                                                  {-1},           {-1},
                                                  {-1},{-1}, {-1}}};
     return structure;
+}
+
+std::shared_ptr<Config> BaseBlock::getConfig()
+{
+    return m_config;
 }

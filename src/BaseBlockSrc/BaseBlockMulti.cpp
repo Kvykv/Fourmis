@@ -1,14 +1,14 @@
 #include "include/BaseBlockHeader/BaseBlockMulti.h"
 
-BaseBlockMulti::BaseBlockMulti(int blockType, std::string tag, bool diggable)
-    :BaseBlock(blockType, tag, diggable)
+BaseBlockMulti::BaseBlockMulti(int blockType, std::string tag, bool diggable, int thermalConductivity, std::shared_ptr<Config> config)
+    :BaseBlock(blockType, tag, diggable, thermalConductivity, config)
 {
     switch (blockType)       // Premier element de chaque case : par defaut
     {
         case 3 :            // Storage
-            m_structure = {{{5,3},  {5,3},   {5,3},
-                            {5,3},           {5,3},
-                            {1,3,4},{1,3,4}, {1,3,4}}};
+            m_structure = {{{5,3},    {5,3},       {5,3},
+                            {5,3},                 {5,3},
+                            {1,3,4,5},{1,3,4,5}, {1,3,4,5}}};
             break;
         case 6 :            // QueenChamber
             m_structure = {{{5},  {5},   {5},

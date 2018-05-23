@@ -9,6 +9,7 @@ Fourmis.depend
 Fourmis.layout
 obj/*
 bin/*
+include/rapidjson/*
 build-Fourmis-Desktop_Qt_5_9_2_MinGW_32bit-Debug/*
 build-Fourmis-Desktop_Qt_5_9_2_MinGW_32bit-Release/*
 *.user

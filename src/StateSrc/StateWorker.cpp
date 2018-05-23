@@ -6,7 +6,10 @@ StateWorker::StateWorker()
 {
 }
 
-bool StateWorker::execute(AntWorker* antWorker){}
+bool StateWorker::execute(AntWorker* antWorker)
+{
+    return false;
+}
 
 bool StateWorker::updateState(AntWorker* antWorker)
 {
@@ -87,7 +90,8 @@ bool StateWorkerGather::execute(AntWorker* antWorker)
             antWorker->store();
         else
             antWorker->gather(2);
-        setNextAction(antWorker);
+        if (antWorker->getCooldown() == 0)
+            setNextAction(antWorker);
     }
     return isDead;
 }
@@ -128,8 +132,6 @@ bool StateWorkerBuild::execute(AntWorker* antWorker)
         bool success(build(antWorker));
         if (success)
             setNextAction(antWorker);
-        else
-            antWorker->goTo(m_buildOrder.coord);
     }
     return isDead;
 }
@@ -139,7 +141,7 @@ bool StateWorkerBuild::build(AntWorker* antWorker)
     if (m_buildOrder.blockType == -1)
         return true;
     else
-        return antWorker->setBlock(m_buildOrder.coord, m_buildOrder.blockType, m_buildOrder.blockValue);
+        return antWorker->setBlock(m_buildOrder.coord, m_buildOrder.blockType, m_buildOrder.blockValue, m_buildOrder.structureTag);
 }
 
 void StateWorkerBuild::setNextAction(AntWorker* antWorker)
@@ -175,26 +177,15 @@ bool StateWorkerFarm::execute(AntWorker* antWorker)
         antWorker->eat();
     else
     {
-        if (antWorker->getInventoryQuantity() != 0)
-        {
-            antWorker->store();
+        if(!antWorker->farm())
             setNextAction(antWorker);
-        }
-        else
-            if(!antWorker->farm())
-                setNextAction(antWorker);
-
     }
     return isDead;
 }
 
-
 void StateWorkerFarm::setNextAction(AntWorker* antWorker)
 {
-    if(antWorker->getInventoryQuantity() != 0)
-        antWorker->goTo(antWorker->getNotFullStorage());
-    else
-        antWorker->goTo(antWorker->getAntHill()->getSpecificUniqueTile("Mushroom"));
+    antWorker->goTo(antWorker->getAntHill()->getSpecificStructure("Field")->getSpecificUniqueTile("Mushroom"));
 }
 
 

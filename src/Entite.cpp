@@ -5,11 +5,10 @@ using namespace std;
 
 Entite::Entite(TileMap *tileMap, int type)
     :m_ptrMap(tileMap)
-    ,m_hunger(2000)
-    ,m_goingForFood(false)
     ,m_entityType(type)
-    ,m_inventoryQuantity(0)
-    ,m_inventoryType(0)
+    ,m_goingForFood(false)
+    ,m_hunger(2000)
+    ,m_cooldown(0)
 {
     int x = (rand()%(largeur-2)) + 1;
     for (int y = 0; y < hauteur; y ++)
@@ -18,22 +17,21 @@ Entite::Entite(TileMap *tileMap, int type)
         {
             m_coordX = x;
             m_coordY = y;
-            m_sprite.setScale(1*tailleTileLargeur, 1*tailleTileHauteur);
+            m_sprite.setScale(1*m_ptrMap->getTailleTileLargeur(), 1*m_ptrMap->getTailleTileHauteur());
             break;
         }
     }
 }
 Entite::Entite(int x, int y, TileMap *tileMap, int type)
-    :m_coordX(x)
-    ,m_coordY(y)
-    ,m_ptrMap(tileMap)
-    ,m_hunger(2000)
-    ,m_goingForFood(false)
+    :m_ptrMap(tileMap)
     ,m_entityType(type)
-    ,m_inventoryQuantity(0)
-    ,m_inventoryType(0)
+    ,m_coordX(x)
+    ,m_coordY(y)
+    ,m_goingForFood(false)
+    ,m_hunger(2000)
+    ,m_cooldown(0)
 {
-    m_sprite.setScale(1*tailleTileLargeur, 1*tailleTileHauteur);
+    m_sprite.setScale(1*m_ptrMap->getTailleTileLargeur(), 1*m_ptrMap->getTailleTileHauteur());
 }
 int Entite::getCoordX()
 {
@@ -93,22 +91,19 @@ void Entite::setHasArrived(bool boolean)
 }
 void Entite::setInventoryType(int type)
 {
-    if (type != 0)
-    {
-        m_inventoryType = type;
-    }
+    m_inventory.setType(type);
 }
 void Entite::setInventoryQuantity(int quantity)
 {
-    m_inventoryQuantity = quantity;
+    m_inventory.setQuantity(quantity);
 }
 int Entite::getInventoryType()
 {
-    return m_inventoryType;
+    return m_inventory.getType();
 }
 int Entite::getInventoryQuantity()
 {
-    return m_inventoryQuantity;
+    return m_inventory.getQuantity();
 }
 
 int Entite::getHunger()
@@ -148,11 +143,25 @@ TileMap* Entite::getPtrMap()
     return m_ptrMap;
 }
 
+void Entite::resetCooldown()
+{
+    m_cooldown = 0;
+}
+void Entite::incrCooldown()
+{
+    m_cooldown += 1;
+}
+int Entite::getCooldown()
+{
+    return m_cooldown;
+}
+
+
 /* -------------------------- Graphics ---------------------------------------- */
 
 void Entite::paintEntite()
 {
-    m_sprite.setPosition(m_coordX*tailleTileLargeur - 0.5*m_sprite.getScale().x * m_sprite.getTexture()->getSize().x,m_coordY*tailleTileHauteur - 0.5*m_sprite.getScale().y*m_sprite.getTexture()->getSize().y);
+    m_sprite.setPosition(m_coordX*m_ptrMap->getTailleTileLargeur() - 0.4*m_sprite.getScale().x * m_sprite.getTexture()->getSize().x,m_coordY*m_ptrMap->getTailleTileHauteur() - 0.4*m_sprite.getScale().y*m_sprite.getTexture()->getSize().y);
 }
 void Entite::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -246,20 +255,27 @@ void Entite::eat()
 {
     if (getBlock(m_destination)->getStorageType() == 2)
     {
-        int quantity(min(1000, getBlock(m_destination)->getQuantity()));
-        m_ptrMap->dimQuantiteBlock(m_destination, quantity);
-        m_hunger+=quantity;
-        m_goingForFood = false;
+        if(m_cooldown < 20)
+            incrCooldown();
+        else
+        {
+            resetCooldown();
+            int quantity(min(2000, getBlock(m_destination)->getQuantity()));
+            m_ptrMap->dimQuantiteBlock(m_destination, quantity);
+            m_hunger+=quantity;
+            m_goingForFood = false;
+        }
     }
     else
     {
+        resetCooldown();
         getFood();
     }
 }
 void Entite::nexStepArray(vector<unique_ptr<Entite> > *entiteArray)
 {
     vector<int> areDead;
-    for (int i=0; i < entiteArray->size() ; i++)
+    for (unsigned int i=0; i < entiteArray->size() ; i++)
     {
         bool isDead((*entiteArray)[i]->nextStep());
         if (isDead)
@@ -275,7 +291,7 @@ void Entite::nexStepArray(vector<unique_ptr<Entite> > *entiteArray)
         }
     }
 }
-bool Entite::falling()
+void Entite::falling()
 {
     if (!getBlock(getCoord())->isCrossable())
     {
@@ -294,7 +310,6 @@ bool Entite::oneMovement()
     {
         m_hasArrived = true;
         m_iter = 0;
-       // cout << m_coordX << "  " << m_coordY << endl;
     }
     m_iter++;
     return true;
@@ -400,7 +415,7 @@ pair<int,int> Entite::lookForFood(int typeBlock)
     if (airBlocks.size() != 0)          // On s'eloigne du dernier point franchi
     {
         coord = airBlocks[rand()%(airBlocks.size())];
-        for (int i=0; i<airBlocks.size(); i++)
+        for (unsigned int i=0; i<airBlocks.size(); i++)
         {
             if (MathHelp::distancePath(airBlocks[i], m_previousCoord) > MathHelp::distancePath(coord, m_previousCoord))
             {
@@ -412,7 +427,7 @@ pair<int,int> Entite::lookForFood(int typeBlock)
     return coord;
 }
 
-pair<int,int> Entite::lookFor(int typeBlock)
+pair<int,int> Entite::lookFor(int typeResource)
 {
     pair<int,int> coord = getCoord();
     int x(coord.first);
@@ -422,14 +437,14 @@ pair<int,int> Entite::lookFor(int typeBlock)
     while(ite < 40)
     {
         ite++;
-        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->getBlockType() == typeBlock)
+        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->getResourceType() == typeResource)
         {
             coord.first = x;
             coord.second = min(hauteur-1, y + ite);
             coord = lookUp(coord, 2);
             return coord;
         }
-        else if (m_ptrMap->getBlock(x, max(0, y - ite))->getBlockType() == typeBlock)
+        else if (m_ptrMap->getBlock(x, max(0, y - ite))->getResourceType() == typeResource)
         {
             coord.first = x;
             coord.second = max(0, y - ite);
@@ -438,28 +453,28 @@ pair<int,int> Entite::lookFor(int typeBlock)
         }
         for (int i = 0; i < ite + 2; i++)       // Scan en losange
         {
-            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->getBlockType() == typeBlock)
+            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->getResourceType() == typeResource)
             {
                 coord.first = min(largeur-1, x+i);
                 coord.second = min(hauteur-1, y + ite - i);
                 coord = lookUp(coord, 2);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->getBlockType() == typeBlock)
+            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->getResourceType() == typeResource)
             {
                 coord.first = max(0, x-i);
                 coord.second = min(hauteur-1, y + ite - i);
                 coord = lookUp(coord, 2);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->getBlockType() == typeBlock)
+            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->getResourceType() == typeResource)
             {
                 coord.first = min(largeur-1, x+i);
                 coord.second = max(0, y - ite + i);
                 coord = lookUp(coord, 2);
                 return coord;
             }
-            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->getBlockType() == typeBlock)
+            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->getResourceType() == typeResource)
             {
                 coord.first = max(0, x-i);
                 coord.second = max(0, y - ite + i);
@@ -498,7 +513,7 @@ pair<int,int> Entite::lookFor(int typeBlock)
     if (airBlocks.size() != 0)          // On s'eloigne du dernier point franchi
     {
         coord = airBlocks[rand()%(airBlocks.size())];
-        for (int i=0; i<airBlocks.size(); i++)
+        for (unsigned int i=0; i<airBlocks.size(); i++)
         {
             if (MathHelp::distancePath(airBlocks[i], m_previousCoord) > MathHelp::distancePath(coord, m_previousCoord))
             {

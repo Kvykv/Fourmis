@@ -5,6 +5,7 @@
 #include "include/TileMap.h"
 #include "include/IAPathFinding.h"
 #include "include/StateHeader/State.h"
+#include "include/ItemHeader/item.h"
 #include <vector>
 #include <iostream>
 
@@ -43,6 +44,9 @@ class Entite : public sf::Drawable, public sf::Transformable
         bool checkFood();
         std::pair<int,int> getDestination();
         void setDestination(std::pair<int,int> coord);
+        void resetCooldown();
+        void incrCooldown();
+        int getCooldown();
 
 
         // Graphic
@@ -56,33 +60,34 @@ class Entite : public sf::Drawable, public sf::Transformable
         void creuserBlock(int x, int y);
         void eat();
         bool oneMovement();
-        bool falling();
-        std::pair<int,int> getRandomDestination();
+        void falling();
+        virtual std::pair<int,int> getRandomDestination();
 
         // Entite IA base
         virtual bool nextStep();
         void goTo(std::pair<int,int> coord);
         bool getFood();
         virtual std::pair<int,int> lookForFood(int typeBlock);
-        std::pair<int,int> lookFor(int typeBlock);
+        std::pair<int,int> lookFor(int typeResource);
         std::pair<int,int> lookUp(std::pair<int,int> coord, int typeBlock);
 
         std::pair <int,int> m_previousCoord;
         std::vector<std::pair<int,int> > m_path;
+
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        TileMap *m_ptrMap;
         int m_entityType=0;
-        int m_coordY;
         int m_coordX;
+        int m_coordY;
         bool m_hasArrived;
         bool m_goingForFood;
         int m_iter;
         int m_hunger;
-        int m_inventoryType;
-        int m_inventoryQuantity;
+        Item m_inventory;
         std::pair <int,int> m_destination;
-        TileMap *m_ptrMap;
         sf::Sprite m_sprite;
+        int m_cooldown;
 };
 
 #endif // ENTITE_H

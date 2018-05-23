@@ -33,11 +33,11 @@ class Engine
         void updateTPS();
 
     private:
+        float framePerSecond;
         TileMap tileMap;
         WorldGen m_worldGen;
         AntHill antHill;
         AntHillAI m_antHillAI;
-        float framePerSecond;
         sf::Time timePerFrame;
         sf::RenderWindow window;
         sf::View m_mainView;
@@ -45,9 +45,11 @@ class Engine
         int m_counter;
         bool m_statePause;
         float m_velocity;
+        const double tailleTileHauteur;
+        const double tailleTileLargeur;
         sf::RectangleShape m_outlineMiniMap;
         std::pair<int,int> m_targetCoord;
-
+        std::shared_ptr<Config> m_config;
 };
 
 #endif // ENGINE_H

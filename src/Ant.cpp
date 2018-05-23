@@ -21,12 +21,20 @@ AntHill* Ant::getAntHill()
     return m_antHill;
 }
 
-bool Ant::setBlock(pair<int,int> coord, int blockType, int blockValue)
+bool Ant::setBlock(pair<int,int> coord, int blockType, int blockValue, string structureTag)
 {
-    if(MathHelp::distance(coord, getCoord())<=2)
+    if(m_cooldown < 30)
+        incrCooldown();
+    else
     {
-        m_antHill->setBlock(coord, blockType, blockValue);
-        return true;
+        resetCooldown();
+        if(MathHelp::distance(coord, getCoord())<=2)
+        {
+            m_antHill->setBlock(coord, blockType, blockValue, structureTag);
+            return true;
+        }
+        else
+            goTo(coord);
     }
     return false;
 }
@@ -137,16 +145,71 @@ pair<int,int> Ant::lookForFood(int typeBlock)
 
 pair<int,int> Ant::getNotEmptyStorage()
 {
-    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> storage = m_antHill->getTileArray()->equal_range("Storage");
-    if (storage.first!=m_antHill->getTileArray()->end())
+    auto storage = m_antHill->getSpecificStructure("Storage")->getSpecificTile("Storage");
+    if (storage.size()!=0)
     {
-        for (multimap<string, pair<int,int> >::iterator i = storage.first; i != storage.second; i++)
+        for (unsigned int i = 0; i != storage.size(); i++)
         {
-            if (m_ptrMap->getBlock(i->second)->getQuantity() != 0)
+            if (m_ptrMap->getBlock(storage[i])->getQuantity() != 0)
             {
-                return i->second;
+                return storage[i];
             }
         }
     }
     return getCoord();
 }
+
+pair<int,int> Ant::getRandomDestination()
+{
+    pair<int,int> coord = getCoord();
+    int x(coord.first);
+    int y(coord.second);
+    int ite(rand()%30+15);
+    while(ite < 50)
+    {
+        ite++;
+        if (m_ptrMap->getBlock(x, min(hauteur-1, y + ite))->getBlockType() == 5)
+        {
+            coord.first = x;
+            coord.second = min(hauteur-1, y + ite);
+            return coord;
+        }
+        else if (m_ptrMap->getBlock(x, max(0, y - ite))->getBlockType() == 5)
+        {
+            coord.first = x;
+            coord.second = max(0, y - ite);
+            return coord;
+        }
+        for (int i = 0; i < ite + 2; i++)       // Scan en losange
+        {
+            if (m_ptrMap->getBlock(min(largeur-1, x+i), min(hauteur-1, y + ite - i))->getBlockType() == 5)
+            {
+                coord.first = min(largeur-1, x+i);
+                coord.second = min(hauteur-1, y + ite - i);
+                return coord;
+            }
+            else if (m_ptrMap->getBlock(max(0, x-i), min(hauteur-1, y + ite - i))->getBlockType() == 5)
+            {
+                coord.first = max(0, x-i);
+                coord.second = min(hauteur-1, y + ite - i);
+                return coord;
+            }
+            else if (m_ptrMap->getBlock(min(largeur-1, x+i), max(0, y - ite + i))->getBlockType() == 5)
+            {
+                coord.first = min(largeur-1, x+i);
+                coord.second = max(0, y - ite + i);
+                return coord;
+            }
+            else if (m_ptrMap->getBlock(max(0, x-i), max(0, y - ite + i))->getBlockType() == 5)
+            {
+                coord.first = max(0, x-i);
+                coord.second = max(0, y - ite + i);
+                return coord;
+            }
+        }
+    }
+    coord = Entite::getRandomDestination();
+    return coord;
+}
+
+

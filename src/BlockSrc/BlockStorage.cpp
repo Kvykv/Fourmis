@@ -6,7 +6,7 @@ BlockStorage::BlockStorage(shared_ptr<BaseBlock> baseBlock, int quantity, int ty
     :Block(baseBlock, true, 1)
     ,m_storageType(typeStorage)
     ,m_quantity(quantity)
-    ,m_capacity(20000)
+    ,m_capacity(baseBlock->getConfig()->m_storageDefaultCapacity)
 {
 }
 

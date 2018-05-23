@@ -30,7 +30,10 @@ SOURCES += \
     src/StateSrc/StateWorker.cpp \
     src/BlockSrc/BlockQueenChamber.cpp \
     src/BaseBlockSrc/BaseBlockMulti.cpp \
-    src/BlockSrc/BlockMushroom.cpp
+    src/BlockSrc/BlockMushroom.cpp \
+    src/ItemSrc/item.cpp \
+    src/Config.cpp \
+    src/StructureSrc/Structure.cpp
 
 HEADERS += \
     include/Ant.h \
@@ -59,10 +62,13 @@ HEADERS += \
     include/StateHeader/StateWorker.h \
     include/BlockHeader/BlockQueenChamber.h \
     include/BaseBlockHeader/BaseBlockMulti.h \
-    include/BlockHeader/BlockMushroom.h
+    include/BlockHeader/BlockMushroom.h \
+    include/ItemHeader/item.h \
+    include/Config.h \
+    include/StructureHeader/Structure.h
 
 
-INCLUDEPATH += D:\Users\Kvykvzx\Projet\C++\Fourmis
+INCLUDEPATH += D:\Users\Kvykvzx\Projet\C++\
 
 
 LIBS += -LD:/Programs/SFML/lib

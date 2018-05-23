@@ -8,6 +8,8 @@ AntHillAI::AntHillAI(AntHill* antHill)
     :m_antHill(antHill)
     ,m_tileMap(antHill->getTileMap())
 {
+    addBlock(Tile(3, pair<int,int>(320,320), 2, "Storage"));
+    addBlock(Tile(6, pair<int,int>(340,340), 2, "ThroneRoom"));
 }
 
 void AntHillAI::update()
@@ -15,20 +17,20 @@ void AntHillAI::update()
     double rate(double(m_antHill->getCurrentFoodStorage())/double(m_antHill->getFoodCapacity()+1));
     if (rate > 0.8)
     {
-        expandStorage();
+        expandStorage("Storage");
     }
 }
 
-void AntHillAI::expandStorage()
+void AntHillAI::expandStorage(string aStructureTag)
 {
-    vector<pair<int,int>> listCoord(m_antHill->getSpecificTile("Storage"));
+    vector<pair<int,int>> listCoord(m_antHill->getSpecificStructure(aStructureTag)->getSpecificTile(aStructureTag));
     vector<pair<int,int>> listNeighbours(m_antHill->getTileMap()->getNeighbours(listCoord[rand()%listCoord.size()]));
     int inc(rand()%listNeighbours.size());
-    for (int i = inc; i < listNeighbours.size() + inc; i++)
+    for (unsigned int i = inc; i < listNeighbours.size() + inc; i++)
     {
         if (m_antHill->getTileMap()->getBlock(listNeighbours[i%(listNeighbours.size())])->getBlockType() <= 1)
         {
-            addBlock(Tile(3, listNeighbours[i%(listNeighbours.size())], 2));
+            addBlock(Tile(3, listNeighbours[i%(listNeighbours.size())], 2, aStructureTag));
         }
     }
 }
@@ -69,9 +71,9 @@ void AntHillAI::addBlock(Tile tile)
     }
 }
 
-void AntHillAI::addBlock(int blockType, pair<int,int> coord, int blockValue)
+void AntHillAI::addBlock(int blockType, pair<int,int> coord, int blockValue, string aStructureTag)
 {
-    addBlock(Tile(blockType, coord, blockValue));
+    addBlock(Tile(blockType, coord, blockValue, aStructureTag));
 }
 
 

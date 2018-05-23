@@ -5,32 +5,36 @@
 
 using namespace std;
 
-Tile::Tile(int aBlockType, pair<int,int> aCoord, int aBlockValue)
+Tile::Tile(int aBlockType, pair<int,int> aCoord, int aBlockValue, std::string aStructureTag)
     :coord(aCoord)
     ,blockType(aBlockType)
     ,blockValue(aBlockValue)
+    ,structureTag(aStructureTag)
 {
 }
 
 AntHill::AntHill(){}
-AntHill::AntHill(TileMap &tileMap)
-    :m_tileMap(&tileMap)
-    ,m_numberQueen(0)
+AntHill::AntHill(TileMap &tileMap, std::shared_ptr<Config> config)
+    :m_numberQueen(0)
     ,m_numberWorkerIdle(0)
     ,m_numberWorkerGather(0)
     ,m_numberWorkerBuild(0)
     ,m_numberWorkerFarm(0)
     ,m_numberEggs(0)
+    ,m_dead(0)
     ,m_storageFoodCapacity(0)
     ,m_storageFoodCurrent(0)
-    ,m_dead(0)
+    ,m_tileMap(&tileMap)
+    ,m_config(config)
 {
     loadTextures();
 }
 
-void AntHill::addTile(string aString, pair<int,int> coord)
+void AntHill::addTile(string aStructure, string aString, pair<int,int> coord)
 {
-    m_tileArray.insert(pair<string,pair<int,int> >(aString, coord));
+    if(m_structureArray[aStructure].getTileArray()->size()==0)
+        m_structureArray[aStructure].setAntHill(this);
+    m_structureArray[aStructure].addTile(aString, coord);
 }
 
 vector<unique_ptr<Entite> >* AntHill::getEntityArray()
@@ -38,9 +42,9 @@ vector<unique_ptr<Entite> >* AntHill::getEntityArray()
     return &m_entityArray;
 }
 
-multimap<string, pair<int,int> >* AntHill::getTileArray()
+map<string, Structure>* AntHill::getStructureArray()
 {
-    return &m_tileArray;
+    return &m_structureArray;
 }
 
 ///Set and get
@@ -54,13 +58,13 @@ void AntHill::updateFoodCapacity()
 {
     m_storageFoodCapacity = 0;
     m_storageFoodCurrent = 0;
-    auto storage = m_tileArray.equal_range("Storage");
-    if (storage.first!=m_tileArray.end())
+    auto storage = m_structureArray["Storage"].getSpecificTile("Storage");
+    if (storage.size() != 0)
     {
-        for (multimap<string, pair<int,int> >::iterator i = storage.first; i != storage.second; i++)
+        for (unsigned int i = 0; i < storage.size(); i++)
         {
-            m_storageFoodCapacity += m_tileMap->getBlock(i->second)->getCapacity();
-            m_storageFoodCurrent += m_tileMap->getBlock(i->second)->getQuantity();
+            m_storageFoodCapacity += m_tileMap->getBlock(storage[i])->getCapacity();
+            m_storageFoodCurrent += m_tileMap->getBlock(storage[i])->getQuantity();
         }
     }
 }
@@ -84,33 +88,17 @@ TileMap* AntHill::getTileMap()
     return m_tileMap;
 }
 
-vector<pair<int,int>> AntHill::getSpecificTile(string tag)
+Structure* AntHill::getSpecificStructure(string tag)
 {
-    vector<pair<int,int>> listCoord;
-    pair<multimap<string, pair<int,int> >::iterator, multimap<string, pair<int,int> >::iterator> listTag = m_tileArray.equal_range(tag);
-    if (listTag.first!=m_tileArray.end())
-    {
-        for (multimap<string, pair<int,int> >::iterator i = listTag.first; i != listTag.second; i++)
-        {
-            listCoord.push_back(i->second);
-        }
-    }
-    return listCoord;
-}
-pair<int,int> AntHill::getSpecificUniqueTile(string tag)
-{
-    vector<pair<int,int>> tileVect(getSpecificTile(tag));
-    if (tileVect.size() == 0)
-        return pair<int,int>(-1,-1);
-    else
-        return tileVect[rand()%tileVect.size()];
+    return &m_structureArray[tag];
 }
 
-void AntHill::setBlock(pair<int,int> coord, int blockType, int blockValue)
+
+void AntHill::setBlock(pair<int,int> coord, int blockType, int blockValue, string aStructureTag)
 {
     m_tileMap->setBlock(coord, blockType, blockValue);
     if (blockType == 3 || blockType == 6 || blockType == 7)
-        addTile(m_tileMap->getBlock(coord)->getTag(), coord);
+        addTile(aStructureTag, m_tileMap->getBlock(coord)->getTag(), coord);
 }
 
 
