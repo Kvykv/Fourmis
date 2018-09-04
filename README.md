@@ -1,4 +1,4 @@
-# Fourmis : first dev project
+# Ants : first dev project
 
 Ant Colony Simulation
 
